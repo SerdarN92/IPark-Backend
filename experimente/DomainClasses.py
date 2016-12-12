@@ -3,13 +3,16 @@ class User(object):
         self.firstName = ""  # string
         self.lastName = ""  # string
         self.address = ""  # string oder extra Datentyp?
-        self.paymentMethods = []  # liste mit PaymentMethods
-        self.reservations = []  # liste mit Reservations
-        self.invoices = []  # liste mit Invoices
+        self.paymentMethods = []  # type: list[PaymentMethod]
+        self.reservations = []  # type: list[Reservation]
+        self.invoices = []  # type: list[Invoice]
+        self.authorization_secret = ""
+        self.balance = 0  # interner Kontostand?
 
 
 class PaymentMethod(object):
     def __init__(self):
+        self.paymentProvider = None
         self.validFrom = ""
         self.validUntil = ""
         # weiteres? ggf. abhängig von der Zahlungsmethode
@@ -17,42 +20,45 @@ class PaymentMethod(object):
 
 class ParkingLot(object):
     def __init__(self):
-        self.id = ""  # ID des Parkplatzes / Parkhauses (vllt UUID?)
-        self.address = "" # siehe oben zu den Adressen
+        self.id = 0  # ID des Parkplatzes / Parkhauses (vllt UUID?)
+        self.address = ""  # siehe oben zu den Adressen
         self.capacity = 1
         self.reservationCapacity = 1
-        self.reservations = []
-        self.parkingSpots = []
-        self.tariffs = [] # ggf. mehrere Tarife pro Parkhaus?
-        self.long = 1234.1231
-        self.lat = 1234.123124
+        self.reservations = []  # type: list[Reservation]
+        self.parkingSpots = []  # type: list[ParkingSpot]
+        self.tariffs = []  # type: list[Tariff]
+        self.location = (1234.1231, 1234.123124)  # lat, lon
 
 
 class ParkingSpot(object):
     def __init__(self):
-        self.number = "" #Nummer des Parkplatzes
-        self.status = "" #Statusobjekt
-        self.parkingLot = "" #zyklisch mit ParkingLot.parkingSpots. leider sehe ich grad keine andere Variante (s.u.)
+        self.number = 0  # Nummer des Parkplatzes
+        self.status = None  # Statusobjekt
+        self.parkingLot = None  # type: ParkingLot # zyklisch mit ParkingLot.parkingSpots. leider sehe ich grad keine andere Variante (s.u.)
+        self.location = 0  # Ebene oä?
+        self.tariffID = 0
 
 
 class Reservation(object):
     def __init__(self):
-        self.id = "" # UUID
+        self.id = ""  # UUID
         self.validFrom = ""
         self.validUntil = ""
         self.duration = 1234
-        self.parkingSpot = "" # eindeutiger Parkplatz
-        self.tariff = ""
+        self.parkingSpot = None  # type: ParkingSpot # eindeutiger Parkplatz
+        self.tariff = None  # type: Tariff
 
 
 class Invoice(object):
     def __init__(self):
-        self.User = ""  # leider zyklisch
+        self.user = None  # type: User  # leider zyklisch
         self.date = ""
-        self.deadline = "" # Frist für die Begleichung
-        self.paymentMethod = ""
-        # fehlt da noch was?
+        self.deadline = ""  # Frist für die Begleichung
+        self.paymentMethod = None  # type: PaymentMethod
+        self.status = 0  # bezahlt?
 
 
 class Tariff(object):
-    pass # TODO dringend modellieren. Keine Ahnung!
+    def __init__(self):
+        self.pricePerMinute = 0.01
+        self.maxDuration = 100
