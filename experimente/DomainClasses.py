@@ -61,4 +61,5 @@ class Invoice(object):
 class Tariff(object):
     def __init__(self):
         self.pricePerMinute = 0.01
-        self.maxDuration = 100
+        self.minDuration = 30
+        self.maxDuration = 120

@@ -1,0 +1,86 @@
+## USER: INFORMATIVE
+
+LOGIN
+request:
+	email/alias
+	user secret
+success: code 200
+	token
+error: code 401 (Invalid Login)
+
+STATUS
+request:
+	email/alias
+	token
+success: code 200
+	User Object
+	[list of] currently used spot
+	list of active reservations
+error: code 401 (Invalid Login)
+
+BILLING
+request:
+	email/alias
+	token
+	[Invoice ID]
+success: code 200
+	[list of] Invoices
+error: code 401 (Invalid Login)
+error: code 422 (ID Not Found)
+
+
+## USER: PAYMENT METHODS
+
+LIST PAYMENT METHODS
+request:
+	email/alias
+	token
+success: code 202
+	list of payment methods
+
+ADD/EDIT/REMOVE PAYMENT METHOD
+request:
+	email/alias
+	token
+	payment details
+	[ID]
+success: code 200 (Edited)
+success: code 201 (Added)
+error: code 401
+error: code 422 (Invalid ID)
+
+## PARKING
+
+NEARBY SPOTS
+request:
+	email/alias
+	token
+	location
+	radius
+success: code 200
+	radius
+	list of Spots
+error: code 401
+error: code 422
+
+RESERVE
+request:
+	email/alias
+	token
+	ParkingLot ID
+	startTime
+	duration
+success: code 201
+	reservation ID
+error: code 401
+error: code 422
+
+OPEN/CLOSE BARRIER
+request:
+	email/alias
+	token
+	reservation ID
+success: code 200
+error: code 401
+error: code 422 (Not reserved)
+error: code 429 (Too Many Requests)
