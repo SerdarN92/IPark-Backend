@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_restplus import Api, Resource, fields, errors
 
+from frontend.APIFrontendRequests import *
+
 app = Flask(__name__)
 api = Api(app, version='1.0', title='iPark', description='iPark Frontend')
 
@@ -16,10 +18,11 @@ authentication = api.model('User Authentication', {
     'token': fields.String(required=True, description='Authentication Token')
 })
 
-spot = api.model('Parking Spot', {
+location = api.model('Location', {
     'lat': fields.Fixed(decimals=7, required=True, description='Latitude'),
     'lon': fields.Fixed(decimals=7, required=True, description='Longitude')
 })
+spot = api.inherit('Parking Spot', location, {})
 tariff = api.model('Tariff', {'pricePerMinute': fields.Arbitrary(description="Price per Minute")})
 reservation = api.model('Reservation', {
     'spot': fields.Nested(spot, required=True, description="Parking Spot"),
@@ -30,9 +33,9 @@ reservation = api.model('Reservation', {
 })
 invoice = api.model('Invoice', {'reservation': fields.Nested(reservation, description="Reservation")})
 payment_method = api.model('Payment Methods', {})
-nearby_spots = api.model('Nearby Spots', {
-    'radius': fields.Integer(description='Radius of Parking Spots'),
-    'spots': fields.List(fields.Nested(spot))
+nearby_lots = api.model('Nearby Lots', {
+    'precision': fields.Integer(description='Radius of Parking Lots'),
+    'lots': fields.List(fields.Nested(location))
 })
 info = api.model('User Info', {'lastname': fields.String(description="Last Name")})
 userstatus = api.model('Status', {
@@ -42,15 +45,29 @@ userstatus = api.model('Status', {
 })
 
 authentication_error = api.model('User Authentication Error', {
-    'msg': fields.String(readOnly=True, required=False, description='Error Message')
+    'message': fields.String(readOnly=True, required=False, description='Error Message')
 })
-argument_error = api.model('Argument Error', {
-    'argument': fields.String(readOnly=True, required=False, description='Invalid Argument'),
-    'msg': fields.String(readOnly=True, required=False, description='Error Message')
+argument_error = api.inherit('Argument Error', authentication_error, {
+    'argument': fields.String(readOnly=True, required=False, description='Invalid Argument')
 })
 
 
-@ns.route("/login")
+@ns.route("/user/sign_up")
+class UserSignup(Resource):
+    """User Sign Up"""
+
+    @ns.doc('')
+    @ns.expect(credentials, validate=True)
+    @ns.marshal_with(api.model('Token', {'token': fields.String(required=True)}),
+                     code=200, description='Sign Up successful')
+    @ns.response(401, 'Authentication Error', model=authentication_error)
+    @ns.response(422, 'Invalid Arguments', model=argument_error)
+    def post(self):
+        """User Sign Up"""
+        return user_signup(api)
+
+
+@ns.route("/user/login")
 class UserLogin(Resource):
     """ Request Authentication Token """
 
@@ -58,27 +75,36 @@ class UserLogin(Resource):
     @ns.expect(credentials, validate=True)
     @ns.marshal_with(api.model('Token', {'token': fields.String(required=True)}),
                      code=200, description='Login successful')
-    @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
+    @ns.response(401, 'Authentication Error', model=authentication_error)
     def post(self):
         """ Request Authentication Token """
-        return None, 500
+        return user_login(api)
 
 
-@ns.route("/status")
-class UserLogin(Resource):
+@ns.route("/user/status/<string:filter>")
+@ns.param("filter")
+@ns.header('X-Token', 'Authentication Token', required=True, type=str)
+@ns.response(401, 'Authentication Error', model=authentication_error)
+@ns.response(422, 'Invalid Arguments', model=argument_error)
+class UserStatus(Resource):
     """ Request User Status """
 
-    @ns.doc('Request User Status')
-    @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_with(userstatus, code=200, description='Successful')
-    @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
-    def post(self):
+    @ns.doc('Request User Status')
+    def get(self, **kwargs):
         """ Request User Status """
-        return None, 500
+        return user_status_get(api, **kwargs)
+
+    @ns.expect(userstatus, validate=True)
+    @ns.marshal_with(api.model('Successful', {'message': fields.String()}), code=200, description='Successful')
+    @ns.doc('Set User Status')
+    def post(self, **kwargs):
+        """ Set User Status """
+        return user_status_set(api, **kwargs)
 
 
 @ns.route("/billing")
-class UserLogin(Resource):
+class UserBilling(Resource):
     """ List of Invoices """
 
     @ns.doc('List of Invoices')
@@ -87,11 +113,11 @@ class UserLogin(Resource):
     @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
     @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
     def post(self):
-        """ Request User Status """
+        """ Request List of Invoices """
         return None, 500
 
 
-@ns.route('/payment_methods')
+@ns.route('/user/payment_methods')
 class PaymentMethods(Resource):
     """List of Payment Methods"""
 
@@ -99,7 +125,7 @@ class PaymentMethods(Resource):
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_list_with(payment_method, code=202, description='List of Payment Methods')
     def get(self):
-        """"""
+        """List of Payment Methods"""
         return None, 500
 
     @ns.doc('')
@@ -109,21 +135,21 @@ class PaymentMethods(Resource):
     @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
     @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
     def post(self):
-        """"""
+        """Edit of Payment Methods"""
         return None, 500
 
 
-@ns.route('/parking_spots')
+@ns.route('/parking')
 class ParkingSpots(Resource):
-    """ List of ParkingSpots """
+    """ Parking Lots and Spots """
 
     @ns.doc('')
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
-    @ns.marshal_with(nearby_spots, code=200, description='List of Parking Spots')
+    @ns.marshal_with(nearby_lots, code=200, description='List of Parking Lots')
     @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
     @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
     def get(self):
-        """"""
+        """ List of nearby Parking Lots """
         return None, 500
 
     @ns.doc('')
@@ -133,7 +159,7 @@ class ParkingSpots(Resource):
     @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
     @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
     def post(self):
-        """"""
+        """ Reservate Parking Spots """
         return None, 500
 
 
@@ -146,7 +172,7 @@ class Barrier(Resource):
     @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
     @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
     def get(self):
-        """"""
+        """ Get Barrier State """
         return None, 500
 
 
@@ -154,15 +180,15 @@ class Barrier(Resource):
 @ns.param('status', required=False, description='Requested Status [Open (1)/Closed (2)]')
 class BarrierSet(Resource):  # Barrier
 
-    @ns.marshal_with(api.model('Barrier Status', {'status': fields.Integer('Status Open (1)/Closed (2)')}),
-                     code=200, description='Barrier Status')
+    @ns.marshal_with(api.model('Barrier State', {'status': fields.Integer('Status Open (1)/Closed (2)')}),
+                     code=200, description='Barrier State')
     @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
     @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
     @ns.marshal_with(api.model('Too Many Requests', {}), code=429, description='Too Many Requests')
     def post(self):
-        """"""
+        """ Open/Close Barrier """
         return None, 500
 
 
 if __name__ == '__main__':
-    app.run(port=443, debug=True, threaded=True, ssl_context=('cert.crt', 'cert.key'))
+    app.run(host="127.0.0.1", port=443, debug=False, threaded=True, ssl_context=('cert.crt', 'cert.key'))
