@@ -1,0 +1,67 @@
+Aufteilung
+
+Das gesamte Backend besteht aus mehreren Subsystemen. Das wesentliche Subsystem für den Client ist das Service Gateway / API-Gateway. 
+Dessen Aufgabe ist es lediglich anhand der Routen festzustellen an welchen weiteren Service der Request delegiert wird. Hier müssen 
+wir uns noch Gedanken zum internen Load-Balancing machen, falls mehrere Instanzen anderer Services die gleichen Aufgabenbereiche 
+abdecken. Es besteht ggf. außerdem hier bereits die Möglichkeit, legitime Requests von illegitimen unterscheiden zu lassen - da fehlen 
+noch Details (später dazu mehr!). Dieser Service sollte mit einfachsten Mitteln skaliert werden können, da hier keine kritische Logik 
+stattfindet. (bspw. Nginx als Load Balancer und sowas)
+Alle folgenden Services sind primär Teil der internen API!
+
+
+
+
+Der zweite wesentliche Service ist der Auth-Service. Den würde ich gekoppelt vom später beschriebenen Accounting & Billing-Service 
+betrachten, weil der unbedingt skalieren muss da ja bei jedem Zugriff auf _irgendwas_ die Authentifizierung überprüft werden muss.
+Instanzen dieses Service bearbeiten Login-Requests und Auth-Requests. 
+
+Ein eingehender Login-Request würde dann so verarbeitet:
+1. Frage bei Accounting & Billing an, ob die übergebenen Credentials gültig sind.
+2. Generiere ein Token.
+3. Response: Token.
+
+Login-Requests können meiner Meinung nach einfach vom Service Gateway weitergeleitet werden.
+
+Auth-Requests werden nur durch interne Services durchgeführt. Eingehende Auth-Requests werden so verarbeitet:
+
+1. Prüfe, ob das Token von mir geissued wurde (ggf. auch für wen)
+2. (Falls nötig) prüfe, ob Zugriff auf die Ressource im Client-Request gegeben werden darf.
+	(KRITISCH! Hier haben wir noch gar nicht drüber gesprochen!)
+3. Gebe Antwort an den internen Empfänger zurück -> true vs false.
+
+Um die Skalierung zu ermöglichen müssen wir genauer schauen, wie wir die Tokens generieren, damit unterschiedliche Instanzen des 
+Auth-Services unterscheidbar sind. Eine einfache Variante wäre, eine in einem "Service Repository" hinterlegte ID dem Token voranzustellen.
+Da reichen ja wenige Byte aus.
+
+
+
+
+Das Service Repository ist ebenfalls ein wichtiger Service - ohne den ist die interne Sicht schwer zu realisieren. Die Aufgabe des Service
+Repository ist es, alle Instanzen für sämtliche Services zu kennen (= die Instanzen melden sich an und ggf. wieder ab), sodass ein angefragter
+Service zu einer oder mehreren IP-Adressen aufgelöst werden kann. Wie der hier exakt funktioniert ist etwas komplexer, da müssen wir in jedem
+Fall gemeinsam drüber reden.
+
+
+
+
+Accounting & Billing - wie der Name schon sagt liegen hier hauptsächlich die Nutzerdaten. Wenn wir die Rechnungen, Zahlungen und dergleichen
+explizit verwalten wollen, sollten die auch hier liegen (sorry, dass ich das grad nicht mehr auf dem Schirm hab, wie hier der stand ist).
+A&B wird intern von den Auth-Services genutzt, um die Authentizität der Benutzer sicherzustellen. Außerdem werden sämtliche Requests, die
+die Stammdaten der Nutzer anfragen, hinzufügen, ändern oder löschen letztenends hier landen. Wie wir das skalieren ist mir noch nicht so klar!
+Zudem  kommt dazu, dass meiner Ansicht nach auch die Belegung der Parkplätze zumindest in Bezug auf die Kosten hier verwaltet werden müssen.
+
+
+
+
+Als letztes haben wir noch die Services, die jeweils einen oder eine ganz kleine Menge von Parkplätzen (im Sinne von z.B. Parkhaus) verwalten.
+Da hinterlegt sind alle zu den Parkplätzen gehörenden Stellplätze mit Status und Belegungsinformationen (also welcher Nutzer steht auf welchem
+Stellplatz) sowie Reservierungen und Tarife (hoffe ich hab da nichts vergessen). Das hier skaliert allein über die Erwartung, das nur in etwa 
+ein kleines Vielfaches der verfügbaren Stellplätze vermutlich auch Anfragen an die gleiche Instanz richten wird.
+Hier würde ein Name für den Service noch helfen..
+
+
+
+
+Der letzte Service ist das IoT-Gateway. Glaub darüber hatten wir schon gesprochen, aber dort kann explizit nach Belegungsinformationen einzelner
+Stellplätze gefragt werden, Lampen an den Plätzen können ein- / ausgeschaltet werden und bei Reservierungen die Schranke geöffnet und geschlossen.
+Damit ist der Service glaub ich erstmal ausreichend beschrieben.. Details müssen wir ja noch abwarten.
