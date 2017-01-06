@@ -11,7 +11,10 @@ class Service(threading.Thread):
         self.name = name or self.__class__.__name__
 
         self.channel = None
-        self.connection = pika.SelectConnection(pika.ConnectionParameters(), self.on_connected)
+        self.connection = pika.SelectConnection(
+            pika.ConnectionParameters(host='132.252.152.56',
+                                      credentials=pika.PlainCredentials('ipark', 'GS~FsB3~&c7T')),
+            self.on_connected)
         self.start()
 
     def on_connected(self, connection):

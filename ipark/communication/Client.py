@@ -12,7 +12,9 @@ class Client:
         self.response = None
         self.corr_id = None
 
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        self.connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host='132.252.152.56',
+                                      credentials=pika.PlainCredentials('ipark', 'GS~FsB3~&c7T')))
         self.channel = self.connection.channel()
 
         result = self.channel.queue_declare(exclusive=True)
