@@ -12,7 +12,7 @@ class DatabaseObject:
     # r.flushall()
 
     my = mydb.connect('132.252.152.57', 'root', 'GS~FsB3~&c7T', 'ipark',
-                      cursorclass=mydb.cursors.DictCursor).cursor()  # type: MySQLdb.cursors.DictCursor
+                      cursorclass=mydb.cursors.DictCursor)
 
     def __init__(self):
         pass
@@ -21,8 +21,9 @@ class DatabaseObject:
     def get_data(key: str, query: str, queryargs: tuple, factory: callable) -> any:
         data = DatabaseObject.r.get(key)
         if data is None:
-            DatabaseObject.my.execute(query, queryargs)
-            data = DatabaseObject.my.fetchall()
+            cur = DatabaseObject.my.cursor()  # type: MySQLdb.cursors.DictCursor
+            cur.execute(query, queryargs)
+            data = cur.fetchall()
             data = factory(data)
 
             DatabaseObject.r.set(key, pickle.dumps(data))

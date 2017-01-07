@@ -40,6 +40,13 @@ class User(DatabaseObject):
         for e in data:
             setattr(self, e, data[e])
 
+    @staticmethod
+    def create(email, password):
+        cur = DatabaseObject.my.cursor()
+        if cur.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, password)) != 1:
+            return None  # the email is already in use
+        return User(email, password)
+
     @property
     def payment_methods(self):
         """
