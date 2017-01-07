@@ -33,11 +33,11 @@ class TestAccountingAndBillingServiceClient(communication.Client.Client):
     def test_validate_user(self):
         print(PrintColors.HEADER + "Testing Accounting And Billing Validation" + PrintColors.ENDC)
         exp = {"status": True}
-        test_case(self.call("validate_user", "horst@localhorst".encode(), "password".encode()) == exp, "Basic user validation")
+        test_case(self.call("validate_user", "horst@localhorst", "password") == exp, "Basic user validation")
         exp = {'status': False, 'message': 'Invalid mail address or password.'}
-        test_case(self.call("validate_user", "horst@localhorst".encode(), "passxord".encode()) == exp, "Invalid password")
-        test_case(self.call("validate_user", "horst@localorst".encode(), "passxord".encode()) == exp, "Invalid mail and password")
-        test_case(self.call("validate_user", "horst@localorst".encode(), "password".encode()) == exp, "Invalid mail")
+        test_case(self.call("validate_user", "horst@localhorst", "passxord") == exp, "Invalid password")
+        test_case(self.call("validate_user", "horst@localorst", "passxord") == exp, "Invalid mail and password")
+        test_case(self.call("validate_user", "horst@localorst", "password") == exp, "Invalid mail")
 
     def run_all_tests(self):
         self.test_sign_up()
@@ -47,11 +47,11 @@ class TestAccountingAndBillingServiceClient(communication.Client.Client):
 class TestAuthServiceClient(communication.Client.Client):
     def test_login(self,):
         print(PrintColors.HEADER + "Testing Auth Login" + PrintColors.ENDC)
-        test_case("token" in self.call("login", "horst@localhorst".encode(), "password".encode()), "Basic Login")
+        test_case("token" in self.call("login", "horst@localhorst", "password"), "Basic Login")
         exp = {"status": False, "message": "Invalid password or user."}
-        test_case(exp == self.call("login", "horst@localhorst".encode(), "passw0rd".encode()), "Wrong password")
-        test_case(exp == self.call("login", "horst@localorst".encode(), "password".encode()), "Invalid User")
-        test_case(exp == self.call("login", "horst@localorst".encode(), "passw0rd".encode()), "Invalid User using wrong password :-P")
+        test_case(exp == self.call("login", "horst@localhorst", "passw0rd"), "Wrong password")
+        test_case(exp == self.call("login", "horst@localorst", "password"), "Invalid User")
+        test_case(exp == self.call("login", "horst@localorst", "passw0rd"), "Invalid User using wrong password :-P")
 
     def run_all_tests(self):
         self.test_login()

@@ -12,18 +12,22 @@ class AccountingAndBillingService(Service):
         super().__init__("Accounting")
 
     def sign_up(self, email, password):
-        if self.r.exists("user:" + email):
+        key = "user:"+email
+        key = key.encode()
+        if self.r.exists(key):
             return {"status": False, "message": "Mail address is already in use."}
-        u = {"email": email, "password": password}  # Todo weitere Userdaten
-        self.r.hmset("user:"+email, u)
+        u = {b"email": email.encode(), b"password": password.encode()}  # Todo weitere Userdaten
+        self.r.hmset(key, u)
         result = self.authservice.login(email, password)
         return {"status": True, "token": result["token"]}
 
     def validate_user(self, email, password):
-        if not self.r.exists(b"user:" + email):
+        key = "user:" + email
+        key = key.encode()
+        if not self.r.exists(key):
             return {"status": False, "message": "Invalid mail address or password."}
-        user = self.r.hgetall(b"user:"+email)
-        if password != user[b"password"].decode():
+        user = self.r.hgetall(key)
+        if password.encode() != user[b"password"]:
             return {"status": False, "message": "Invalid mail address or password."}
         return {"status": True}
 
