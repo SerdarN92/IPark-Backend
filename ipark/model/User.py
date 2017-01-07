@@ -69,13 +69,13 @@ class User(DomainClassBase):
 
     @staticmethod
     def create(email, password):
-        cur = DatabaseObject.my.cursor()
-        try:
-            if cur.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, password)) != 1:
-                return None  # unknown error :)
-        except MySQLdb.IntegrityError:
-            return None  # the mail is already in use
-        DatabaseObject.my.commit()
+        with DatabaseObject.my.cursor() as cur:
+            try:
+                if cur.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, password)) != 1:
+                    return None  # unknown error :)
+            except MySQLdb.IntegrityError:
+                return None  # the mail is already in use
+            DatabaseObject.my.commit()
         return User(email, password, readonly=True)
 
     @property

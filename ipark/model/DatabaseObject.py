@@ -91,10 +91,11 @@ class DatabaseObject:
         assert query.lower()[:6] == 'select'
         data = DatabaseObject.r.get(key)
         if data is None:
-            cur = DatabaseObject.my.cursor()  # type: MySQLdb.cursors.DictCursor
-            cur.execute(query, queryargs)
-            data = cur.fetchall()
-            data = factory(data)
+            with  DatabaseObject.my.cursor() as cur:  # type: MySQLdb.cursors.DictCursor
+                cur.execute(query, queryargs)
+                data = cur.fetchall()
+                data = factory(data)
+                DatabaseObject.my.commit()
 
             DatabaseObject.r.set(key, pickle.dumps(data))
         else:
