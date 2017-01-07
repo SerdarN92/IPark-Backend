@@ -10,9 +10,16 @@ class AccountingAndBillingService(Service):
         self.authservice = AuthService.AuthClient()
         super().__init__("Accounting")
 
-    def sign_up(self, email, password):
-        if User.create(email, password) is None:
+    def sign_up(self, email, password, first_name = None, last_name = None, address = None):
+        newbody = User.create(email, password)
+        if newbody is None:
             return {"status": False, "message": "Mail address is already in use."}
+        if first_name is not None:
+            pass
+        if last_name is not None:
+            pass
+        if address is not None:
+            pass
         result = self.authservice.login(email, password)
         return {"status": True, "token": result["token"]}
 
