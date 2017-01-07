@@ -34,9 +34,10 @@ class User(DomainClassBase):
         self._modified = DatabaseObject.READONLY if readonly else DatabaseObject.NONE  # type: int
 
         # Load
-        data = DatabaseObject.load_and_lock_data(self._key, "SELECT * from users WHERE email = %s",
-                                                 (email,),
-                                                 lambda x: len(x) and x[0])
+        load_func = DatabaseObject.load_data if readonly else DatabaseObject.load_and_lock_data
+        data = load_func(self._key, "SELECT * from users WHERE email = %s",
+                         (email,),
+                         lambda x: len(x) and x[0])
 
         # Check
         if not data or (password is not None and data['password'] != password):
