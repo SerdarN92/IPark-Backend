@@ -3,8 +3,9 @@
 .AppleDouble
 .LSOverride
 
-# ich glaub das ist besser:
+# PyCharm
 .idea/
+**/__pycache__/
 
 #from https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
 # User-specific stuff:
@@ -26,7 +27,3 @@
 
 # IntelliJ
 /out/
-
-__pycache__/
-
-
