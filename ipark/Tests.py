@@ -59,8 +59,8 @@ class TestAuthServiceClient(communication.Client.Client):
         self.test_login()
 
 if __name__ == "__main__":
-    #abservice = AccountingAndBillingService()
-    #authservice = AuthService()
+    abservice = AccountingAndBillingService()
+    authservice = AuthService()
     a = TestAccountingAndBillingServiceClient("Accounting")
     a.run_all_tests()
     b = TestAuthServiceClient("AuthService")
