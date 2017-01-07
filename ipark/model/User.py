@@ -1,6 +1,6 @@
 from model.DatabaseObject import DatabaseObject
 from model.DomainClasses import PaymentMethod, Reservation, Invoice
-
+import MySQLdb
 
 class User(DatabaseObject):
     """Objects of this class hold the master data of the customers."""
@@ -43,8 +43,11 @@ class User(DatabaseObject):
     @staticmethod
     def create(email, password):
         cur = DatabaseObject.my.cursor()
-        if cur.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, password)) != 1:
-            return None  # the email is already in use
+        try:
+            if cur.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, password)) != 1:
+                return None  # unknown error :)
+        except MySQLdb.IntegrityError:
+            return None  # the mail is already in use
         return User(email, password)
 
     @property
