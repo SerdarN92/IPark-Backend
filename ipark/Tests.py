@@ -1,6 +1,6 @@
 from AccountingBillingService import AccountingAndBillingService, AccountingAndBillingClient
 from AuthService import AuthService, AuthClient
-import communication.Client
+from model.DatabaseObject import DatabaseObject
 
 
 class PrintColors:
@@ -64,6 +64,7 @@ class TestAuthServiceClient(AuthClient):
 
 
 if __name__ == "__main__":
+    DatabaseObject.r.flushall()
     abservice = AccountingAndBillingService()
     authservice = AuthService()
     a = TestAccountingAndBillingServiceClient()
