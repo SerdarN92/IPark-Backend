@@ -11,5 +11,9 @@ try:
     print(user.payment_methods[0])
     print(user.reservations[0])
 
+    user.first_name = 'Neuer Name'
+    user.save()
+    user.flush()
+
 except User.NotFoundException as ex:
     print("User not found (or invalid password)")

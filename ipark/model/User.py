@@ -1,14 +1,16 @@
-from model.DatabaseObject import DatabaseObject
+from model.DatabaseObject import DatabaseObject, DomainClassBase
 from model.DomainClasses import PaymentMethod, Reservation, Invoice
 
 
-class User(DatabaseObject):
+class User(DomainClassBase):
     """Objects of this class hold the master data of the customers."""
+
+    database_fields = ['user_id', 'first_name', 'last_name', 'email', 'password', 'address', 'dataflags', 'balance']
 
     class NotFoundException(BaseException):
         pass
 
-    def __init__(self, email: str, password: str = None):
+    def __init__(self, email: str, password: str = None, readonly: bool = False):
         """ Load User Data
         :param password: None disables check
         """
@@ -27,10 +29,13 @@ class User(DatabaseObject):
         self._reservations = None  # type: list[Reservation]
         self._invoices = None  # type: list[Invoice]
 
+        self._key = 'user:' + email
+        self._modified = DatabaseObject.READONLY if readonly else DatabaseObject.NONE  # type: int
+
         # Load
-        data = DatabaseObject.get_data('user:' + email, "SELECT * from users WHERE email = %s",
-                                       (email,),
-                                       lambda x: len(x) and x[0])
+        data = DatabaseObject.load_and_lock_data(self._key, "SELECT * from users WHERE email = %s",
+                                                 (email,),
+                                                 lambda x: len(x) and x[0])
 
         # Check
         if not data or (password is not None and data['password'] != password):
@@ -48,9 +53,9 @@ class User(DatabaseObject):
         """
         if self._payment_methods is None:
             self._payment_methods = \
-                DatabaseObject.get_data('user:payment_methods:' + str(self.user_id),
-                                        "SELECT * FROM payment_methods WHERE user_id = %s", (self.user_id,),
-                                        lambda d: [DatabaseObject.assign_dict(PaymentMethod(), x) for x in d])
+                DatabaseObject.load_data('user:payment_methods:' + str(self.user_id),
+                                         "SELECT * FROM payment_methods WHERE user_id = %s", (self.user_id,),
+                                         lambda d: tuple([DatabaseObject.assign_dict(PaymentMethod(), x) for x in d]))
         return self._payment_methods
 
     @property
@@ -61,9 +66,9 @@ class User(DatabaseObject):
         """
         if self._reservations is None:
             self._reservations = \
-                DatabaseObject.get_data('user:reservations:' + str(self.user_id),
-                                        "SELECT * FROM reservations WHERE user_id = %s", (self.user_id,),
-                                        lambda d: [DatabaseObject.assign_dict(Reservation(), x) for x in d])
+                DatabaseObject.load_data('user:reservations:' + str(self.user_id),
+                                         "SELECT * FROM reservations WHERE user_id = %s", (self.user_id,),
+                                         lambda d: tuple([DatabaseObject.assign_dict(Reservation(), x) for x in d]))
         return self._reservations
 
     @property
