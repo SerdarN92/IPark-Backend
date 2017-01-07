@@ -21,8 +21,6 @@ class AccountingAndBillingService(Service):
         if address is not None:
             pass
         result = self.authservice.login(email, password)
-		newbody.save()
-        newbody.flush()
         return {"status": True, "token": result["token"]}
 
 

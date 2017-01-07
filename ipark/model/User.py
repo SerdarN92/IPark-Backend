@@ -75,7 +75,8 @@ class User(DomainClassBase):
                 return None  # unknown error :)
         except MySQLdb.IntegrityError:
             return None  # the mail is already in use
-        return User(email, password)
+        DatabaseObject.my.commit()
+        return User(email, password, readonly=True)
 
     @property
     def payment_methods(self):
