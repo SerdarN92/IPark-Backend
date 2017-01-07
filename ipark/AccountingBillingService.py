@@ -15,16 +15,15 @@ class AccountingAndBillingService(Service):
         if self.r.exists("user:" + email):
             return {"status": False, "message": "Mail address is already in use."}
         u = {"email": email, "password": password}  # Todo weitere Userdaten
-        self.r.hset("user:"+email, u)
+        self.r.hmset("user:"+email, u)
         result = self.authservice.login(email, password)
-        print(result)
         return {"status": True, "token": result["token"]}
 
     def validate_user(self, email, password):
-        if not self.r.exists("user:" + email):
+        if not self.r.exists(b"user:" + email):
             return {"status": False, "message": "Invalid mail address or password."}
-        user = self.r.hgetall("user:"+email)
-        if password != user["password"]:
+        user = self.r.hgetall(b"user:"+email)
+        if password != user[b"password"].decode():
             return {"status": False, "message": "Invalid mail address or password."}
         return {"status": True}
 
