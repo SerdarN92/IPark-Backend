@@ -34,7 +34,7 @@ class AuthService(Service):
         while self.r.exists("token:"+token):
             token = str(uuid.uuid4())
         self.r.set("token:"+token, email)
-        #self.r.expire("token:"+token, 1800)
+        self.r.expire("token:"+token, 1800)
         return token
 
 
