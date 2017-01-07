@@ -19,7 +19,7 @@ class AuthService(Service):
 
     def validate_user(self, email, password):
         try:
-            User(email, password)
+            User(email, password, readonly=True)
         except User.NotFoundException:
             return {"status": False, "message": "Invalid mail address or password."}
         return {"status": True}
