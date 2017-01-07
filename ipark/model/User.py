@@ -2,6 +2,7 @@ from model.DatabaseObject import DatabaseObject, DomainClassBase
 from model.DomainClasses import PaymentMethod, Reservation, Invoice
 import MySQLdb
 
+
 class User(DomainClassBase):
     """Objects of this class hold the master data of the customers."""
 
@@ -45,6 +46,26 @@ class User(DomainClassBase):
         for e in data:
             setattr(self, e, data[e])
 
+    def save(self):
+        super(User, self).save()
+        self.save_properties()
+
+    def save_properties(self):
+        for p in ['reservations', 'payment_methods', 'invoices']:
+            self._save_list_property(p)
+
+    def flush(self):
+        self.save_properties()
+        super(User, self).flush()
+
+    def _save_list_property(self, name):
+        private_name = '_' + name
+        if getattr(self, private_name) is not None:
+            assert self.user_id is not None
+            key = 'user:' + name + ':' + str(self.user_id)
+            DatabaseObject._flush_and_unlock(key, getattr(self, private_name))
+            setattr(self, private_name, None)
+
     @staticmethod
     def create(email, password):
         cur = DatabaseObject.my.cursor()
@@ -62,10 +83,10 @@ class User(DomainClassBase):
         :rtype: list[PaymentMethod]
         """
         if self._payment_methods is None:
-            self._payment_methods = \
-                DatabaseObject.load_data('user:payment_methods:' + str(self.user_id),
-                                         "SELECT * FROM payment_methods WHERE user_id = %s", (self.user_id,),
-                                         lambda d: tuple([DatabaseObject.assign_dict(PaymentMethod(), x) for x in d]))
+            self._payment_methods = DatabaseObject \
+                .load_and_lock_data('user:payment_methods:' + str(self.user_id),
+                                    "SELECT * FROM payment_methods WHERE user_id = %s", (self.user_id,),
+                                    lambda d: [DatabaseObject.assign_dict(PaymentMethod(), x) for x in d])
         return self._payment_methods
 
     @property
@@ -75,10 +96,10 @@ class User(DomainClassBase):
         :rtype: list[Reservation]
         """
         if self._reservations is None:
-            self._reservations = \
-                DatabaseObject.load_data('user:reservations:' + str(self.user_id),
-                                         "SELECT * FROM reservations WHERE user_id = %s", (self.user_id,),
-                                         lambda d: tuple([DatabaseObject.assign_dict(Reservation(), x) for x in d]))
+            self._reservations = DatabaseObject \
+                .load_and_lock_data('user:reservations:' + str(self.user_id),
+                                    "SELECT * FROM reservations WHERE user_id = %s", (self.user_id,),
+                                    lambda d: [DatabaseObject.assign_dict(Reservation(), x) for x in d])
         return self._reservations
 
     @property

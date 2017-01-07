@@ -1,7 +1,14 @@
-class PaymentMethod(object):
+from model.DatabaseObject import DomainClassBase
+
+
+class PaymentMethod(DomainClassBase):
     """This class is used to represent different payment methods."""
 
+    database_fields = ['payment_provider', 'valid_from', 'valid_until']
+
     def __init__(self):
+        super(PaymentMethod, self).__init__()
+
         self.payment_provider = None
         self.valid_from = ""
         self.valid_until = ""
@@ -11,10 +18,14 @@ class PaymentMethod(object):
         return '{' + str(self.payment_provider) + ': "' + str(self.valid_from) + '" - "' + str(self.valid_until) + '"}'
 
 
-class Reservation(object):
+class Reservation(DomainClassBase):
     """This class represents a reservation."""
 
+    database_fields = ['res_id', 'user_id', 'lot_id', 'tariff_id', 'valid_from', 'valid_until', 'duration']
+
     def __init__(self):
+        super(Reservation, self).__init__()
+
         self.res_id = None  # UUID
         self.user_id = None
         self.lot_id = None
@@ -33,6 +44,8 @@ class ParkingLot(object):
     """This class represents a geographical location in which the system manages a set of parking spots."""
 
     def __init__(self):
+        super(ParkingLot, self).__init__()
+
         self.id = 0  # ID des Parkplatzes / Parkhauses (vllt UUID?)
         self.address = ""  # siehe oben zu den Adressen
         self.capacity = 1
@@ -47,6 +60,8 @@ class ParkingSpot(object):
     """This class represents a single spot to park a car on. This always belongs to exactly one ParkingLot."""
 
     def __init__(self):
+        super(ParkingSpot, self).__init__()
+
         self.number = 0  # Nummer des Parkplatzes
         self.status = None  # Statusobjekt
         self.parking_lot = None  # type: ParkingLot # zyklisch mit ParkingLot.parkingSpots. leider sehe ich grad keine
@@ -55,8 +70,13 @@ class ParkingSpot(object):
         self.tariffID = 0
 
 
-class Invoice(object):
+class Invoice(DomainClassBase):
+
+    database_fields = [] # Todo
+
     def __init__(self):
+        super(Invoice, self).__init__()
+
         self.user = None  # type: User  # leider zyklisch
         self.date = ""
         self.deadline = ""  # Frist für die Begleichung
@@ -66,6 +86,8 @@ class Invoice(object):
 
 class Tariff(object):
     def __init__(self):
+        super(Tariff, self).__init__()
+
         self.price_per_minute = 0.01
         self.minDuration = 30
         self.maxDuration = 120

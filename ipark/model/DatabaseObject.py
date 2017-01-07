@@ -1,4 +1,5 @@
 import pickle
+import decimal
 
 import MySQLdb as mydb
 import MySQLdb.cursors
@@ -80,7 +81,7 @@ class DatabaseObject:
         return data
 
     @staticmethod
-    def _flush_and_unlock(key: str, data: any):
+    def _flush_and_unlock(key: str, data: any) -> None:
         assert DatabaseObject.r.get(key + ':locked') == b'1'
         DatabaseObject.r.set(key, pickle.dumps(data))
         DatabaseObject.r.delete(key + ':locked')
