@@ -1,28 +1,30 @@
 from communication.Service import Service
-from model.DomainClasses import User
 from communication.Client import Client
 import AuthService
+import redis
 
 
 class AccountingAndBillingService(Service):
     def __init__(self):
-        self.users = {}
         self.authservice = AuthService.AuthClient()
+        self.r = redis.StrictRedis(host='132.252.152.57')
+        self.r.execute_command("AUTH GS~FsB3~&c7T")
         super().__init__("Accounting")
 
     def sign_up(self, email, password):
-        if email in self.users:
+        if self.r.exists("user:" + email):
             return {"status": False, "message": "Mail address is already in use."}
-        self.users[email] = User(email, password)  # Todo weitere Userdaten
+        u = {"email": email, "password": password}  # Todo weitere Userdaten
+        self.r.hset("user:"+email, u)
         result = self.authservice.login(email, password)
         print(result)
         return {"status": True, "token": result["token"]}
 
     def validate_user(self, email, password):
-        if email not in self.users:
+        if not self.r.exists("user:" + email):
             return {"status": False, "message": "Invalid mail address or password."}
-        user = self.users[email]
-        if password != user.password:
+        user = self.r.hgetall("user:"+email)
+        if password != user["password"]:
             return {"status": False, "message": "Invalid mail address or password."}
         return {"status": True}
 
