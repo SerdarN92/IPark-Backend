@@ -1,5 +1,6 @@
 from communication.Service import Service
 from communication.Client import Client
+from model.User import User
 import AccountingBillingService
 import redis
 import uuid
@@ -9,25 +10,31 @@ class AuthService(Service):
     def __init__(self):
         self.r = redis.StrictRedis(host='132.252.152.57')
         self.r.execute_command("AUTH GS~FsB3~&c7T")
-        self.abservice = AccountingBillingService.AccountingAndBillingClient()
         super().__init__("AuthService")
 
     def login(self, email, password):
-        if not self.abservice.validate_user(email, password)["status"]:
+        if not self.validate_user(email, password)["status"]:
             return {"status": False, "message": "Invalid password or user."}
         return {"status": True, "token": self.issue_token(email)}
 
+    def validate_user(self, email, password):
+        try:
+            User(email, password)
+        except User.NotFoundException:
+            return {"status": False, "message": "Invalid mail address or password."}
+        return {"status": True}
+
     def validate_token(self, token):
-        if self.r.exists(token):
+        if not self.r.exists("token:"+token):
             return {"status": False, "message": "Invalid Token."}
         return {"status": True}  # Todo müssen wir hier nicht noch irgendwie email / user-ID zurückgeben?
 
     def issue_token(self, email):  # das hier reicht mMn für den Proof of Concept erstmal
         token = str(uuid.uuid4())
-        while self.r.exists(token):
+        while self.r.exists("token:"+token):
             token = str(uuid.uuid4())
-        self.r.set(token, email)
-        self.r.expire(token, 1800)
+        self.r.set("token:"+token, email)
+        #self.r.expire("token:"+token, 1800)
         return token
 
 
@@ -40,6 +47,9 @@ class AuthClient(Client):
 
     def validate_token(self, token):
         return self.call("validate_token", token)
+
+    def validate_user(self, email, password):
+        return self.call("validate_user", email, password)
 
 
 if __name__ == "__main__":

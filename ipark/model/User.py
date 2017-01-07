@@ -1,6 +1,6 @@
 from model.DatabaseObject import DatabaseObject, DomainClassBase
 from model.DomainClasses import PaymentMethod, Reservation, Invoice
-
+import MySQLdb
 
 class User(DomainClassBase):
     """Objects of this class hold the master data of the customers."""
@@ -44,6 +44,16 @@ class User(DomainClassBase):
         # Assign
         for e in data:
             setattr(self, e, data[e])
+
+    @staticmethod
+    def create(email, password):
+        cur = DatabaseObject.my.cursor()
+        try:
+            if cur.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, password)) != 1:
+                return None  # unknown error :)
+        except MySQLdb.IntegrityError:
+            return None  # the mail is already in use
+        return User(email, password)
 
     @property
     def payment_methods(self):
