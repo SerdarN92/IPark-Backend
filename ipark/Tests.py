@@ -68,7 +68,6 @@ if __name__ == "__main__":
     abservice = AccountingAndBillingService()
     authservice = AuthService()
     geoservice = GeoService()
-    print(GeoClient().find_near_parking_lots(51.4, 7.03, 6))
     a = TestAccountingAndBillingServiceClient()
     a.run_all_tests()
     b = TestAuthServiceClient()
