@@ -37,7 +37,8 @@ nearby_lots = api.model('Nearby Lots', {
     'precision': fields.Integer(description='Radius of Parking Lots'),
     'lots': fields.List(fields.Nested(location))
 })
-info = api.model('User Info', {'lastname': fields.String(description="Last Name")})
+info = api.model('User Info', {'lastname': fields.String(description="Last Name", required=False),
+                               "password": fields.String(description="Password")})
 userstatus = api.model('Status', {
     'info': fields.Nested(info, description="General User Information"),
     'used_spots': fields.List(fields.Nested(spot), description="Currently used parking spots"),
@@ -81,8 +82,8 @@ class UserLogin(Resource):
         return user_login(api)
 
 
-@ns.route("/user/status/<string:filter>")
-@ns.param("filter")
+@ns.route("/user/status/<string:ufilter>")
+@ns.param("ufilter")
 @ns.header('X-Token', 'Authentication Token', required=True, type=str)
 @ns.response(401, 'Authentication Error', model=authentication_error)
 @ns.response(422, 'Invalid Arguments', model=argument_error)
@@ -91,9 +92,9 @@ class UserStatus(Resource):
 
     @ns.marshal_with(userstatus, code=200, description='Successful')
     @ns.doc('Request User Status')
-    def get(self, **kwargs):
+    def get(self, ufilter):
         """ Request User Status """
-        return user_status_get(api, **kwargs)
+        return user_status_get(api, ufilter)
 
     @ns.expect(userstatus, validate=True)
     @ns.marshal_with(api.model('Successful', {'message': fields.String()}), code=200, description='Successful')
@@ -191,4 +192,5 @@ class BarrierSet(Resource):  # Barrier
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=443, debug=False, threaded=True, ssl_context=('cert.crt', 'cert.key'))
+    app.run(host="127.0.0.1", port=1443, debug=False, threaded=True)  # , ssl_context=('cert.crt', 'cert.key'))
+

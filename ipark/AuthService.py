@@ -35,6 +35,12 @@ class AuthService(Service):
         self.r.setex("token:"+token, 1800, email)
         return token
 
+    def get_email_from_token(self, token):
+        if not self.r.exists("token:"+token):
+            print("Auth")
+            return {"status": False, "message": "Invalid Token"}
+        return {"email": self.r.get("token:"+token).decode(), "status": True}
+
 
 class AuthClient(Client):
     def __init__(self):
@@ -48,6 +54,9 @@ class AuthClient(Client):
 
     def validate_user(self, email, password):
         return self.call("validate_user", email, password)
+
+    def get_email_from_token(self, token):
+        return self.call("get_email_from_token", token)
 
 
 if __name__ == "__main__":
