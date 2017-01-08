@@ -14,7 +14,7 @@ if not r.exists('parkinglots'):
     with mydb.connect('132.252.152.57', 'root', 'GS~FsB3~&c7T', 'ipark',
                       cursorclass=mydb.cursors.DictCursor) as cur:  # type: MySQLdb.cursors.DictCursor
 
-        cur.execute('SELECT * FROM parking_lots NATURAL LEFT JOIN parking_lot_status')
+        cur.execute('SELECT * FROM parking_lots')
         rows = cur.fetchall()
 
         geoadd_command = ['GEOADD', 'parkinglots']
