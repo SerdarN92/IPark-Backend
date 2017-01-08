@@ -1,0 +1,92 @@
+from model.DatabaseObject import DatabaseObject
+import pickle
+
+import MySQLdb.cursors
+
+
+class ParkingLot:
+    """This class represents a geographical location in which the system manages a set of parking spots."""
+
+    class FullException(BaseException):
+        pass
+
+    def __init__(self):
+        super(ParkingLot, self).__init__()
+
+        self.lot_id = None  # ID des Parkplatzes / Parkhauses (vllt UUID?)
+        self.name = None
+        self.total_spots = None
+        self.longitude = None
+        self.latitude = None
+        self.tax = None
+        self.max_tax = None
+        self.reservation_tax = None
+
+    def getFreeParkingSpots(self) -> int:
+        assert self.lot_id is not None
+        DatabaseObject.r.scard('lot:' + str(self.lot_id) + ':freespots')
+
+    def getReserveFreeParkingSpot(self):
+        assert self.lot_id is not None
+
+        spot_id = DatabaseObject.r.spop('lot:' + str(self.lot_id) + ':freespots')
+        if spot_id is None:
+            raise ParkingLot.FullException()
+        DatabaseObject.r.sadd('lot:' + str(self.lot_id) + ':occupiedspots', spot_id)
+
+    def removeReservation(self, spot_id: int) -> bool:
+        return bool(DatabaseObject.r.smove('lot:' + str(self.lot_id) + ':occupiedspots',
+                                           'lot:' + str(self.lot_id) + ':freespots',
+                                           str(spot_id)))
+
+    @staticmethod
+    def import_parkinglots():
+        r = DatabaseObject.r
+        r.delete('parkinglots')
+
+        with DatabaseObject.my.cursor() as cur:  # type: MySQLdb.cursors.DictCursor
+            cur.execute('SELECT * FROM parking_lots')
+            rows = cur.fetchall()
+
+            # add geo data
+            geoadd_command = ['GEOADD', 'parkinglots']
+            for row in rows:  # type: dict
+                geoadd_command.extend([str(row['longitude']), str(row['latitude']), pickle.dumps(row)])
+            r.execute_command(*geoadd_command)
+            print("Geodata added")
+
+            cur.execute('SELECT spot_id, lot_id, `number` FROM parking_spots ORDER By lot_id ASC')
+            while True:
+                rows = cur.fetchmany(1000)
+                if len(rows) < 1:
+                    break
+
+                # add all spots as free
+                data = {}
+                for row in rows:
+                    a = data.get(row['lot_id'], [])
+                    a.append(row['spot_id'])
+                    data[row['lot_id']] = a
+                for k in data:
+                    r.sadd('lot:' + str(k) + ':freespots', data[k])
+                for row in rows:
+                    r.hmset('spot:' + str(row['spot_id']), {k: v for k, v in row.items() if k in ['lot_id', 'number']})
+
+                print(cur.rownumber, '/', cur.rowcount)
+
+            DatabaseObject.my.commit()
+
+
+class ParkingSpot:
+    """This class represents a single spot to park a car on. This always belongs to exactly one ParkingLot."""
+
+    def __init__(self, spot_id: int):
+        super(ParkingSpot, self).__init__()
+        self.spot_id = spot_id
+
+        # ID, Nummer des Parkplatzes
+        self.lot_id, self.number = DatabaseObject.r.hmget('spot:' + str(self.spot_id), ('lot_id', 'number'))
+        assert self.lot_id is not None
+
+    def is_busy(self):
+        return not bool(DatabaseObject.r.sismember('lot:' + str(self.lot_id) + ':freespots'))

@@ -1,9 +1,12 @@
 from model.DomainClasses import PaymentMethod
 from model.User import User
+from model.ParkingLot import ParkingLot
 
 from model.DatabaseObject import DatabaseObject
 
 # DatabaseObject.r.flushall()
+
+# ParkingLot.import_parkinglots()  # only fast on localhost
 
 try:
     user = User("test@test.de", "123")
@@ -26,3 +29,5 @@ try:
 
 except User.NotFoundException as ex:
     print("User not found (or invalid password)")
+
+
