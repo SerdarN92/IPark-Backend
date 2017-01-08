@@ -1,5 +1,6 @@
 from AccountingBillingService import AccountingAndBillingService, AccountingAndBillingClient
 from AuthService import AuthService, AuthClient
+from GeoService import GeoService, GeoClient
 from model.DatabaseObject import DatabaseObject
 
 
@@ -64,9 +65,10 @@ class TestAuthServiceClient(AuthClient):
 
 
 if __name__ == "__main__":
-    DatabaseObject.r.flushall()
     abservice = AccountingAndBillingService()
     authservice = AuthService()
+    geoservice = GeoService()
+    print(GeoClient().find_near_parking_lots(51.4, 7.03, 6))
     a = TestAccountingAndBillingServiceClient()
     a.run_all_tests()
     b = TestAuthServiceClient()

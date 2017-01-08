@@ -1,7 +1,6 @@
 from communication.Service import Service
 from communication.Client import Client
 import AuthService
-import redis
 from model.User import User
 
 

@@ -24,15 +24,16 @@ class ParkingLot:
 
     def getFreeParkingSpots(self) -> int:
         assert self.lot_id is not None
-        DatabaseObject.r.scard('lot:' + str(self.lot_id) + ':freespots')
+        return DatabaseObject.r.scard('lot:' + str(self.lot_id) + ':freespots')
 
-    def getReserveFreeParkingSpot(self):
+    def reserve_free_parkingspot(self) -> int:
         assert self.lot_id is not None
 
         spot_id = DatabaseObject.r.spop('lot:' + str(self.lot_id) + ':freespots')
         if spot_id is None:
             raise ParkingLot.FullException()
         DatabaseObject.r.sadd('lot:' + str(self.lot_id) + ':occupiedspots', spot_id)
+        return int(spot_id)
 
     def removeReservation(self, spot_id: int) -> bool:
         return bool(DatabaseObject.r.smove('lot:' + str(self.lot_id) + ':occupiedspots',
@@ -62,17 +63,9 @@ class ParkingLot:
                     break
 
                 # add all spots as free
-                data = {}
                 for row in rows:
-                    a = data.get(row['lot_id'], [])
-                    a.append(row['spot_id'])
-                    data[row['lot_id']] = a
-                for k in data:
-                    r.sadd('lot:' + str(k) + ':freespots', data[k])
-                for row in rows:
+                    r.sadd('lot:' + str(row['lot_id']) + ':freespots', row['spot_id'])
                     r.hmset('spot:' + str(row['spot_id']), {k: v for k, v in row.items() if k in ['lot_id', 'number']})
-
-                print(cur.rownumber, '/', cur.rowcount)
 
             DatabaseObject.my.commit()
 
