@@ -52,7 +52,8 @@ nearby_lots_request = api.model('Nearby Lots Request', {
     'location': fields.Nested(location)
 })
 info = api.model('User Info', {'lastname': fields.String(description="Last Name", required=False),
-                               "password": fields.String(description="Password")})
+                               "password": fields.String(description="Password", required=False),
+                               "email": fields.String(description="E-Mail address", required=False)})
 userstatus = api.model('Status', {
     'info': fields.Nested(info, description="General User Information"),
     'used_spots': fields.List(fields.Nested(spot), description="Currently used parking spots"),
@@ -96,7 +97,28 @@ class UserLogin(Resource):
         return user_login(api)
 
 
-@ns.route("/user/status/<string:ufilter>")
+@ns.route("/user/info")
+@ns.header('X-Token', 'Authentication Token', required=True, type=str)
+@ns.response(401, 'Authentication Error', model=authentication_error)
+@ns.response(422, 'Invalid Arguments', model=argument_error)
+class UserInfo(Resource):
+    """ Request User Info """
+
+    @ns.marshal_with(info, code=200, description='Successful')
+    @ns.doc('Request User Info')
+    def get(self):
+        """ Request User Info """
+        return user_info_get(api)
+
+    @ns.expect(userstatus, validate=True)
+    @ns.marshal_with(api.model('Successful', {'message': fields.String()}), code=200, description='Successful')
+    @ns.doc('Set User Status')
+    def post(self, **kwargs):
+        """ Set User Status """
+        return user_status_set(api, **kwargs)
+
+
+@ns.route("/user/info/<string:ufilter>")
 @ns.param("ufilter")
 @ns.header('X-Token', 'Authentication Token', required=True, type=str)
 @ns.response(401, 'Authentication Error', model=authentication_error)
