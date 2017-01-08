@@ -33,9 +33,23 @@ reservation = api.model('Reservation', {
 })
 invoice = api.model('Invoice', {'reservation': fields.Nested(reservation, description="Reservation")})
 payment_method = api.model('Payment Methods', {})
+lot = api.model('ParkingLot', {
+    'lot_id': fields.String(required=True, description=''),
+    'name': fields.String(required=True, description=''),
+    'total_spots': fields.String(required=True, description=''),
+    'longitude': fields.String(required=True, description=''),
+    'latitude': fields.String(required=True, description=''),
+    'tax': fields.String(required=True, description='Tax (€/h)'),
+    'max_tax': fields.String(required=True, description='Tax limit per day'),
+    'reservation_tax': fields.String(required=True, description='Reservation tax (€/h)'),
+})
 nearby_lots = api.model('Nearby Lots', {
-    'precision': fields.Integer(description='Radius of Parking Lots'),
-    'lots': fields.List(fields.Nested(location))
+    'found_lots': fields.Integer(required=True, description='Number of found Parking Lots'),
+    'lots': fields.List(fields.Nested(lot), required=True, description='Array of ParkingLots')
+})
+nearby_lots_request = api.model('Nearby Lots Request', {
+    'radius': fields.Integer(description='Radius of Parking Lots in km'),
+    'location': fields.Nested(location)
 })
 info = api.model('User Info', {'lastname': fields.String(description="Last Name", required=False),
                                "password": fields.String(description="Password")})
@@ -119,6 +133,8 @@ class UserBilling(Resource):
 
 
 @ns.route('/user/payment_methods')
+@ns.response(401, 'Authentication Error', model=authentication_error)
+@ns.response(422, 'Invalid Arguments', model=argument_error)
 class PaymentMethods(Resource):
     """List of Payment Methods"""
 
@@ -132,36 +148,33 @@ class PaymentMethods(Resource):
     @ns.doc('')
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_with(api.model('Payment Method Edited', {}), code=200, description='Payment Method Edited')
-    @ns.marshal_with(api.model('Payment Method Added', {}), code=201, description='Payment Method Added')
-    @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
-    @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
+    # @ns.marshal_with(api.model('Payment Method Added', {}), code=201, description='Payment Method Added')
     def post(self):
         """Edit of Payment Methods"""
         return None, 500
 
 
 @ns.route('/parking')
+@ns.response(401, 'Authentication Error', model=authentication_error)
+@ns.response(422, 'Invalid Arguments', model=argument_error)
 class ParkingSpots(Resource):
     """ Parking Lots and Spots """
 
     @ns.doc('')
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_with(nearby_lots, code=200, description='List of Parking Lots')
-    @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
-    @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
-    def get(self):
-        """ List of nearby Parking Lots """
-        return None, 500
-
-    @ns.doc('')
-    @ns.header('X-Token', 'Authentication Token', required=True, type=str)
-    # @ns.expect()
-    @ns.marshal_with(api.model('Reservation Successful', {}), code=201, description='Reservation Successful')
-    @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
-    @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
+    @ns.expect(nearby_lots_request, validate=False)
     def post(self):
-        """ Reservate Parking Spots """
-        return None, 500
+        """ List of nearby Parking Lots """
+        return get_nearby_parkinglots(api)
+
+        # @ns.doc('')
+        # @ns.header('X-Token', 'Authentication Token', required=True, type=str)
+        # # @ns.expect()
+        # @ns.marshal_with(api.model('Reservation Successful', {}), code=201, description='Reservation Successful')
+        # def post(self):
+        #     """ Reserve Parking Spots """
+        #     return None, 500
 
 
 @ns.route('/barrier/<int:id>')
@@ -193,4 +206,3 @@ class BarrierSet(Resource):  # Barrier
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=443, debug=False, threaded=True, ssl_context=('assets/cert.crt', 'assets/cert.key'))
-

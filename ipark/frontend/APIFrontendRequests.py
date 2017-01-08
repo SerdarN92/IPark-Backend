@@ -1,12 +1,13 @@
 from flask_restplus import Api
 from AuthService import AuthClient
 from AccountingBillingService import AccountingAndBillingClient
+from GeoService import GeoClient
 from flask import request
-from hashlib import md5
 
 users = {}  # type: dict[str: User]
 auth_client = AuthClient()
 accounting_client = AccountingAndBillingClient()
+geo_client = GeoClient()
 
 
 def user_signup(api: Api):
@@ -52,7 +53,12 @@ def user_status_set(api: Api, **kwargs):
     return {'message': 'Success'}, 200
 
 
-def generateToken(*args):
-    m = md5()  # type: hashlib.md5
-    m.update(''.join(args).encode())
-    return m.hexdigest()
+def get_nearby_parkinglots(api: Api):
+    if 'X-Token' not in request.headers or not auth_client.validate_token(request.headers["X-Token"])["status"]:
+        print("X-Token")
+        api.abort(401, "Invalid Token")
+    lots = geo_client.find_near_parking_lots(api.payload['location']['lon'], api.payload['location']['lat'],
+                                             api.payload['radius'])  # type: list[ParkingLot]
+
+    lots = [x.get_data_dict() for x in lots]
+    return {'found_lots': len(lots), 'lots': lots}, 200

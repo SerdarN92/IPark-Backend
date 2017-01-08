@@ -18,11 +18,11 @@ class Service(threading.Thread):
         self.start()
 
     def on_connected(self, connection):
-        print("Connected")
+        # print("Connected")
         connection.channel(self.on_channel_open)
 
     def on_channel_open(self, channel):
-        print("Channel")
+        # print("Channel")
         self.channel = channel
         self.channel.queue_declare(self.on_queue_declared, queue=self.name)
         self.channel.basic_consume(self.on_request, queue=self.name)

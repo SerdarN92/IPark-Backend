@@ -44,6 +44,9 @@ class ParkingLot:
                                            'lot:' + str(self.lot_id) + ':freespots',
                                            str(spot_id)))
 
+    def get_data_dict(self):
+        return {k: getattr(self, k) for k in ['lot_id', 'name', 'total_spots', 'longitude', 'latitude', 'tax', 'max_tax', 'reservation_tax']}
+
     @staticmethod
     def import_parkinglots():
         r = DatabaseObject.r

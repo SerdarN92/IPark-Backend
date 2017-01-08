@@ -25,14 +25,15 @@ try:
 
     print(user._payment_methods)  # internal cache is cleared on save
     print(user.payment_methods[1])
+    print('Number of payment_methods', len(user.payment_methods))
 
     user.flush()  # actual save, now readonly
 
 except User.NotFoundException as ex:
     print("User not found (or invalid password)")
 
-lots = GeoService.find_near_parking_lots(None, 51.4, 7.03, 6)
-print(lots)
+lots = GeoService.find_near_parking_lots(None, 51.4, 7.03, 6, 3)
+print('Found Lots:', len(lots), [x.__dict__ for x in lots])
 
 lot = lots[2]  # type: ParkingLot
 print(lot.__dict__)
