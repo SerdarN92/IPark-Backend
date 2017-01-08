@@ -10,10 +10,10 @@ class ParkingLot:
     class FullException(BaseException):
         pass
 
-    def __init__(self):
+    def __init__(self, lot_id=None):
         super(ParkingLot, self).__init__()
 
-        self.lot_id = None  # ID des Parkplatzes / Parkhauses (vllt UUID?)
+        self.lot_id = lot_id  # ID des Parkplatzes / Parkhauses (vllt UUID?)
         self.name = None
         self.total_spots = None
         self.longitude = None
@@ -21,6 +21,10 @@ class ParkingLot:
         self.tax = None
         self.max_tax = None
         self.reservation_tax = None
+
+        if self.lot_id is not None:
+            lot_data = DatabaseObject.r.hget('parkinglotsbyid', self.lot_id)
+            DatabaseObject.assign_dict(self, pickle.loads(lot_data))
 
     def getFreeParkingSpots(self) -> int:
         assert self.lot_id is not None
@@ -49,11 +53,15 @@ class ParkingLot:
             cur.execute('SELECT * FROM parking_lots')
             rows = cur.fetchall()
 
-            # add geo data
+            # add lots to geo set and lot_id map
             geoadd_command = ['GEOADD', 'parkinglots']
+            hmset_command = ['HMSET', 'parkinglotsbyid']
             for row in rows:  # type: dict
                 geoadd_command.extend([str(row['longitude']), str(row['latitude']), pickle.dumps(row)])
+                hmset_command.extend([row['lot_id'], pickle.dumps(row)])
+
             r.execute_command(*geoadd_command)
+            r.execute_command(*hmset_command)
             print("Geodata added")
 
             cur.execute('SELECT spot_id, lot_id, `number` FROM parking_spots ORDER By lot_id ASC')

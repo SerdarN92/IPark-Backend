@@ -43,5 +43,6 @@ spot = ParkingSpot(spot_id)
 print('Reserved Spot:', spot.spot_id)
 print('Free Spots:', lot.getFreeParkingSpots())
 
+lot = ParkingLot(spot.lot_id)
 lot.removeReservation(spot.spot_id)
 print('Returned Spot\nFree Spots:', lot.getFreeParkingSpots())
