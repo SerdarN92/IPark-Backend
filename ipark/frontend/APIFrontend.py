@@ -192,5 +192,5 @@ class BarrierSet(Resource):  # Barrier
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=1443, debug=False, threaded=True)  # , ssl_context=('cert.crt', 'cert.key'))
+    app.run(host="127.0.0.1", port=443, debug=False, threaded=True, ssl_context=('assets/cert.crt', 'assets/cert.key'))
 
