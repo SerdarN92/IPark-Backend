@@ -1,7 +1,6 @@
 from communication.Service import Service
 from communication.Client import Client
 from model.User import User
-import AccountingBillingService
 import redis
 import uuid
 
@@ -33,8 +32,7 @@ class AuthService(Service):
         token = str(uuid.uuid4())
         while self.r.exists("token:"+token):
             token = str(uuid.uuid4())
-        self.r.set("token:"+token, email)
-        self.r.expire("token:"+token, 1800)
+        self.r.setex("token:"+token, 1800, email)
         return token
 
 
