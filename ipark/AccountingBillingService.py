@@ -1,6 +1,9 @@
 from communication.Service import Service
 from communication.Client import Client
 import AuthService
+from model.DatabaseObject import DatabaseObject
+from model.DomainClasses import Reservation
+from model.ParkingLot import ParkingLot, ParkingSpot
 from model.User import User
 
 
@@ -30,6 +33,22 @@ class AccountingAndBillingService(Service):
         ruser = User(user["email"], readonly=True)
         return {"status": True, "user": ruser.get_data_dict()}
 
+    def reserve_parking_spot(self, token: str, lot_id: int) -> bool:
+        response = self.authservice.get_email_from_token(token)
+        if not response['status']:
+            return False
+        user = User(response['email'], readonly=True)
+
+        lot = ParkingLot(lot_id)
+        spot_id = lot.reserve_free_parkingspot()
+        spot = ParkingSpot(spot_id)
+
+        res = Reservation()
+        res.spot_id = spot_id
+        res.user_id = user.user_id
+        user.reservations.append(res)
+        user.flush()
+
 
 class AccountingAndBillingClient(Client):
     def __init__(self):
@@ -40,6 +59,9 @@ class AccountingAndBillingClient(Client):
 
     def fetch_user_data(self, token):
         return self.call("fetch_user_data", token)
+
+    def reserve_parking_spot(self, token: str, lot_id: int) -> bool:
+        return self.call("reserve_parking_spot", token, lot_id)
 
 
 if __name__ == "__main__":

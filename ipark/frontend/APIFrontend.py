@@ -190,13 +190,18 @@ class ParkingSpots(Resource):
         """ List of nearby Parking Lots """
         return get_nearby_parkinglots(api)
 
-        # @ns.doc('')
-        # @ns.header('X-Token', 'Authentication Token', required=True, type=str)
-        # # @ns.expect()
-        # @ns.marshal_with(api.model('Reservation Successful', {}), code=201, description='Reservation Successful')
-        # def post(self):
-        #     """ Reserve Parking Spots """
-        #     return None, 500
+
+@ns.route('/parking/reserve')
+@ns.response(401, 'Authentication Error', model=authentication_error)
+@ns.response(422, 'Invalid Arguments', model=argument_error)
+class ReserveParkingSpot(Resource):
+    @ns.doc('Reserve Parking Spot by lot_id')
+    @ns.header('X-Token', 'Authentication Token', required=True, type=str)
+    @ns.expect(api.model('Parking lot', {'lot_id': fields.Integer('ID of parking lot')}), validate=True)
+    @ns.marshal_with(api.model('Reservation Successful', {}), code=201, description='Reservation Successful')
+    def post(self):
+        """ Reserve Parking Spots """
+        return reserve_parking_spot(api)
 
 
 @ns.route('/barrier/<int:id>')

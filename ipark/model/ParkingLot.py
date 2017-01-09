@@ -4,11 +4,13 @@ import pickle
 import MySQLdb.cursors
 
 
+class FullException(BaseException):
+    def __init__(self):
+        super(FullException, self).__init__()
+
+
 class ParkingLot:
     """This class represents a geographical location in which the system manages a set of parking spots."""
-
-    class FullException(BaseException):
-        pass
 
     def __init__(self, lot_id=None):
         super(ParkingLot, self).__init__()
@@ -35,7 +37,7 @@ class ParkingLot:
 
         spot_id = DatabaseObject.r.spop('lot:' + str(self.lot_id) + ':freespots')
         if spot_id is None:
-            raise ParkingLot.FullException()
+            raise FullException()
         DatabaseObject.r.sadd('lot:' + str(self.lot_id) + ':occupiedspots', spot_id)
         return int(spot_id)
 
@@ -45,7 +47,8 @@ class ParkingLot:
                                            str(spot_id)))
 
     def get_data_dict(self):
-        return {k: getattr(self, k) for k in ['lot_id', 'name', 'total_spots', 'longitude', 'latitude', 'tax', 'max_tax', 'reservation_tax']}
+        return {k: getattr(self, k) for k in
+                ['lot_id', 'name', 'total_spots', 'longitude', 'latitude', 'tax', 'max_tax', 'reservation_tax']}
 
     @staticmethod
     def import_parkinglots():

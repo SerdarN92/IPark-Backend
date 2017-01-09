@@ -40,7 +40,7 @@ class Service(threading.Thread):
         try:
             function = getattr(self, request['function'])
             result = {'result': function(*request['args'], **request['kwargs'])}
-        except Exception as ex:
+        except BaseException as ex:
             result = {'exception': ex}
 
         response = pickle.dumps(result)

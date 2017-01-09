@@ -2,6 +2,7 @@ from flask_restplus import Api
 from AuthService import AuthClient
 from AccountingBillingService import AccountingAndBillingClient
 from GeoService import GeoClient
+from model.ParkingLot import FullException
 from flask import request
 
 auth_client = AuthClient()
@@ -75,3 +76,16 @@ def get_nearby_parkinglots(api: Api):
 
     lots = [x.get_data_dict() for x in lots]
     return {'found_lots': len(lots), 'lots': lots}, 200
+
+
+def reserve_parking_spot(api: Api):
+    if 'X-Token' not in request.headers or not auth_client.validate_token(request.headers["X-Token"])["status"]:
+        print("X-Token")
+        api.abort(401, "Invalid Token")
+    try:
+        accounting_client.reserve_parking_spot(request.headers["X-Token"], api.payload['lot_id'])
+        return {}, 201
+    except FullException as ex:
+        api.abort(422, "Lot is full")
+    except BaseException as ex:
+        api.abort(400, ex.__class__.__name__)
