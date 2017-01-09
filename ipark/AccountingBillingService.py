@@ -28,10 +28,27 @@ class AccountingAndBillingService(Service):
     def fetch_user_data(self, token):
         user = self.authservice.get_email_from_token(token)
         if "status" not in user or not user["status"]:
-            print("Accounting")
             return {"status": False, "message": "Invalid Token."}
         ruser = User(user["email"], readonly=True)
         return {"status": True, "user": ruser.get_data_dict()}
+
+    def update_user_data(self, token, updata):
+        user = self.authservice.get_email_from_token(token)
+        if "status" not in user or not user["status"]:
+            return {"status": False, "message": "Invalid Token."}
+        if "password" in updata or "balance" in updata or "dataflags" in updata or "user_id" in updata:
+            return {"status": False, "message": "Invalid Arguments."}
+        wuser = User(user["email"])
+        if "address" in updata:
+            wuser.address = updata["address"]
+        if "last_name" in updata:
+            wuser.last_name = updata["last_name"]
+        if "first_name" in updata:
+            wuser.first_name = updata["first_name"]
+        wuser.save()
+        wuser.flush()
+        return {"status": True}
+
 
     def reserve_parking_spot(self, token: str, lot_id: int) -> bool:
         response = self.authservice.get_email_from_token(token)
@@ -60,6 +77,8 @@ class AccountingAndBillingClient(Client):
     def fetch_user_data(self, token):
         return self.call("fetch_user_data", token)
 
+    def update_user_data(self, token, updata):
+        return self.call("update_user_data", token, updata)
     def reserve_parking_spot(self, token: str, lot_id: int) -> bool:
         return self.call("reserve_parking_spot", token, lot_id)
 
