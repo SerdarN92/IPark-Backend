@@ -6,8 +6,10 @@ import uuid
 import pika
 
 
-class Client:
+class Client(threading.Thread):
     def __init__(self, name=None):
+        super(Client, self).__init__()
+
         self.name = name or self.__class__.__name__
         self.responses = {}
         self.corr_ids = []
@@ -21,6 +23,8 @@ class Client:
         self.callback_queue = result.method.queue
 
         self.channel.basic_consume(self.on_response, no_ack=True, queue=self.callback_queue)
+
+        self.start()
 
     def on_response(self, ch, method, props, body):
         if props.correlation_id in self.corr_ids:
@@ -47,3 +51,8 @@ class Client:
             raise response['exception']
 
         return response['result']
+
+    def run(self):
+        while True:
+            self.connection.process_data_events()
+            self.connection.sleep(10)
