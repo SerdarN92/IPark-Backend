@@ -34,7 +34,6 @@ def user_info_get(api: Api):
         return
     if "user" in user_result:
         return user_result["user"], 200
-    print("OMG")
     api.abort(500, "We apologize for having really bad behaving servers. Please try again later.")
     return
 
@@ -53,16 +52,15 @@ def user_status_get(api: Api, ufilter):
     return
 
 
-def user_status_set(api: Api, **kwargs):
-    if 'X-Token' not in request.headers or request.headers['X-Token'] not in users:
+def user_info_set(api: Api):
+    if 'X-Token' not in request.headers or not auth_client.validate_token(request.headers["X-Token"])["status"]:
         api.abort(401, "Invalid Token")
         return
-    user = users[request.headers['X-Token']]
-
-    if 'info' not in api.payload or 'lastname' not in api.payload['info']:
-        api.abort(422, 'Invalid Arguments', argument='lastname')
-
-    user['lastname'] = api.payload['info']['lastname'] or user.get('lastname', 'noname')
+    status = accounting_client.update_user_data(request.headers["X-Token"], api.payload)
+    print(status)
+    if "status" not in status or not status["status"]:
+        api.abort(401, "Invalid Token or arguments")
+        return
     return {'message': 'Success'}, 200
 
 

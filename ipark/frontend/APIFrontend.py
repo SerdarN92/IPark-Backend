@@ -51,13 +51,20 @@ nearby_lots_request = api.model('Nearby Lots Request', {
     'radius': fields.Integer(description='Radius of Parking Lots in km'),
     'location': fields.Nested(location)
 })
-info = api.model('User Info', {'lastname': fields.String(description="Last Name", required=False),
-                               "password": fields.String(description="Password", required=False),
-                               "email": fields.String(description="E-Mail address", required=False)})
+info = api.model('User Info', {'last_name': fields.String(description="Last Name"),
+                               "email": fields.String(description="E-Mail address"),
+                               'first_name': fields.String(description="First Name"),
+                               'balance': fields.Float(description="Account balance")})
 userstatus = api.model('Status', {
     'info': fields.Nested(info, description="General User Information"),
     'used_spots': fields.List(fields.Nested(spot), description="Currently used parking spots"),
     'reservations': fields.List(fields.Nested(reservation), description="Active reservations")
+})
+
+userupdate = api.model("User Update Info", {
+    'last_name': fields.String(description="new last name"),
+    'first_name': fields.String(description="new first name"),
+    'address': fields.String(description="new address")
 })
 
 authentication_error = api.model('User Authentication Error', {
@@ -110,12 +117,12 @@ class UserInfo(Resource):
         """ Request User Info """
         return user_info_get(api)
 
-    @ns.expect(userstatus, validate=True)
+    @ns.expect(userupdate, validate=True)
     @ns.marshal_with(api.model('Successful', {'message': fields.String()}), code=200, description='Successful')
-    @ns.doc('Set User Status')
-    def post(self, **kwargs):
+    @ns.doc('Update User Details')
+    def put(self):
         """ Set User Status """
-        return user_status_set(api, **kwargs)
+        return user_info_set(api)
 
 
 @ns.route("/user/info/<string:ufilter>")
@@ -131,13 +138,6 @@ class UserStatus(Resource):
     def get(self, ufilter):
         """ Request User Status """
         return user_status_get(api, ufilter)
-
-    @ns.expect(userstatus, validate=True)
-    @ns.marshal_with(api.model('Successful', {'message': fields.String()}), code=200, description='Successful')
-    @ns.doc('Set User Status')
-    def post(self, **kwargs):
-        """ Set User Status """
-        return user_status_set(api, **kwargs)
 
 
 @ns.route("/billing")
