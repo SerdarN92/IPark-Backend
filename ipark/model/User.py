@@ -6,7 +6,8 @@ import MySQLdb
 class User(DomainClassBase):
     """Objects of this class hold the master data of the customers."""
 
-    database_fields = ['user_id', 'first_name', 'last_name', 'email', 'password', 'address', 'dataflags', 'balance']
+    database_fields = ['user_id', 'first_name', 'last_name', 'email', 'password',
+                       'street', 'number', 'plz', 'city', 'country', 'dataflags', 'balance']
 
     class NotFoundException(BaseException):
         pass
@@ -17,12 +18,17 @@ class User(DomainClassBase):
         """
         super(User, self).__init__()
         self.user_id = None
-        self.first_name = None  # type: str
-        self.last_name = None  # type: str
-
         self.email = None
         self.password = None
-        self.address = None  # string oder extra Datentyp?
+
+        self.first_name = None  # type: str
+        self.last_name = None  # type: str
+        self.street = None  # type: str
+        self.number = None  # type: str
+        self.plz = None  # type: str
+        self.city = None  # type: str
+        self.country = None  # type: str
+
         self.dataflags = None  # z.B. ist ist 0x01 == delete
         self.balance = None  # interner Kontostand?
 
@@ -68,10 +74,15 @@ class User(DomainClassBase):
             setattr(self, private_name, None)
 
     @staticmethod
-    def create(email, password):
+    def create(email, password, **additional_data):
         with DatabaseObject.my.cursor() as cur:
             try:
-                if cur.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, password)) != 1:
+                data = [email, password]
+                data.extend([additional_data.get(field, '') for field
+                             in ['first_name', 'last_name', 'street', 'number', 'plz', 'city', 'country']])
+                if cur.execute("INSERT INTO users (email, password, first_name, last_name, "
+                               "street, `number`, plz, city, country) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                               tuple(*data)) != 1:
                     return None  # unknown error :)
             except MySQLdb.IntegrityError:
                 return None  # the mail is already in use

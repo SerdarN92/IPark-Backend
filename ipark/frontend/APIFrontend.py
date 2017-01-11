@@ -51,10 +51,17 @@ nearby_lots_request = api.model('Nearby Lots Request', {
     'radius': fields.Integer(description='Radius of Parking Lots in km'),
     'location': fields.Nested(location)
 })
-info = api.model('User Info', {'last_name': fields.String(description="Last Name"),
-                               "email": fields.String(description="E-Mail address"),
-                               'first_name': fields.String(description="First Name"),
-                               'balance': fields.Float(description="Account balance")}) # Todo use Fixed or Arbitrary
+info = api.model('User Info', {
+    'first_name': fields.String(description="First Name"),
+    'last_name': fields.String(description="Last Name"),
+    "email": fields.String(description="E-Mail address"),
+    'street': fields.String(description="new street"),
+    'number': fields.String(description="new number"),
+    'plz': fields.String(description="new plz"),
+    'city': fields.String(description="new city"),
+    'country': fields.String(description="new country"),
+    'balance': fields.Arbitrary(description="Account balance"),
+})
 userstatus = api.model('Status', {
     'info': fields.Nested(info, description="General User Information"),
     'used_spots': fields.List(fields.Nested(spot), description="Currently used parking spots"),
@@ -64,7 +71,11 @@ userstatus = api.model('Status', {
 userupdate = api.model("User Update Info", {
     'last_name': fields.String(description="new last name"),
     'first_name': fields.String(description="new first name"),
-    'address': fields.String(description="new address")
+    'street': fields.String(description="new street"),
+    'number': fields.String(description="new number"),
+    'plz': fields.String(description="new plz"),
+    'city': fields.String(description="new city"),
+    'country': fields.String(description="new country"),
 })
 
 authentication_error = api.model('User Authentication Error', {

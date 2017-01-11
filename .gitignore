@@ -3,6 +3,10 @@
 .AppleDouble
 .LSOverride
 
+# IPARK
+assets/*.crt
+assets/*.key
+
 # PyCharm
 .idea/
 **/__pycache__/

@@ -39,16 +39,14 @@ class AccountingAndBillingService(Service):
         if "password" in updata or "balance" in updata or "dataflags" in updata or "user_id" in updata:
             return {"status": False, "message": "Invalid Arguments."}
         wuser = User(user["email"])
-        if "address" in updata:
-            wuser.address = updata["address"]
-        if "last_name" in updata:
-            wuser.last_name = updata["last_name"]
-        if "first_name" in updata:
-            wuser.first_name = updata["first_name"]
+
+        for field in ['first_name', 'last_name', 'street', 'number', 'plz', 'city', 'country']:
+            if field in updata:
+                setattr(wuser, field, updata[field])
+
         wuser.save()
         wuser.flush()
         return {"status": True}
-
 
     def reserve_parking_spot(self, token: str, lot_id: int) -> bool:
         response = self.authservice.get_email_from_token(token)
@@ -79,6 +77,7 @@ class AccountingAndBillingClient(Client):
 
     def update_user_data(self, token, updata):
         return self.call("update_user_data", token, updata)
+
     def reserve_parking_spot(self, token: str, lot_id: int) -> bool:
         return self.call("reserve_parking_spot", token, lot_id)
 
