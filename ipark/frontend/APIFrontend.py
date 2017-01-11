@@ -78,6 +78,11 @@ userupdate = api.model("User Update Info", {
     'country': fields.String(description="new country"),
 })
 
+sign_up = api.inherit("Sign Up Request", userstatus, {
+    'email': fields.String(required=True, description='E-Mail Address'),
+    'password': fields.String(required=True, description='Password')
+})
+
 authentication_error = api.model('User Authentication Error', {
     'message': fields.String(readOnly=True, required=False, description='Error Message')
 })
@@ -91,7 +96,7 @@ class UserSignup(Resource):
     """User Sign Up"""
 
     @ns.doc('')
-    @ns.expect(credentials, validate=True)
+    @ns.expect(sign_up, validate=True)
     @ns.marshal_with(api.model('Token', {'token': fields.String(required=True)}),
                      code=200, description='Sign Up successful')
     @ns.response(401, 'Authentication Error', model=authentication_error)

@@ -82,7 +82,7 @@ class User(DomainClassBase):
                              in ['first_name', 'last_name', 'street', 'number', 'plz', 'city', 'country']])
                 if cur.execute("INSERT INTO users (email, password, first_name, last_name, "
                                "street, `number`, plz, city, country) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                               tuple(*data)) != 1:
+                               tuple(data)) != 1:
                     return None  # unknown error :)
             except MySQLdb.IntegrityError:
                 return None  # the mail is already in use

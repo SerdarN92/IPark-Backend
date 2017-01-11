@@ -11,7 +11,7 @@ geo_client = GeoClient()
 
 
 def user_signup(api: Api):
-    sign_up_result = accounting_client.sign_up(api.payload['email'], api.payload['password'])
+    sign_up_result = accounting_client.sign_up(api.payload)
     if "token" in sign_up_result:
         return {"token": sign_up_result["token"]}, 200
     else:

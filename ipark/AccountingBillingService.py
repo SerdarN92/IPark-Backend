@@ -12,17 +12,15 @@ class AccountingAndBillingService(Service):
         self.authservice = AuthService.AuthClient()
         super().__init__("Accounting")
 
-    def sign_up(self, email, password, first_name=None, last_name=None, address=None):
-        newbody = User.create(email, password)
+    def sign_up(self, info):
+        if 'email' not in info or 'password' not in info or len(info['email']) * len(info['password']) == 0:
+            return {"status": False, "message": "Invalid Arguments"}
+
+        newbody = User.create(**info)
         if newbody is None:
             return {"status": False, "message": "Mail address is already in use."}
-        if first_name is not None:
-            pass
-        if last_name is not None:
-            pass
-        if address is not None:
-            pass
-        result = self.authservice.login(email, password)
+
+        result = self.authservice.login(info['email'], info['password'])
         return {"status": True, "token": result["token"]}
 
     def fetch_user_data(self, token):
@@ -69,8 +67,8 @@ class AccountingAndBillingClient(Client):
     def __init__(self):
         super().__init__("Accounting")
 
-    def sign_up(self, email, password):
-        return self.call("sign_up", email, password)
+    def sign_up(self, info):
+        return self.call("sign_up", info)
 
     def fetch_user_data(self, token):
         return self.call("fetch_user_data", token)
