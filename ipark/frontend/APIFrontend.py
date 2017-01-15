@@ -80,7 +80,7 @@ userupdate = api.model("User Update Info", {
     'country': fields.String(description="new country"),
 })
 
-sign_up = api.inherit("Sign Up Request", userstatus, {
+sign_up = api.inherit("Sign Up Request", userupdate, {
     'email': fields.String(required=True, description='E-Mail Address'),
     'password': fields.String(required=True, description='Password')
 })
