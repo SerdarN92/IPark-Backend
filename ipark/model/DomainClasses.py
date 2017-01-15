@@ -1,4 +1,4 @@
-from model.DatabaseObject import DomainClassBase
+from model.DatabaseObject import DomainClassBase, DatabaseObject
 
 
 class PaymentMethod(DomainClassBase):
@@ -25,10 +25,14 @@ class Reservation(DomainClassBase):
 
     database_fields = ['res_id', 'user_id', 'spot_id', 'valid_from', 'valid_until', 'duration']
 
+    @staticmethod
+    def get_next_id() -> int:
+        return DatabaseObject.r.incr('reservationsLastId')
+
     def __init__(self):
         super(Reservation, self).__init__()
 
-        self.res_id = None  # UUID
+        self.res_id = None  # type: int
         self.user_id = None
         self.spot_id = None
 

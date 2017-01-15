@@ -57,6 +57,7 @@ class AccountingAndBillingService(Service):
         spot = ParkingSpot(spot_id)
 
         res = Reservation()
+        res.res_id = Reservation.get_next_id()
         res.spot_id = spot_id
         res.user_id = user.user_id
         res.valid_from = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
