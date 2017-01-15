@@ -25,11 +25,13 @@ location = api.model('Location', {
 spot = api.inherit('Parking Spot', location, {})
 tariff = api.model('Tariff', {'pricePerMinute': fields.Arbitrary(description="Price per Minute")})
 reservation = api.model('Reservation', {
-    'spot': fields.Nested(spot, required=True, description="Parking Spot"),
-    'time': fields.DateTime(required=True, description="Time of Reservation"),
-    'duration': fields.Integer(description="Minutes of Reservation (-1 if active)", min=-1),
-    'active': fields.Boolean(required=True, description="if reservation duration is increasing"),
-    'tariff': fields.Nested(tariff, required=True, description="Tariff")
+    'id': fields.Integer(required=True, description="Unique identifier"),
+    'lot_id': fields.Integer(required=True, description="Parking Lot id"),
+    'number': fields.Integer(description="Parking spot number inside the parking lot (not globally unique)"),
+    'spot_id': fields.Integer(description="Globally unique identifier of the parking spot"),
+    'time': fields.String(required=True, description="Time of Reservation (e.g. 2017-01-14 18:43:56)"),
+    'duration': fields.Integer(description="Minutes of Reservation (-1 if active)"),
+    # todo 'tariff': fields.Nested(tariff, required=True, description="Tariff")
 })
 invoice = api.model('Invoice', {'reservation': fields.Nested(reservation, description="Reservation")})
 payment_method = api.model('Payment Methods', {})
@@ -219,7 +221,12 @@ class ReserveParkingSpot(Resource):
         """ Reserve Parking Spots """
         return reserve_parking_spot(api)
 
+    @ns.doc("Get the users reservation")
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
+    @ns.marshal_with(api.model('Reservation List', {"reservations":
+                                                    fields.List(fields.Nested(reservation),
+                                                                description="List of reservations",
+                                                                required=False)}))
     def get(self):
         return get_reservation_data(api)
 

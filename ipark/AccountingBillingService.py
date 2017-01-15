@@ -73,15 +73,14 @@ class AccountingAndBillingService(Service):
         for r in user.reservations:
             p = ParkingSpot(r.spot_id)
             if r.valid_until is None:
-                reservations.append({"res_id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
-                                     "start_time": r.valid_from})
+                reservations.append({"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
+                                     "time": r.valid_from})
             else:
                 dur = (datetime.strptime(r.valid_until, "%Y-%m-%d %H:%M:%S") -
                        datetime.strptime(r.valid_from, "%Y-%m-%d %H:%M:%S")).seconds
-                reservations.append({"res_id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
-                                     "start_time": r.valid_from, "duration": dur, "end_time": r.valid_until})
+                reservations.append({"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
+                                     "time": r.valid_from, "duration": dur})
 
-        print(reservations)
         return reservations
 
 
