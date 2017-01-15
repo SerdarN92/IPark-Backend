@@ -10,7 +10,7 @@ from model.User import User
 class AccountingAndBillingService(Service):
     def __init__(self):
         self.authservice = AuthService.AuthClient()
-        super().__init__("Accounting+")  # todo change back
+        super().__init__("Accounting")
 
     def sign_up(self, info):
         if 'email' not in info or 'password' not in info or len(info['email']) * len(info['password']) == 0:
@@ -86,7 +86,7 @@ class AccountingAndBillingService(Service):
 
 class AccountingAndBillingClient(Client):
     def __init__(self):
-        super().__init__("Accounting+")
+        super().__init__("Accounting")
 
     def sign_up(self, info):
         return self.call("sign_up", info)

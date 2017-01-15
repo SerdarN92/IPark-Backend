@@ -58,7 +58,6 @@ def user_info_set(api: Api):
         api.abort(401, "Invalid Token")
         return
     status = accounting_client.update_user_data(request.headers["X-Token"], api.payload)
-    print(status)
     if "status" not in status or not status["status"]:
         api.abort(401, "Invalid Token or arguments")
         return
@@ -67,7 +66,6 @@ def user_info_set(api: Api):
 
 def get_nearby_parkinglots(api: Api):
     if not check_auth(request.headers):
-        print("X-Token")
         api.abort(401, "Invalid Token")
     lots = geo_client.find_near_parking_lots(api.payload['location']['lon'], api.payload['location']['lat'],
                                              api.payload['radius'])  # type: list[ParkingLot]
@@ -78,7 +76,6 @@ def get_nearby_parkinglots(api: Api):
 
 def reserve_parking_spot(api: Api):
     if not check_auth(request.headers):
-        print("X-Token")
         api.abort(401, "Invalid Token")
     try:
         accounting_client.reserve_parking_spot(request.headers["X-Token"], api.payload['lot_id'])
@@ -91,7 +88,6 @@ def reserve_parking_spot(api: Api):
 
 def get_reservation_data(api: Api):
     if not check_auth(request.headers):
-        print("X-Token")
         api.abort(401, "Invalid Token")
     reservation_result = accounting_client.fetch_reservation_data(request.headers["X-Token"])
     # return {"reservations": reservation_result}
