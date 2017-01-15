@@ -6,6 +6,14 @@ import MySQLdb.cursors
 import redis
 
 
+class ReadonlyException(BaseException):
+    pass
+
+
+class LockedException(BaseException):
+    pass
+
+
 class DomainClassBase:
     database_fields = None
 
@@ -16,7 +24,7 @@ class DomainClassBase:
     def save(self):
         assert self._modified is not None
         if self._modified == DatabaseObject.READONLY:
-            raise DatabaseObject.ReadonlyException()
+            raise ReadonlyException()
 
         if self._modified == DatabaseObject.NONE:
             self._modified = DatabaseObject.MODIFIED
@@ -44,26 +52,21 @@ class DomainClassBase:
 
 
 class DatabaseObject:
-    class ReadonlyException(BaseException):
-        pass
-
     r = redis.StrictRedis(host='132.252.152.57')
-    r.execute_command("AUTH GS~FsB3~&c7T")
 
+    r.execute_command("AUTH GS~FsB3~&c7T")
     READONLY = -1
     NONE = 0
     NEW = 1
-    MODIFIED = 2
 
     # r.flushall()
+
+    MODIFIED = 2
 
     my = mydb.connect('132.252.152.57', 'root', 'GS~FsB3~&c7T', 'ipark',
                       cursorclass=mydb.cursors.DictCursor)
 
     database_fields = None
-
-    class LockedError(BaseException):
-        pass
 
     def __init__(self):
         pass
@@ -74,7 +77,7 @@ class DatabaseObject:
 
         lock = DatabaseObject.r.getset(key + ':locked', 1)
         if lock == 1:
-            raise DatabaseObject.LockedError()
+            raise LockedException()
 
         data = DatabaseObject.load_data(key, query, queryargs, factory)
 

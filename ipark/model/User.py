@@ -3,14 +3,15 @@ from model.DomainClasses import PaymentMethod, Reservation, Invoice
 import MySQLdb
 
 
+class NotFoundException(BaseException):
+    pass
+
+
 class User(DomainClassBase):
     """Objects of this class hold the master data of the customers."""
 
     database_fields = ['user_id', 'first_name', 'last_name', 'email', 'password',
                        'street', 'number', 'plz', 'city', 'country', 'dataflags', 'balance']
-
-    class NotFoundException(BaseException):
-        pass
 
     def __init__(self, email: str, password: str = None, readonly: bool = False):
         """ Load User Data
@@ -47,7 +48,7 @@ class User(DomainClassBase):
 
         # Check
         if not data or (password is not None and data['password'] != password):
-            raise User.NotFoundException()
+            raise NotFoundException()
 
         # Assign
         for e in data:

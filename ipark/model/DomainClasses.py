@@ -4,14 +4,16 @@ from model.DatabaseObject import DomainClassBase
 class PaymentMethod(DomainClassBase):
     """This class is used to represent different payment methods."""
 
-    database_fields = ['payment_provider', 'valid_from', 'valid_until']
+    database_fields = ['pm_id', 'user_id', 'payment_provider', 'valid_from', 'valid_until']
 
     def __init__(self):
         super(PaymentMethod, self).__init__()
 
+        self.pm_id = None
+        self.user_id = None
         self.payment_provider = None
-        self.valid_from = ""
-        self.valid_until = ""
+        self.valid_from = None
+        self.valid_until = None
         # weiteres? ggf. abhängig von der Zahlungsmethode
 
     def __str__(self):
@@ -49,5 +51,3 @@ class Invoice(DomainClassBase):
         self.deadline = ""  # Frist für die Begleichung
         self.payment_method = None  # type: PaymentMethod
         self.status = 0  # bezahlt?
-
-
