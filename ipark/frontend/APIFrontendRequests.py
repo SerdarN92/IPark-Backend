@@ -26,7 +26,7 @@ def user_login(api: Api):
 
 
 def user_info_get(api: Api):
-    if 'X-Token' not in request.headers or not auth_client.validate_token(request.headers["X-Token"])["status"]:
+    if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
     user_result = accounting_client.fetch_user_data(request.headers["X-Token"])
@@ -40,7 +40,7 @@ def user_info_get(api: Api):
 
 
 def user_status_get(api: Api, ufilter):
-    if 'X-Token' not in request.headers or not auth_client.validate_token(request.headers["X-Token"])["status"]:
+    if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
     user_result = accounting_client.fetch_user_data(request.headers["X-Token"])
@@ -54,7 +54,7 @@ def user_status_get(api: Api, ufilter):
 
 
 def user_info_set(api: Api):
-    if 'X-Token' not in request.headers or not auth_client.validate_token(request.headers["X-Token"])["status"]:
+    if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
     status = accounting_client.update_user_data(request.headers["X-Token"], api.payload)
@@ -66,7 +66,7 @@ def user_info_set(api: Api):
 
 
 def get_nearby_parkinglots(api: Api):
-    if 'X-Token' not in request.headers or not auth_client.validate_token(request.headers["X-Token"])["status"]:
+    if not check_auth(request.headers):
         print("X-Token")
         api.abort(401, "Invalid Token")
     lots = geo_client.find_near_parking_lots(api.payload['location']['lon'], api.payload['location']['lat'],
@@ -77,7 +77,7 @@ def get_nearby_parkinglots(api: Api):
 
 
 def reserve_parking_spot(api: Api):
-    if 'X-Token' not in request.headers or not auth_client.validate_token(request.headers["X-Token"])["status"]:
+    if not check_auth(request.headers):
         print("X-Token")
         api.abort(401, "Invalid Token")
     try:
@@ -87,3 +87,24 @@ def reserve_parking_spot(api: Api):
         api.abort(422, "Lot is full")
     except BaseException as ex:
         api.abort(400, ex.__class__.__name__)
+
+
+def get_reservation_data(api: Api):
+    if not check_auth(request.headers):
+        print("X-Token")
+        api.abort(401, "Invalid Token")
+    reservation_result = accounting_client.fetch_reservation_data(request.headers["X-Token"])
+    # return {"reservations": reservation_result}
+    # todo das hier kann weg, sobald die ID und Number richtig gesetzt werden
+    res = []
+    for p in reservation_result:
+        if p["id"] is None:
+            p["id"] = -1
+        if p["number"] is None or p["number"] == b'None':
+            p["number"] = -1
+        res.append(p)
+    return {"reservations": res}
+
+
+def check_auth(headers):
+    return 'X-Token' in headers and auth_client.validate_token(headers["X-Token"])["status"]
