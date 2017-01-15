@@ -87,3 +87,10 @@ def reserve_parking_spot(api: Api):
         api.abort(422, "Lot is full")
     except BaseException as ex:
         api.abort(400, ex.__class__.__name__)
+
+def get_reservation_data(api: Api):
+    if 'X-Token' not in request.headers or not auth_client.validate_token(request.headers["X-Token"])["status"]:
+        print("X-Token")
+        api.abort(401, "Invalid Token")
+    reservation_result = accounting_client.fetch_reservation_data(request.headers["X-Token"])
+    print(reservation_result)

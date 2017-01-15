@@ -219,6 +219,10 @@ class ReserveParkingSpot(Resource):
         """ Reserve Parking Spots """
         return reserve_parking_spot(api)
 
+    @ns.header('X-Token', 'Authentication Token', required=True, type=str)
+    def get(self):
+        return get_reservation_data(api)
+
 
 @ns.route('/barrier/<int:id>')
 @ns.param('id', description='ID of Reservation')
@@ -248,4 +252,4 @@ class BarrierSet(Resource):  # Barrier
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=443, debug=False, threaded=True, ssl_context=('assets/cert.crt', 'assets/cert.key'))
+    app.run(host="127.0.0.1", port=1443, debug=False, threaded=True)#, ssl_context=('assets/cert.crt', 'assets/cert.key'))

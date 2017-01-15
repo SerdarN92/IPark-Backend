@@ -26,7 +26,7 @@ def test_case(condition, name):
 class TestAccountingAndBillingServiceClient(AccountingAndBillingClient):
     def test_sign_up(self):
         print(PrintColors.HEADER + "Testing Accounting And Billing Sign up" + PrintColors.ENDC)
-        test_case("token" in self.sign_up("horst@localhorst", "password"), "Basic sign up")
+        test_case("token" in self.sign_up({"email": "horst@localhorst", "password": "password"}), "Basic sign up")
 
         exp = {"status": False, "message": "Mail address is already in use."}
         test_case(self.sign_up("horst@localhorst", "password") == exp, "Sign up with used mail address")
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     authservice = AuthService()
     geoservice = GeoService()
     a = TestAccountingAndBillingServiceClient()
-    a.run_all_tests()
+   # a.run_all_tests()
     b = TestAuthServiceClient()
-    b.run_all_tests()
+   # b.run_all_tests()
 # service.stop()
