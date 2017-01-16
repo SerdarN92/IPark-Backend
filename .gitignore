@@ -6,6 +6,7 @@
 # IPARK
 assets/*.crt
 assets/*.key
+assets/*.pem
 
 # PyCharm
 .idea/

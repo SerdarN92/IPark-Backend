@@ -1,4 +1,5 @@
 import MySQLdb
+import ssl
 
 from AccountingBillingService import AccountingAndBillingService
 from AuthService import AuthService
@@ -27,4 +28,6 @@ geoservice = GeoService()
 # HTTPS self signed
 # app.run(host="0.0.0.0", port=443, debug=False, threaded=True, ssl_context='adhoc')
 # HTTPS
-app.run(host="0.0.0.0", port=443, debug=False, threaded=True, ssl_context=('assets/cert.crt', 'assets/cert.key'))
+context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+context.load_cert_chain('assets/fullchain1.pem', 'assets/privkey1.pem')
+app.run(host="0.0.0.0", port=443, debug=False, threaded=True, ssl_context=context)
