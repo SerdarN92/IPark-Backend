@@ -22,6 +22,12 @@ class GeoService(Service):
 
         return lots
 
+    def get_lot(self, lot_id):
+        try:
+            return ParkingLot(lot_id)
+        except:
+            return None
+
 
 class GeoClient(Client):
     def __init__(self):
@@ -29,3 +35,6 @@ class GeoClient(Client):
 
     def find_near_parking_lots(self, lon, lat, radius, max_results: int = 30):
         return self.call("find_near_parking_lots", lon, lat, radius, max_results)
+
+    def get_lot(self, lot_id):
+        return self.call("get_lot", lot_id)

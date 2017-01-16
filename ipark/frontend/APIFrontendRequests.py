@@ -104,3 +104,13 @@ def get_reservation_data(api: Api):
 
 def check_auth(headers):
     return 'X-Token' in headers and auth_client.validate_token(headers["X-Token"])["status"]
+
+
+def get_lot_info(api: Api, lot_id: int):
+    if not check_auth(request.headers):
+        api.abort(401, "Invalid Token")
+    lot = geo_client.get_lot(lot_id)  # type: ParkingLot
+    if lot is not None:
+        return lot.get_data_dict(), 200
+    else:
+        api.abort(422, 'lot_id not found')

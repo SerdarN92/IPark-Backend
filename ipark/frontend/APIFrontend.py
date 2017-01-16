@@ -1,7 +1,8 @@
 from flask import Flask
-from flask_restplus import Api, Resource, fields, errors
+from flask_restplus import Resource, fields
 
 from frontend.APIFrontendRequests import *
+from frontend.APIFrontendRequests import get_lot_info
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='iPark', description='iPark Frontend')
@@ -194,7 +195,7 @@ class PaymentMethods(Resource):
         return None, 500
 
 
-@ns.route('/parking')
+@ns.route('/parking') # TODO: Change to '/parking/near_lots'
 @ns.response(401, 'Authentication Error', model=authentication_error)
 @ns.response(422, 'Invalid Arguments', model=argument_error)
 class ParkingSpots(Resource):
@@ -257,6 +258,15 @@ class BarrierSet(Resource):  # Barrier
         """ Open/Close Barrier """
         return None, 500
 
+
+@ns.route('/parking/lotinfo/<int:lot_id>')
+@ns.param('lot_id', required=True, description='ID of Lot')
+@ns.header('X-Token', 'Authentication Token', required=True, type=str)
+class LotInfo(Resource):
+
+    @ns.marshal_with(lot, code=200)
+    def get(self, lot_id):
+        return get_lot_info(api, lot_id)
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=1443, debug=False, threaded=True)#, ssl_context=('assets/cert.crt', 'assets/cert.key'))
