@@ -45,6 +45,8 @@ lot = api.model('ParkingLot', {
     'tax': fields.String(required=True, description='Tax (€/h)'),
     'max_tax': fields.String(required=True, description='Tax limit per day'),
     'reservation_tax': fields.String(required=True, description='Reservation tax (€/h)'),
+    'information': fields.String(required=True, description=''),
+    'flags': fields.String(required=True, description=''),
 })
 nearby_lots = api.model('Nearby Lots', {
     'found_lots': fields.Integer(required=True, description='Number of found Parking Lots'),

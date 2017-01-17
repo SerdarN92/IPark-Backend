@@ -23,6 +23,8 @@ class ParkingLot:
         self.tax = None
         self.max_tax = None
         self.reservation_tax = None
+        self.information = None
+        self.flags = None
 
         if self.lot_id is not None:
             lot_data = DatabaseObject.r.hget('parkinglotsbyid', self.lot_id)
@@ -48,7 +50,9 @@ class ParkingLot:
 
     def get_data_dict(self):
         return {k: getattr(self, k) for k in
-                ['lot_id', 'name', 'total_spots', 'longitude', 'latitude', 'tax', 'max_tax', 'reservation_tax']}
+                ['lot_id', 'name', 'total_spots', 'longitude', 'latitude',
+                 'tax', 'max_tax', 'reservation_tax',
+                 'information', 'flags']}
 
     @staticmethod
     def import_parkinglots():

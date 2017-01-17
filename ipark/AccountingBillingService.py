@@ -51,6 +51,8 @@ class AccountingAndBillingService(Service):
         if not response['status']:
             return False
         user = User(response['email'], readonly=True)
+        if not user.reservations[-1].duration > 0:
+            return False
 
         lot = ParkingLot(lot_id)
         spot_id = lot.reserve_free_parkingspot()
