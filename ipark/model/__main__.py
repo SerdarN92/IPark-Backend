@@ -1,6 +1,6 @@
 from GeoService import GeoService
 from model.DomainClasses import PaymentMethod
-from model.User import User
+from model.User import User, NotFoundException
 from model.ParkingLot import ParkingLot, ParkingSpot
 
 from model.DatabaseObject import DatabaseObject
@@ -29,7 +29,7 @@ try:
 
     user.flush()  # actual save, now readonly
 
-except User.NotFoundException as ex:
+except NotFoundException as ex:
     print("User not found (or invalid password)")
 
 lots = GeoService.find_near_parking_lots(None, 51.4, 7.03, 6, 3)
