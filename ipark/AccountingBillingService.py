@@ -53,7 +53,7 @@ class AccountingAndBillingService(Service):
         if not response['status']:
             return False
         user = User(response['email'], readonly=True)
-        if not len(user.reservations[-1].parking_end) > 0:
+        if user.reservations[-1].parking_end is None or len(user.reservations[-1].parking_end) <= 0:
             return False
 
         lot = ParkingLot(lot_id)
@@ -68,7 +68,7 @@ class AccountingAndBillingService(Service):
         user.reservations.append(res)
         user.save()
         user.flush()
-        return res
+        return True
 
     def fetch_reservation_data(self, token):
         response = self.authservice.get_email_from_token(token)

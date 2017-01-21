@@ -1,4 +1,6 @@
 from flask_restplus import Api
+from werkzeug.exceptions import HTTPException
+
 from AuthService import AuthClient
 from AccountingBillingService import AccountingAndBillingClient
 from GeoService import GeoClient
@@ -78,8 +80,12 @@ def reserve_parking_spot(api: Api):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
     try:
-        accounting_client.reserve_parking_spot(request.headers["X-Token"], api.payload['lot_id'])
-        return {}, 201
+        if accounting_client.reserve_parking_spot(request.headers["X-Token"], api.payload['lot_id']):
+            return {}, 201
+        else:
+            api.abort(409, 'Denied')
+    except HTTPException as ex:
+        raise
     except FullException as ex:
         api.abort(422, "Lot is full")
     except BaseException as ex:
