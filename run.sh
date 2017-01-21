@@ -1,1 +1,2 @@
-sudo PYTHONPATH=ipark python3 -m ipark
+# /usr/bin/env bash
+sudo PYTHONPATH=ipark python3 -m ipark "$@"

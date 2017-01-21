@@ -11,7 +11,7 @@ from model.DatabaseObject import DatabaseObject
 from model.ParkingLot import ParkingLot
 from services.PersistencyService import flush_redis_to_mysql
 
-if '--relaod' in sys.argv:
+if '--reload' in sys.argv:
     # CLEAN UP FOR COLD START
     flush_redis_to_mysql()
     DatabaseObject.r.flushall()
