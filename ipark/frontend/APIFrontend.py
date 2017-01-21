@@ -234,8 +234,23 @@ class ReserveParkingSpot(Resource):
         return get_reservation_data(api)
 
 
-@ns.route('/barrier/<int:id>')
-@ns.param('id', description='ID of Reservation')
+@ns.route("/parking/<int:reservation_id>/cancel")
+@ns.param('reservation_id', description='ID of Reservation')
+@ns.response(401, 'Authentication Error', model=authentication_error)
+@ns.response(422, 'Invalid Arguments', model=argument_error)
+class CancelReservation(Resource):
+    @ns.header('X-Token', 'Authentication Token', required=True, type=str)
+    @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
+    @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
+    @ns.marshal_with(api.model('Result of action', {
+        'status': fields.Boolean(description="Whether the request could be fulfilled or not")}),
+                     code=200, description='Status of the reservation')
+    def post(self, reservation_id):
+        return cancel_reservation(api, reservation_id)
+
+
+@ns.route('/barrier/<int:reservation_id>')
+@ns.param('reservation_id', description='ID of Reservation')
 class Barrier(Resource):
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_with(api.model('Barrier Status', {'status': fields.Integer('Status Open (1)/Closed (2)')}),
@@ -245,6 +260,15 @@ class Barrier(Resource):
     def get(self):
         """ Get Barrier State """
         return None, 500
+
+    @ns.header('X-Token', 'Authentication Token', required=True, type=str)
+    @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
+    @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
+    @ns.marshal_with(api.model('Result of action', {
+        'status': fields.Boolean(description="Whether the request could be fulfilled or not")}),
+                     code=200, description='Status of the reservation')
+    def put(self, reservation_id):
+        return begin_parking(api, reservation_id)
 
 
 @ns.route('/barrier/<int:id>/<int:status>')

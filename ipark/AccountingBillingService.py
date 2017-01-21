@@ -114,6 +114,7 @@ class AccountingAndBillingService(Service):
         user.flush()
         return tax
 
+    # diese Methode wird durch IoT Gateway aufgerufen
     def end_parking(self, token, reservationid):
         response = self.authservice.get_email_from_token(token)
         if not response['status']:

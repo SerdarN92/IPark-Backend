@@ -69,6 +69,7 @@ def user_info_set(api: Api):
 def get_nearby_parkinglots(api: Api):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
+        return
     lots = geo_client.find_near_parking_lots(api.payload['location']['lon'], api.payload['location']['lat'],
                                              api.payload['radius'])  # type: list[ParkingLot]
 
@@ -79,6 +80,7 @@ def get_nearby_parkinglots(api: Api):
 def reserve_parking_spot(api: Api):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
+        return
     try:
         if accounting_client.reserve_parking_spot(request.headers["X-Token"], api.payload['lot_id']):
             return {}, 201
@@ -95,6 +97,7 @@ def reserve_parking_spot(api: Api):
 def get_reservation_data(api: Api):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
+        return
     reservation_result = accounting_client.fetch_reservation_data(request.headers["X-Token"])
     # return {"reservations": reservation_result}
     # todo das hier kann weg, sobald die ID und Number richtig gesetzt werden
@@ -106,6 +109,28 @@ def get_reservation_data(api: Api):
             p["number"] = -1
         res.append(p)
     return {"reservations": res}
+
+
+def begin_parking(api: Api, reservation_id):
+    if not check_auth(request.headers):
+        api.abort(401, "Invalid Token")
+        return
+    result = accounting_client.begin_parking(request.headers["X-Token"], reservation_id)
+    if not result:
+        api.abort(422, "Invalid Arguments")
+        return
+    return {"status": True}
+
+
+def cancel_reservation(api: Api, reservation_id):
+    if not check_auth(request.headers):
+        api.abort(401, "Invalid Token")
+        return
+    result = accounting_client.cancel_reservation(request.headers["X-Token"], reservation_id)
+    if not result:
+        api.abort(422, "Invalid Arguments")
+        return
+    return {"status": True}
 
 
 def check_auth(headers):
