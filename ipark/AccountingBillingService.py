@@ -64,6 +64,7 @@ class AccountingAndBillingService(Service):
         res.user_id = user.user_id
         res.reservation_start = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         user.reservations.append(res)
+        user.save()
         user.flush()
         return res
 
@@ -86,6 +87,90 @@ class AccountingAndBillingService(Service):
 
         return reservations
 
+    def begin_parking(self, token, reservationid):
+        response = self.authservice.get_email_from_token(token)
+        if not response['status']:
+            return False
+        user = User(response['email'])
+        reservation = self.get_user_reservation_for_id(user, reservationid)
+        if reservation is None:
+            return False
+        lot = ParkingLot(reservation.spot_id)
+        begin = datetime.strptime(reservation.reservation_start, "%Y-%m-%d %H:%M:%S")
+        end = datetime.now()
+        reservation.parking_start = end.strftime("%Y-%m-%d %H:%M:%S")
+        reservation.save()
+        reservation.flush()
+        # tax wird auf die Sekunde genau berechnet!
+        duration = (end - begin).total_seconds()
+        tax = (lot.reservation_tax * duration) / 3600
+        days = (end - begin).days()
+        if tax > lot.max_tax*(days+1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
+            tax = lot.max_tax
+        user.balance -= tax
+        user.save()
+        user.flush()
+        return tax
+
+    def end_parking(self, token, reservationid):
+        response = self.authservice.get_email_from_token(token)
+        if not response['status']:
+            return False
+        user = User(response['email'])
+        reservation = self.get_user_reservation_for_id(user, reservationid)
+        if reservation is None:
+            return False
+        lot = ParkingLot(reservation.spot_id)
+        begin = datetime.strptime(reservation.parking_start, "%Y-%m-%d %H:%M:%S")
+        end = datetime.now()
+        reservation.parking_end = end.strftime("%Y-%m-%d %H:%M:%S")
+        reservation.save()
+        reservation.flush()
+        duration = (end - begin).total_seconds()
+        days = (end - begin).days()
+        tax = (lot.tax * duration) / 3600
+        if tax > lot.max_tax*(days+1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
+            tax = lot.max_tax
+        lot.removeReservation(reservation.spot_id)
+        user.balance -= tax
+        user.save()
+        user.flush()
+        return tax
+
+    def cancel_reservation(self, token, reservationid):
+        response = self.authservice.get_email_from_token(token)
+        if not response['status']:
+            return False
+        user = User(response['email'])
+        reservation = self.get_user_reservation_for_id(user, reservationid)
+        if reservation is None:
+            return False
+        lot = ParkingLot(reservation.spot_id)
+        begin = datetime.strptime(reservation.reservation_start, "%Y-%m-%d %H:%M:%S")
+        end = datetime.now()
+        reservation.parking_start = end.strftime("%Y-%m-%d %H:%M:%S")
+        reservation.parking_end = end.strftime("%Y-%m-%d %H:%M:%S")
+        reservation.save()
+        reservation.flush()
+        duration = (end - begin).total_seconds()
+        days = (end - begin).days()
+        tax = (lot.reservation_tax * duration) / 3600
+        if tax > lot.max_tax * (days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
+            tax = lot.max_tax
+        lot.removeReservation(reservation.spot_id)
+        user.balance -= tax
+        user.save()
+        user.flush()
+        return tax
+
+    @staticmethod
+    def get_user_reservation_for_id(user, reservationid):
+        reservations = [x for x in user.reservations if x.res_id == reservationid]
+        if not reservations:
+            return None
+        reservation = reservations.pop()
+        return reservation
+
 
 class AccountingAndBillingClient(Client):
     def __init__(self):
@@ -105,6 +190,15 @@ class AccountingAndBillingClient(Client):
 
     def fetch_reservation_data(self, token):
         return self.call("fetch_reservation_data", token)
+
+    def cancel_reservation(self, token, resid):
+        return self.call("cancel_reservation", token, resid)
+
+    def begin_parking(self, token, resid):
+        return self.call("begin_parking", token, resid)
+
+    def end_parking(self, token, resid):
+        return self.call("end_parking", token, resid)
 
 
 if __name__ == "__main__":
