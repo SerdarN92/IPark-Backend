@@ -23,7 +23,7 @@ class PaymentMethod(DomainClassBase):
 class Reservation(DomainClassBase):
     """This class represents a reservation."""
 
-    database_fields = ['res_id', 'user_id', 'spot_id', 'valid_from', 'valid_until', 'duration']
+    database_fields = ['res_id', 'user_id', 'spot_id', 'reservation_start', 'parking_start', 'parking_end']
 
     @staticmethod
     def get_next_id() -> int:
@@ -36,9 +36,9 @@ class Reservation(DomainClassBase):
         self.user_id = None
         self.spot_id = None
 
-        self.valid_from = None
-        self.valid_until = None
-        self.duration = None
+        self.reservation_start = None
+        self.parking_start = None
+        self.parking_end = None
 
     def __str__(self):
         return str(self.__dict__)

@@ -51,8 +51,8 @@ class AccountingAndBillingService(Service):
         if not response['status']:
             return False
         user = User(response['email'], readonly=True)
-        if not user.reservations[-1].duration > 0:
-            return False
+        #if not user.reservations[-1].duration > 0:
+        #    return False
 
         lot = ParkingLot(lot_id)
         spot_id = lot.reserve_free_parkingspot()
@@ -62,7 +62,7 @@ class AccountingAndBillingService(Service):
         res.res_id = Reservation.get_next_id()
         res.spot_id = spot_id
         res.user_id = user.user_id
-        res.valid_from = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        res.reservation_start = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         user.reservations.append(res)
         user.flush()
         return res
@@ -75,14 +75,14 @@ class AccountingAndBillingService(Service):
         reservations = []
         for r in user.reservations:
             p = ParkingSpot(r.spot_id)
-            if r.valid_until is None:
+            if r.parking_start is None:
                 reservations.append({"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
-                                     "time": r.valid_from})
+                                     "time": r.reservation_start})
             else:
-                dur = (datetime.strptime(r.valid_until, "%Y-%m-%d %H:%M:%S") -
-                       datetime.strptime(r.valid_from, "%Y-%m-%d %H:%M:%S")).seconds
+                dur = (datetime.strptime(r.parking_start, "%Y-%m-%d %H:%M:%S") -
+                       datetime.strptime(r.reservation_start, "%Y-%m-%d %H:%M:%S")).seconds
                 reservations.append({"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
-                                     "time": r.valid_from, "duration": dur})
+                                     "time": r.reservation_start, "duration": dur})
 
         return reservations
 
