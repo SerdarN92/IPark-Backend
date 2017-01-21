@@ -6,6 +6,8 @@ from model.DomainClasses import Reservation
 from model.ParkingLot import ParkingLot, ParkingSpot
 from model.User import User
 
+DATEFORMAT = "%Y-%m-%d %H:%M:%S"
+
 
 class AccountingAndBillingService(Service):
     def __init__(self):
@@ -51,8 +53,8 @@ class AccountingAndBillingService(Service):
         if not response['status']:
             return False
         user = User(response['email'], readonly=True)
-        #if not user.reservations[-1].duration > 0:
-        #    return False
+        if not len(user.reservations[-1].parking_end) > 0:
+            return False
 
         lot = ParkingLot(lot_id)
         spot_id = lot.reserve_free_parkingspot()
@@ -62,7 +64,7 @@ class AccountingAndBillingService(Service):
         res.res_id = Reservation.get_next_id()
         res.spot_id = spot_id
         res.user_id = user.user_id
-        res.reservation_start = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        res.reservation_start = datetime.now().strftime(DATEFORMAT)
         user.reservations.append(res)
         user.save()
         user.flush()
@@ -80,8 +82,8 @@ class AccountingAndBillingService(Service):
                 reservations.append({"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
                                      "time": r.reservation_start})
             else:
-                dur = (datetime.strptime(r.parking_start, "%Y-%m-%d %H:%M:%S") -
-                       datetime.strptime(r.reservation_start, "%Y-%m-%d %H:%M:%S")).seconds
+                dur = (datetime.strptime(r.parking_start, DATEFORMAT) -
+                       datetime.strptime(r.reservation_start, DATEFORMAT)).total_seconds()
                 reservations.append({"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
                                      "time": r.reservation_start, "duration": dur})
 
@@ -96,17 +98,17 @@ class AccountingAndBillingService(Service):
         if reservation is None:
             return False
         lot = ParkingLot(reservation.spot_id)
-        begin = datetime.strptime(reservation.reservation_start, "%Y-%m-%d %H:%M:%S")
+        begin = datetime.strptime(reservation.reservation_start, DATEFORMAT)
         end = datetime.now()
-        reservation.parking_start = end.strftime("%Y-%m-%d %H:%M:%S")
+        reservation.parking_start = end.strftime(DATEFORMAT)
         reservation.save()
         reservation.flush()
         # tax wird auf die Sekunde genau berechnet!
         duration = (end - begin).total_seconds()
         tax = (lot.reservation_tax * duration) / 3600
         days = (end - begin).days()
-        if tax > lot.max_tax*(days+1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
-            tax = lot.max_tax
+        if tax > lot.max_tax * (days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
+            tax = lot.max_tax * (days + 1)
         user.balance -= tax
         user.save()
         user.flush()
@@ -121,16 +123,16 @@ class AccountingAndBillingService(Service):
         if reservation is None:
             return False
         lot = ParkingLot(reservation.spot_id)
-        begin = datetime.strptime(reservation.parking_start, "%Y-%m-%d %H:%M:%S")
+        begin = datetime.strptime(reservation.parking_start, DATEFORMAT)
         end = datetime.now()
-        reservation.parking_end = end.strftime("%Y-%m-%d %H:%M:%S")
+        reservation.parking_end = end.strftime(DATEFORMAT)
         reservation.save()
         reservation.flush()
         duration = (end - begin).total_seconds()
         days = (end - begin).days()
         tax = (lot.tax * duration) / 3600
-        if tax > lot.max_tax*(days+1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
-            tax = lot.max_tax
+        if tax > lot.max_tax * (days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
+            tax = lot.max_tax * (days + 1)
         lot.removeReservation(reservation.spot_id)
         user.balance -= tax
         user.save()
@@ -146,17 +148,17 @@ class AccountingAndBillingService(Service):
         if reservation is None:
             return False
         lot = ParkingLot(reservation.spot_id)
-        begin = datetime.strptime(reservation.reservation_start, "%Y-%m-%d %H:%M:%S")
+        begin = datetime.strptime(reservation.reservation_start, DATEFORMAT)
         end = datetime.now()
-        reservation.parking_start = end.strftime("%Y-%m-%d %H:%M:%S")
-        reservation.parking_end = end.strftime("%Y-%m-%d %H:%M:%S")
+        reservation.parking_start = end.strftime(DATEFORMAT)
+        reservation.parking_end = end.strftime(DATEFORMAT)
         reservation.save()
         reservation.flush()
         duration = (end - begin).total_seconds()
         days = (end - begin).days()
         tax = (lot.reservation_tax * duration) / 3600
         if tax > lot.max_tax * (days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
-            tax = lot.max_tax
+            tax = lot.max_tax * (days + 1)
         lot.removeReservation(reservation.spot_id)
         user.balance -= tax
         user.save()

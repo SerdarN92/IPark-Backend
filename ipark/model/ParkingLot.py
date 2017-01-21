@@ -60,7 +60,7 @@ class ParkingLot:
         r.delete('parkinglots')
 
         with DatabaseObject.my.cursor() as cur:  # type: MySQLdb.cursors.DictCursor
-            cur.execute('SELECT * FROM parking_lots')
+            cur.execute('SELECT * FROM parking_lots UNION SELECT * FROM parking_lots_dummy')
             rows = cur.fetchall()
 
             # add lots to geo set and lot_id map
