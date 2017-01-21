@@ -197,7 +197,7 @@ class PaymentMethods(Resource):
         return None, 500
 
 
-@ns.route('/parking') # TODO: Change to '/parking/near_lots'
+@ns.route('/parking/nearby_lots')
 @ns.response(401, 'Authentication Error', model=authentication_error)
 @ns.response(422, 'Invalid Arguments', model=argument_error)
 class ParkingSpots(Resource):

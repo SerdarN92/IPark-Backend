@@ -1,12 +1,15 @@
-import MySQLdb
 import ssl
+
+import MySQLdb
 
 from AccountingBillingService import AccountingAndBillingService
 from AuthService import AuthService
 from GeoService import GeoService
 from frontend.APIFrontend import app
 from model.DatabaseObject import DatabaseObject
+from model.ParkingLot import ParkingLot
 
+# INITIALIZE REDIS
 if not DatabaseObject.r.exists('reservationsLastId'):
     with DatabaseObject.my.cursor() as cur:
         try:
@@ -19,6 +22,10 @@ if not DatabaseObject.r.exists('reservationsLastId'):
             assert False
         DatabaseObject.my.commit()
 
+if not DatabaseObject.r.exists('parkinglots'):
+    ParkingLot.import_parkinglots()
+
+# START SERVICES
 abservice = AccountingAndBillingService()
 authservice = AuthService()
 geoservice = GeoService()
