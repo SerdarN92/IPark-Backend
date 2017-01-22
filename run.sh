@@ -1,2 +1,2 @@
-# /usr/bin/env bash
+#! /usr/bin/env bash
 sudo PYTHONPATH=ipark python3 -m ipark "$@"

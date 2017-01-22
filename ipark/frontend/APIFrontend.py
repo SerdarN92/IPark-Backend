@@ -66,6 +66,7 @@ info = api.model('User Info', {
     'city': fields.String(description="new city"),
     'country': fields.String(description="new country"),
     'balance': fields.Arbitrary(description="Account balance"),
+    'client_settings': fields.String(description="Arbitrary field for user settings")
 })
 userstatus = api.model('Status', {
     'info': fields.Nested(info, description="General User Information"),
@@ -81,6 +82,7 @@ userupdate = api.model("User Update Info", {
     'plz': fields.String(description="new plz"),
     'city': fields.String(description="new city"),
     'country': fields.String(description="new country"),
+    'client_settings': fields.String(description="Arbitrary field for user settings")
 })
 
 sign_up = api.inherit("Sign Up Request", userupdate, {

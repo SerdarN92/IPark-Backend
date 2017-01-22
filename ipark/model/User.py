@@ -11,7 +11,7 @@ class User(DomainClassBase):
     """Objects of this class hold the master data of the customers."""
 
     database_fields = ['user_id', 'first_name', 'last_name', 'email', 'password',
-                       'street', 'number', 'plz', 'city', 'country', 'dataflags', 'balance']
+                       'street', 'number', 'plz', 'city', 'country', 'dataflags', 'balance', 'client_settings']
 
     def __init__(self, email: str, password: str = None, readonly: bool = False):
         """ Load User Data
@@ -29,6 +29,7 @@ class User(DomainClassBase):
         self.plz = None  # type: str
         self.city = None  # type: str
         self.country = None  # type: str
+        client_settings = None  # type: str
 
         self.dataflags = None  # z.B. ist ist 0x01 == delete
         self.balance = None  # interner Kontostand?
@@ -80,9 +81,11 @@ class User(DomainClassBase):
             try:
                 data = [email, password]
                 data.extend([additional_data.get(field, '') for field
-                             in ['first_name', 'last_name', 'street', 'number', 'plz', 'city', 'country']])
+                             in ['first_name', 'last_name', 'street', 'number', 'plz', 'city', 'country',
+                                 'client_settings']])
                 if cur.execute("INSERT INTO users (email, password, first_name, last_name, "
-                               "street, `number`, plz, city, country) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                               "street, `number`, plz, city, country, client_settings) "
+                               "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                                tuple(data)) != 1:
                     return None  # unknown error :)
             except MySQLdb.IntegrityError:

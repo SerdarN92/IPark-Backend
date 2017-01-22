@@ -40,7 +40,7 @@ class AccountingAndBillingService(Service):
             return {"status": False, "message": "Invalid Arguments."}
         wuser = User(user["email"])
 
-        for field in ['first_name', 'last_name', 'street', 'number', 'plz', 'city', 'country']:
+        for field in ['first_name', 'last_name', 'street', 'number', 'plz', 'city', 'country', 'client_settings']:
             if field in updata:
                 setattr(wuser, field, updata[field])
 
