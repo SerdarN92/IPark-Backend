@@ -18,7 +18,7 @@ class GeoService(Service):
         lots = [DatabaseObject.assign_dict(ParkingLot(), pickle.loads(l)) for l in lots]
 
         if len(lots) > max_results:
-            lots = sorted(lots, key=lambda x: sum(x.getFreeParkingSpots()), reverse=True)[0:max_results]  # type: ParkingLot
+            lots = sorted(lots, key=lambda x: sum(x.getFreeParkingSpots().values()), reverse=True)[0:max_results]  # type: ParkingLot
 
         return lots
 
