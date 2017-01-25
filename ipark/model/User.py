@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from model.DatabaseObject import DatabaseObject, DomainClassBase
 from model.DomainClasses import PaymentMethod, Reservation, Invoice
 import MySQLdb
@@ -32,7 +34,7 @@ class User(DomainClassBase):
         self.client_settings = None  # type: str
 
         self.dataflags = None  # z.B. ist ist 0x01 == delete
-        self.balance = None  # interner Kontostand?
+        self.balance = Decimal(0)  # interner Kontostand?
 
         self._payment_methods = None  # type: list[PaymentMethod]
         self._reservations = None  # type: list[Reservation]

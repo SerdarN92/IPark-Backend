@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from communication.Service import Service
 from communication.Client import Client
 import AuthService
@@ -26,6 +28,14 @@ def merge(j, j2) -> bool:
                     return False
         return True
     return False
+
+
+def any_to_datetime(o):
+    if isinstance(o, str):
+        return datetime.strptime(o, DATEFORMAT)
+    if isinstance(o, datetime):
+        return o
+    assert False
 
 
 class AccountingAndBillingService(Service):
@@ -107,8 +117,8 @@ class AccountingAndBillingService(Service):
                 reservations.append({"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
                                      "time": r.reservation_start})
             else:
-                dur = (datetime.strptime(r.parking_start, DATEFORMAT) -
-                       datetime.strptime(r.reservation_start, DATEFORMAT)).total_seconds()
+                dur = (any_to_datetime(r.parking_start) -
+                       any_to_datetime(r.reservation_start)).total_seconds()
                 reservations.append({"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
                                      "time": r.reservation_start, "duration": dur})
 
@@ -123,11 +133,9 @@ class AccountingAndBillingService(Service):
         if reservation is None:
             return False
         lot = ParkingLot(reservation.spot_id)
-        begin = datetime.strptime(reservation.reservation_start, DATEFORMAT)
+        begin = any_to_datetime(reservation.reservation_start)
         end = datetime.now()
         reservation.parking_start = end.strftime(DATEFORMAT)
-        reservation.save()
-        reservation.flush()
         # tax wird auf die Sekunde genau berechnet!
         duration = (end - begin).total_seconds()
         tax = (lot.reservation_tax * duration) / 3600
@@ -149,11 +157,9 @@ class AccountingAndBillingService(Service):
         if reservation is None:
             return False
         lot = ParkingLot(reservation.spot_id)
-        begin = datetime.strptime(reservation.parking_start, DATEFORMAT)
+        begin = any_to_datetime(reservation.parking_start)
         end = datetime.now()
         reservation.parking_end = end.strftime(DATEFORMAT)
-        reservation.save()
-        reservation.flush()
         duration = (end - begin).total_seconds()
         days = (end - begin).days()
         tax = (lot.tax * duration) / 3600
@@ -166,38 +172,41 @@ class AccountingAndBillingService(Service):
         return tax
 
     def cancel_reservation(self, token, reservationid):
+        # TODO check if reservation is active
+
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
             return False
         user = User(response['email'])
+        if user.balance is None:
+            user.balance = Decimal(0)
         reservation = self.get_user_reservation_for_id(user, reservationid)
         if reservation is None:
             return False
-        lot = ParkingLot(reservation.spot_id)
-        begin = datetime.strptime(reservation.reservation_start, DATEFORMAT)
-        end = datetime.now()
-        reservation.parking_start = end.strftime(DATEFORMAT)
-        reservation.parking_end = end.strftime(DATEFORMAT)
-        reservation.save()
-        reservation.flush()
+
+        spot = ParkingSpot(reservation.spot_id)
+        lot = ParkingLot(spot.lot_id)
+        begin, end = any_to_datetime(reservation.reservation_start), datetime.now()
+        reservation.parking_start = reservation.parking_end = end.strftime(DATEFORMAT)
+
         duration = (end - begin).total_seconds()
-        days = (end - begin).days()
-        tax = (lot.reservation_tax * duration) / 3600
-        if tax > lot.max_tax * (days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
-            tax = lot.max_tax * (days + 1)
-        lot.removeReservation(reservation.spot_id)
-        user.balance -= tax
+        days = (end - begin).days
+        tax = (lot.reservation_tax * Decimal(duration)) / Decimal(3600)
+        if tax > lot.max_tax * Decimal(days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
+            tax = lot.max_tax * Decimal(days + 1)
+        user.balance -= Decimal(tax)
         user.save()
         user.flush()
+
+        lot.removeReservation(reservation.spot_id)
         return tax
 
     @staticmethod
     def get_user_reservation_for_id(user, reservationid):
-        reservations = [x for x in user.reservations if x.res_id == reservationid]
-        if not reservations:
+        try:
+            return next(x for x in user.reservations if int(x.res_id) == int(reservationid))
+        except StopIteration as ex:
             return None
-        reservation = reservations.pop()
-        return reservation
 
 
 class AccountingAndBillingClient(Client):

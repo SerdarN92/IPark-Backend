@@ -109,7 +109,7 @@ def get_reservation_data(api: Api):
         if p["number"] is None or p["number"] == b'None':
             p["number"] = -1
         res.append(p)
-    return {"reservations": res}
+    return {"reservations": res}, 200
 
 
 def begin_parking(api: Api, reservation_id):

@@ -8,6 +8,9 @@ assets/*.crt
 assets/*.key
 assets/*.pem
 
+# TEST
+log*.txt
+
 # PyCharm
 .idea/
 **/__pycache__/
