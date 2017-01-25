@@ -37,13 +37,13 @@ print('Found Lots:', len(lots), [x.__dict__ for x in lots])
 
 lot = lots[2]  # type: ParkingLot
 print(lot.__dict__)
-print('Free Spots:', lot.getFreeParkingSpots())
+print('Free Spots:', lot.get_free_parking_spots())
 
 spot_id = lot.reserve_free_parkingspot()
 spot = ParkingSpot(spot_id)
 print('Reserved Spot:', spot.spot_id)
-print('Free Spots:', lot.getFreeParkingSpots())
+print('Free Spots:', lot.get_free_parking_spots())
 
 lot = ParkingLot(spot.lot_id)
 lot.removeReservation(spot.spot_id)
-print('Returned Spot\nFree Spots:', lot.getFreeParkingSpots())
+print('Returned Spot\nFree Spots:', lot.get_free_parking_spots())
