@@ -88,7 +88,7 @@ class AccountingAndBillingService(Service):
         if not response['status']:
             return False
         user = User(response['email'], readonly=True)
-        if user.reservations[-1].parking_end is None or len(user.reservations[-1].parking_end) <= 0:
+        if any(r.parking_end is None for r in user.reservations):
             return False
 
         lot = ParkingLot(lot_id)
@@ -101,7 +101,6 @@ class AccountingAndBillingService(Service):
         res.user_id = user.user_id
         res.reservation_start = datetime.now().strftime(DATEFORMAT)
         user.reservations.append(res)
-        user.save()
         user.flush()
         return True
 
