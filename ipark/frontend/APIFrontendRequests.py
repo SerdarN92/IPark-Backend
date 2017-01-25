@@ -59,7 +59,7 @@ def user_info_set(api: Api):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
-    status = accounting_client.update_user_data(request.headers["X-Token"], api.payload)
+    status = accounting_client.update_user_data(request.headers["X-Token"], api.payload, 'join' in request.args)
     if "status" not in status or not status["status"]:
         api.abort(401, "Invalid Token or arguments")
         return
@@ -82,7 +82,8 @@ def reserve_parking_spot(api: Api):
         api.abort(401, "Invalid Token")
         return
     try:
-        if accounting_client.reserve_parking_spot(request.headers["X-Token"], api.payload['lot_id']):
+        if accounting_client.reserve_parking_spot(request.headers["X-Token"],
+                                                  api.payload['lot_id'], api.payload['type']):
             return {}, 201
         else:
             api.abort(409, 'Denied')

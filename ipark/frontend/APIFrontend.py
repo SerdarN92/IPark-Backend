@@ -140,6 +140,7 @@ class UserInfo(Resource):
         """ Request User Info """
         return user_info_get(api)
 
+    @ns.param('join', description='Joins JSON Objects', _in='query')
     @ns.expect(userupdate, validate=True)
     @ns.marshal_with(api.model('Successful', {'message': fields.String()}), code=200, description='Successful')
     @ns.doc('Update User Details')
@@ -220,7 +221,8 @@ class ParkingSpots(Resource):
 class ReserveParkingSpot(Resource):
     @ns.doc('Reserve Parking Spot by lot_id')
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
-    @ns.expect(api.model('Parking lot', {'lot_id': fields.Integer('ID of parking lot')}), validate=True)
+    @ns.expect(api.model('Parking lot', {'lot_id': fields.Integer('ID of parking lot'),
+                                         'type': fields.Integer('type parking spot')}), validate=True)
     @ns.marshal_with(api.model('Reservation Successful', {}), code=201, description='Reservation Successful')
     def post(self):
         """ Reserve Parking Spots """
@@ -228,10 +230,10 @@ class ReserveParkingSpot(Resource):
 
     @ns.doc("Get the users reservation")
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
-    @ns.marshal_with(api.model('Reservation List', {"reservations":
-                                                    fields.List(fields.Nested(reservation),
-                                                                description="List of reservations",
-                                                                required=False)}))
+    @ns.marshal_with(api.model('Reservation List',
+                               {"reservations": fields.List(fields.Nested(reservation),
+                                                            description="List of reservations",
+                                                            required=False)}))
     def get(self):
         return get_reservation_data(api)
 
@@ -291,10 +293,11 @@ class BarrierSet(Resource):  # Barrier
 @ns.param('lot_id', required=True, description='ID of Lot')
 @ns.header('X-Token', 'Authentication Token', required=True, type=str)
 class LotInfo(Resource):
-
     @ns.marshal_with(lot, code=200)
     def get(self, lot_id):
         return get_lot_info(api, lot_id)
 
+
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=1443, debug=False, threaded=True)#, ssl_context=('assets/cert.crt', 'assets/cert.key'))
+    app.run(host="127.0.0.1", port=1443, debug=False,
+            threaded=True)  # , ssl_context=('assets/cert.crt', 'assets/cert.key'))

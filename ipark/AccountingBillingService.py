@@ -5,8 +5,27 @@ from datetime import datetime
 from model.DomainClasses import Reservation
 from model.ParkingLot import ParkingLot, ParkingSpot
 from model.User import User
+from flask import json
 
 DATEFORMAT = "%Y-%m-%d %H:%M:%S"
+
+
+def merge(j, j2) -> bool:
+    if type(j) is not type(j2):
+        return False
+
+    if isinstance(j, list):
+        j.extend(j2)
+        return True
+    elif isinstance(j, dict):
+        for k2 in j2:
+            if k2 not in j:
+                j[k2] = j2[k2]
+            else:
+                if not merge(j[k2], j2[k2]):
+                    return False
+        return True
+    return False
 
 
 class AccountingAndBillingService(Service):
@@ -32,23 +51,29 @@ class AccountingAndBillingService(Service):
         ruser = User(user["email"], readonly=True)
         return {"status": True, "user": ruser.get_data_dict()}
 
-    def update_user_data(self, token, updata):
+    def update_user_data(self, token: str, updata: dict, join: bool) -> dict:
         user = self.authservice.get_email_from_token(token)
         if "status" not in user or not user["status"]:
             return {"status": False, "message": "Invalid Token."}
-        if "password" in updata or "balance" in updata or "dataflags" in updata or "user_id" in updata:
+        if any(k in updata for k in ["password", "balance", "dataflags", "user_id"]):
             return {"status": False, "message": "Invalid Arguments."}
         wuser = User(user["email"])
 
         for field in ['first_name', 'last_name', 'street', 'number', 'plz', 'city', 'country', 'client_settings']:
             if field in updata:
-                setattr(wuser, field, updata[field])
+                if join and field == 'client_settings':
+                    j = json.loads(wuser.client_settings)  # type: json
+                    j2 = json.loads(updata[field])
+                    merge(j, j2)
+                    wuser.client_settings = json.dumps(j)
+                else:
+                    setattr(wuser, field, updata[field])
 
         wuser.save()
         wuser.flush()
         return {"status": True}
 
-    def reserve_parking_spot(self, token: str, lot_id: int) -> bool:
+    def reserve_parking_spot(self, token: str, lot_id: int, spottype: int) -> bool:
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
             return False
@@ -57,7 +82,7 @@ class AccountingAndBillingService(Service):
             return False
 
         lot = ParkingLot(lot_id)
-        spot_id = lot.reserve_free_parkingspot()
+        spot_id = lot.reserve_free_parkingspot(spottype)
         spot = ParkingSpot(spot_id)
 
         res = Reservation()
@@ -185,11 +210,11 @@ class AccountingAndBillingClient(Client):
     def fetch_user_data(self, token):
         return self.call("fetch_user_data", token)
 
-    def update_user_data(self, token, updata):
-        return self.call("update_user_data", token, updata)
+    def update_user_data(self, token: str, updata: dict, join: bool) -> dict:
+        return self.call("update_user_data", token, updata, join)
 
-    def reserve_parking_spot(self, token: str, lot_id: int) -> bool:
-        return self.call("reserve_parking_spot", token, lot_id)
+    def reserve_parking_spot(self, token: str, lot_id: int, spottype: int) -> bool:
+        return self.call("reserve_parking_spot", token, lot_id, spottype)
 
     def fetch_reservation_data(self, token):
         return self.call("fetch_reservation_data", token)

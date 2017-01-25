@@ -1,19 +1,29 @@
-from communication.Service import Service
-from communication.Client import Client
-from model.User import User, NotFoundException
-import redis
 import uuid
+
+from communication.Client import Client
+from communication.Service import Service
+from model.User import User, NotFoundException
 
 
 class AuthService(Service):
     def __init__(self):
-        self.r = redis.StrictRedis(host='132.252.152.57')
-        self.r.execute_command("AUTH GS~FsB3~&c7T")
         super().__init__("AuthService")
+        from model.DatabaseObject import DatabaseObject
+        self.r = DatabaseObject.r
+
+        # start or increment a counter KEY[1] that expires KEY[2] seconds after start
+        self.increx_script = self.r.script_load("local a = redis.call('incr', KEYS[1]) "
+                                                "if a <= 1 then redis.call('expire', KEYS[1], KEYS[2]); end "
+                                                "return a")
 
     def login(self, email, password):
         if not self.validate_user(email, password)["status"]:
             return {"status": False, "message": "Invalid password or user."}
+
+        # limit token generation per user
+        if self.r.evalsha(self.increx_script, 2, email + ':num_tokens', 180) > 5:
+            return {"status": False, "message": "Too many concurrent logins"}
+
         return {"status": True, "token": self.issue_token(email)}
 
     def validate_user(self, email, password):
@@ -28,11 +38,13 @@ class AuthService(Service):
             return {"status": False, "message": "Invalid Token."}
         return {"status": True}  # Todo müssen wir hier nicht noch irgendwie email / user-ID zurückgeben?
 
-    def issue_token(self, email):  # das hier reicht mMn für den Proof of Concept erstmal
-        token = str(uuid.uuid4())
-        while self.r.exists("token:" + token):
+    def issue_token(self, email):
+        token = str(uuid.uuid4())  # das hier reicht mMn für den Proof of Concept erstmal
+        # while self.r.exists("token:" + token):
+        #    token = str(uuid.uuid4())
+        # self.r.setex("token:" + token, 1800, email)
+        while not self.r.setnx("token:" + token, email):
             token = str(uuid.uuid4())
-        self.r.setex("token:" + token, 1800, email)
         return token
 
     def get_email_from_token(self, token):

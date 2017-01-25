@@ -29,7 +29,7 @@ class User(DomainClassBase):
         self.plz = None  # type: str
         self.city = None  # type: str
         self.country = None  # type: str
-        client_settings = None  # type: str
+        self.client_settings = None  # type: str
 
         self.dataflags = None  # z.B. ist ist 0x01 == delete
         self.balance = None  # interner Kontostand?

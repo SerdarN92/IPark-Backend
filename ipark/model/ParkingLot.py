@@ -30,22 +30,24 @@ class ParkingLot:
             lot_data = DatabaseObject.r.hget('parkinglotsbyid', self.lot_id)
             DatabaseObject.assign_dict(self, pickle.loads(lot_data))
 
-    def getFreeParkingSpots(self) -> int:
+    def getFreeParkingSpots(self) -> list:
         assert self.lot_id is not None
-        return DatabaseObject.r.scard('lot:' + str(self.lot_id) + ':freespots')
+        types = DatabaseObject.r.smembers('lot:' + str(self.lot_id) + ':spottypes')
+        return {t: DatabaseObject.r.scard('lot:' + str(self.lot_id) + ':freespots:' + str(t)) for t in types}
 
-    def reserve_free_parkingspot(self) -> int:
+    def reserve_free_parkingspot(self, spottype: int = 0) -> int:
         assert self.lot_id is not None
 
-        spot_id = DatabaseObject.r.spop('lot:' + str(self.lot_id) + ':freespots')
+        spot_id = DatabaseObject.r.spop('lot:' + str(self.lot_id) + ':freespots:' + str(spottype))
         if spot_id is None:
             raise FullException()
-        DatabaseObject.r.sadd('lot:' + str(self.lot_id) + ':occupiedspots', spot_id)
+        DatabaseObject.r.sadd('lot:' + str(self.lot_id) + ':occupiedspots:' + str(spottype), spot_id)
         return int(spot_id)
 
     def removeReservation(self, spot_id: int) -> bool:
-        return bool(DatabaseObject.r.smove('lot:' + str(self.lot_id) + ':occupiedspots',
-                                           'lot:' + str(self.lot_id) + ':freespots',
+        spot = ParkingSpot(spot_id)
+        return bool(DatabaseObject.r.smove('lot:' + str(self.lot_id) + ':occupiedspots:' + str(spot.flags),
+                                           'lot:' + str(self.lot_id) + ':freespots:' + str(spot.flags),
                                            str(spot_id)))
 
     def get_data_dict(self):
@@ -74,16 +76,27 @@ class ParkingLot:
             r.execute_command(*hmset_command)
             print("Geodata added")
 
-            cur.execute('SELECT spot_id, lot_id, `number` FROM parking_spots ORDER By lot_id ASC')
+            cur.execute('SELECT spot_id, lot_id, `number`, flags FROM parking_spots ORDER BY lot_id ASC')
             while True:
                 rows = cur.fetchmany(1000)
                 if len(rows) < 1:
                     break
 
+                # spot types per lot
+                lot_types = {}  # type: dict(set)
+
                 # add all spots as free
                 for row in rows:
-                    r.sadd('lot:' + str(row['lot_id']) + ':freespots', row['spot_id'])
-                    r.hmset('spot:' + str(row['spot_id']), {k: v for k, v in row.items() if k in ['lot_id', 'number']})
+                    if int(row['lot_id']) not in lot_types:
+                        lot_types[int(row['lot_id'])] = set()
+                    lot_types[int(row['lot_id'])].add(int(row['flags']))
+
+                    r.sadd('lot:' + str(row['lot_id']) + ':freespots:' + str(row['flags']), row['spot_id'])
+                    r.hmset('spot:' + str(row['spot_id']), {k: v for k, v in row.items() if k
+                                                            in ['lot_id', 'number', 'flags']})
+
+                for l, t in lot_types.items():
+                    r.sadd('lot:' + str(l) + ':spottypes', *t)
 
             DatabaseObject.my.commit()
 
@@ -96,8 +109,10 @@ class ParkingSpot:
         self.spot_id = spot_id
 
         # ID, Nummer des Parkplatzes
-        self.lot_id, self.number = DatabaseObject.r.hmget('spot:' + str(self.spot_id), ('lot_id', 'number'))
+        self.lot_id, self.number, self.flags \
+            = DatabaseObject.r.hmget('spot:' + str(self.spot_id), ('lot_id', 'number', 'flags'))
         assert self.lot_id is not None
+        assert self.flags is not None
 
     def is_busy(self):
-        return not bool(DatabaseObject.r.sismember('lot:' + str(self.lot_id) + ':freespots'))
+        return not bool(DatabaseObject.r.sismember('lot:' + str(self.lot_id) + ':freespots:' + str(self.flags)))
