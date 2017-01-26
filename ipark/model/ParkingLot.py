@@ -60,8 +60,9 @@ class ParkingLot:
                 ['lot_id', 'name', 'total_spots', 'longitude', 'latitude',
                  'tax', 'max_tax', 'reservation_tax',
                  'information', 'flags']}
-        data['free_spots'] = [self.get_free_parking_spots().get(x, 0)
-                              for x in range(max(self.get_free_parking_spots()) + 1)]
+        if self.get_free_parking_spots():
+            data['free_spots'] = [self.get_free_parking_spots().get(x, 0)
+                                  for x in range(max(self.get_free_parking_spots()) + 1)]
         return data
 
     @staticmethod
