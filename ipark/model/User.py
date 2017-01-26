@@ -1,8 +1,19 @@
+import uuid
 from decimal import Decimal
+
+import MySQLdb
+import bcrypt
 
 from model.DatabaseObject import DatabaseObject, DomainClassBase
 from model.DomainClasses import PaymentMethod, Reservation, Invoice
-import MySQLdb
+
+
+def check_hash(pwhash: str, password: str) -> bool:
+    return bcrypt.checkpw(password.encode(), pwhash.encode())
+
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 
 class NotFoundException(BaseException):
@@ -45,12 +56,12 @@ class User(DomainClassBase):
 
         # Load
         load_func = DatabaseObject.load_data if readonly else DatabaseObject.load_and_lock_data
-        data = load_func(self._key, "SELECT * from users WHERE email = %s",
+        data = load_func(self._key, "SELECT * FROM users WHERE email = %s",
                          (email,),
                          lambda x: len(x) and x[0])
 
         # Check
-        if not data or (password is not None and data['password'] != password):
+        if not data or (password is not None and not check_hash(data['password'], password)):
             raise NotFoundException()
 
         # Assign
@@ -79,6 +90,7 @@ class User(DomainClassBase):
 
     @staticmethod
     def create(email, password, **additional_data):
+        password = hash_password(password)
         with DatabaseObject.my.cursor() as cur:
             try:
                 data = [email, password]
