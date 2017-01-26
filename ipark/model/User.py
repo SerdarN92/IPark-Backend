@@ -9,7 +9,10 @@ from model.DomainClasses import PaymentMethod, Reservation, Invoice
 
 
 def check_hash(pwhash: str, password: str) -> bool:
-    return bcrypt.checkpw(password.encode(), pwhash.encode())
+    try:
+        return bcrypt.checkpw(password.encode(), pwhash.encode())
+    except ValueError as ex:
+        return False
 
 
 def hash_password(password: str) -> str:
