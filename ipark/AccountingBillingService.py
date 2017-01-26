@@ -21,7 +21,7 @@ def merge(j, j2) -> bool:
         return True
     elif isinstance(j, dict):
         for k2 in j2:
-            if k2 not in j:
+            if k2 not in j or type(j[k2]) not in (dict, list):
                 j[k2] = j2[k2]
             else:
                 if not merge(j[k2], j2[k2]):
@@ -37,6 +37,12 @@ def any_to_datetime(o):
         return o
     assert False
 
+def any_to_string(o):
+    if isinstance(o, str):
+        return o
+    if isinstance(o, datetime):
+        return o.strftime(DATEFORMAT)
+    assert False
 
 class AccountingAndBillingService(Service):
     def __init__(self):
@@ -112,15 +118,13 @@ class AccountingAndBillingService(Service):
         reservations = []
         for r in user.reservations:
             p = ParkingSpot(r.spot_id)
-            if r.parking_start is None:
-                reservations.append({"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
-                                     "time": r.reservation_start})
-            else:
-                dur = (any_to_datetime(r.parking_start) -
-                       any_to_datetime(r.reservation_start)).total_seconds()
-                reservations.append({"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
-                                     "time": r.reservation_start, "duration": dur})
-
+            res = {"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
+                   "reservation_start": any_to_string(r.reservation_start)}
+            if r.parking_start is not None:
+                res["parking_start"] = any_to_string(r.parking_start)
+            if r.parking_end is not None:
+                res["parking_end"] = any_to_string(r.parking_end)
+            reservations.append(res)
         return reservations
 
     def begin_parking(self, token, reservationid):

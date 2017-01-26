@@ -30,9 +30,9 @@ reservation = api.model('Reservation', {
     'lot_id': fields.Integer(required=True, description="Parking Lot id"),
     'number': fields.Integer(description="Parking spot number inside the parking lot (not globally unique)"),
     'spot_id': fields.Integer(description="Globally unique identifier of the parking spot"),
-    'time': fields.String(required=True, description="Time of Reservation (e.g. 2017-01-14 18:43:56)"),
-    'duration': fields.Integer(description="Minutes of Reservation (-1 if active)"),
-    # todo 'tariff': fields.Nested(tariff, required=True, description="Tariff")
+    'reservation_start': fields.String(required=True, description="Time of Reservation (e.g. 2017-01-14 18:43:56)"),
+    'parking_start': fields.String(required=True, description="Beginning time of parking. Implies end of Reservation. (e.g. 2017-01-14 18:43:56)"),
+    'parking_end': fields.String(required=True, description="End time of parking. (e.g. 2017-01-14 18:43:56)"),
 })
 invoice = api.model('Invoice', {'reservation': fields.Nested(reservation, description="Reservation")})
 payment_method = api.model('Payment Methods', {})
