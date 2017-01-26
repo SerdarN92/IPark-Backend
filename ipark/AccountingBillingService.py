@@ -37,12 +37,14 @@ def any_to_datetime(o):
         return o
     assert False
 
+
 def any_to_string(o):
     if isinstance(o, str):
         return o
     if isinstance(o, datetime):
         return o.strftime(DATEFORMAT)
     assert False
+
 
 class AccountingAndBillingService(Service):
     def __init__(self):
@@ -126,6 +128,24 @@ class AccountingAndBillingService(Service):
                 res["parking_end"] = any_to_string(r.parking_end)
             reservations.append(res)
         return reservations
+
+    def fetch_reservation_data_for_id(self, token, res_id):
+        response = self.authservice.get_email_from_token(token)
+        if not response['status']:
+            return False
+        user = User(response['email'], readonly=True)
+        try:
+            r = next(x for x in user.reservations if x.res_id == res_id)
+        except StopIteration:
+            return False
+        p = ParkingSpot(r.spot_id)
+        res = {"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
+               "reservation_start": any_to_string(r.reservation_start)}
+        if r.parking_start is not None:
+            res["parking_start"] = any_to_string(r.parking_start)
+        if r.parking_end is not None:
+            res["parking_end"] = any_to_string(r.parking_end)
+        return res
 
     def begin_parking(self, token, reservationid):
         response = self.authservice.get_email_from_token(token)
@@ -239,6 +259,9 @@ class AccountingAndBillingClient(Client):
 
     def end_parking(self, token, resid):
         return self.call("end_parking", token, resid)
+
+    def fetch_reservation_data_for_id(self, token, res_id):
+        return self.call("fetch_reservation_data_for_id", token, res_id)
 
 
 if __name__ == "__main__":

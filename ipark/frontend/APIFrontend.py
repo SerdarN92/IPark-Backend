@@ -229,7 +229,7 @@ class ReserveParkingSpot(Resource):
         """ Reserve Parking Spots """
         return reserve_parking_spot(api)
 
-    @ns.doc("Get the users reservation")
+    @ns.doc("Get the users reservations")
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_with(api.model('Reservation List',
                                {"reservations": fields.List(fields.Nested(reservation),
@@ -237,6 +237,19 @@ class ReserveParkingSpot(Resource):
                                                             required=False)}))
     def get(self):
         return get_reservation_data(api)
+
+
+@ns.route("/parking/<int:reservation_id>")
+@ns.param('reservation_id', description='ID of Reservation')
+@ns.response(401, 'Authentication Error', model=authentication_error)
+@ns.response(422, 'Invalid Arguments', model=argument_error)
+class ReservationData(Resource):
+
+    @ns.doc("Get the reservation corresponding to the ID, if it belongs to the user")
+    @ns.header('X-Token', 'Authentication Token', required=True, type=str)
+    @ns.marshal_with(reservation, code=200, description="Reservation data")
+    def get(self, reservation_id):
+        pass
 
 
 @ns.route("/parking/<int:reservation_id>/cancel")

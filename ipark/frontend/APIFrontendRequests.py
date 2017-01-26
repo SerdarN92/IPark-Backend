@@ -123,6 +123,16 @@ def begin_parking(api: Api, reservation_id):
     return {"status": True}
 
 
+def fetch_reservation(api: Api, reservation_id):
+    if not check_auth(request.headers):
+        api.abort(401, "Invalid Token")
+        return
+    result = accounting_client.fetch_reservation_data_for_id(request.headers["X-Token"], reservation_id)
+    if not result:
+        api.abort(422, "Invalid Arguments")
+    return result, 200
+
+
 def cancel_reservation(api: Api, reservation_id):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
@@ -131,7 +141,7 @@ def cancel_reservation(api: Api, reservation_id):
     if not result:
         api.abort(422, "Invalid Arguments")
         return
-    return {"status": True}
+    return {"status": True}, 200
 
 
 def check_auth(headers):
