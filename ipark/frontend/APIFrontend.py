@@ -249,7 +249,7 @@ class ReservationData(Resource):
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_with(reservation, code=200, description="Reservation data")
     def get(self, reservation_id):
-        pass
+        return fetch_reservation(api, reservation_id)
 
 
 @ns.route("/parking/<int:reservation_id>/cancel")

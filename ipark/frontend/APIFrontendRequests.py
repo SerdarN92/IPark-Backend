@@ -130,6 +130,11 @@ def fetch_reservation(api: Api, reservation_id):
     result = accounting_client.fetch_reservation_data_for_id(request.headers["X-Token"], reservation_id)
     if not result:
         api.abort(422, "Invalid Arguments")
+    print(result)
+    if result["id"] is None:
+        result["id"] = -1
+    if result["number"] is None or result["number"] == b'None':
+        result["number"] = -1
     return result, 200
 
 
