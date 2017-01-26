@@ -32,12 +32,12 @@ class ParkingLot:
             lot_data = DatabaseObject.r.hget('parkinglotsbyid', self.lot_id)
             DatabaseObject.assign_dict(self, pickle.loads(lot_data))
 
-    def getFreeParkingSpots(self) -> list:
+    def get_free_parking_spots(self) -> list:
         assert self.lot_id is not None
         if self._free_spots is None:
             types = (int(t) for t in DatabaseObject.r.smembers('lot:' + str(self.lot_id) + ':spottypes'))
             self._free_spots = {t: DatabaseObject.r.scard('lot:' + str(self.lot_id) + ':freespots:' + str(t))
-                                for t in types}
+                                for t in types}  # type: dict
         return self._free_spots
 
     def reserve_free_parkingspot(self, spottype: int = 0) -> int:
@@ -60,8 +60,8 @@ class ParkingLot:
                 ['lot_id', 'name', 'total_spots', 'longitude', 'latitude',
                  'tax', 'max_tax', 'reservation_tax',
                  'information', 'flags']}
-        for t, free in self.getFreeParkingSpots().items():
-            data['free_spots' + str(t)] = free
+        data['free_spots'] = [self.get_free_parking_spots().get(x, 0)
+                              for x in range(max(self.get_free_parking_spots()) + 1)]
         return data
 
     @staticmethod
