@@ -161,3 +161,10 @@ def get_lot_info(api: Api, lot_id: int):
         return lot.get_data_dict(), 200
     else:
         api.abort(422, 'lot_id not found')
+
+
+def iot_push(api: Api, lot_id: int):
+    if 'X-Auth' in request.headers and request.headers['X-Auth'] == "ipark":
+        return {}, 200
+    else:
+        return {}, 401

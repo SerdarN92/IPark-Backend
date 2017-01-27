@@ -312,6 +312,14 @@ class LotInfo(Resource):
         return get_lot_info(api, lot_id)
 
 
+@ns.route('/iot/push/<int:lot_id>')
+@ns.param('lot_id', required=True, description='ID of Lot')
+@ns.header('X-Auth', 'Lot Authentication Key', required=True, type=str)
+class IoTPush(Resource):
+    def get(self, lot_id):
+        return iot_push(api, lot_id)
+
+
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=1443, debug=False,
             threaded=True)  # , ssl_context=('assets/cert.crt', 'assets/cert.key'))
