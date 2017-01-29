@@ -31,7 +31,8 @@ reservation = api.model('Reservation', {
     'number': fields.Integer(description="Parking spot number inside the parking lot (not globally unique)"),
     'spot_id': fields.Integer(description="Globally unique identifier of the parking spot"),
     'reservation_start': fields.String(required=True, description="Time of Reservation (e.g. 2017-01-14 18:43:56)"),
-    'parking_start': fields.String(required=True, description="Beginning time of parking. Implies end of Reservation. (e.g. 2017-01-14 18:43:56)"),
+    'parking_start': fields.String(required=True,
+                                   description="Beginning time of parking. Implies end of Reservation. (e.g. 2017-01-14 18:43:56)"),
     'parking_end': fields.String(required=True, description="End time of parking. (e.g. 2017-01-14 18:43:56)"),
 })
 invoice = api.model('Invoice', {'reservation': fields.Nested(reservation, description="Reservation")})
@@ -219,6 +220,7 @@ class ParkingSpots(Resource):
 @ns.route('/parking/reserve')
 @ns.response(401, 'Authentication Error', model=authentication_error)
 @ns.response(422, 'Invalid Arguments', model=argument_error)
+@ns.response(409, 'This user cannot reserve spots (anymore)', model=api.model('Conflict', {}))
 class ReserveParkingSpot(Resource):
     @ns.doc('Reserve Parking Spot by lot_id')
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
@@ -244,7 +246,6 @@ class ReserveParkingSpot(Resource):
 @ns.response(401, 'Authentication Error', model=authentication_error)
 @ns.response(422, 'Invalid Arguments', model=argument_error)
 class ReservationData(Resource):
-
     @ns.doc("Get the reservation corresponding to the ID, if it belongs to the user")
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_with(reservation, code=200, description="Reservation data")
