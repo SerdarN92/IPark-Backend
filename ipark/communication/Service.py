@@ -1,7 +1,9 @@
 import pickle
 import threading
+import traceback
 
 import pika
+import sys
 
 
 class Service(threading.Thread):
@@ -41,7 +43,7 @@ class Service(threading.Thread):
             function = getattr(self, request['function'])
             result = {'result': function(*request['args'], **request['kwargs'])}
         except BaseException as ex:
-            result = {'exception': ex}
+            result = {'exception': ex, 'traceback': "".join(traceback.format_exception(*sys.exc_info()))}
 
         response = pickle.dumps(result)
 

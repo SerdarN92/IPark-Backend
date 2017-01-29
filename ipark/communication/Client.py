@@ -48,6 +48,12 @@ class Client(threading.Thread):
         response = self.responses.pop(corr_id)
 
         if 'exception' in response:
+            ex = response['exception']  # type: BaseException
+            if 'traceback' in response:
+                if len(ex.args) > 0:
+                    ex.args = (response['traceback'] + ex.args[0],) + ex.args[1:]
+                else:
+                    ex.args = (response['traceback'],)
             raise response['exception']
 
         return response['result']
