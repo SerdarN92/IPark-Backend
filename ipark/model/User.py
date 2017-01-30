@@ -92,10 +92,9 @@ class User(DomainClassBase):
 
     @staticmethod
     def create(email, password, **additional_data):
-        password = hash_password(password)
         with DatabaseObject.my.cursor() as cur:
             try:
-                data = [email, password]
+                data = [email, hash_password(password)]
                 data.extend([additional_data.get(field, '') for field
                              in ['first_name', 'last_name', 'street', 'number', 'plz', 'city', 'country',
                                  'client_settings']])

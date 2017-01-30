@@ -1,11 +1,12 @@
+from flask import request
 from flask_restplus import Api
 from werkzeug.exceptions import HTTPException
 
-from AuthService import AuthClient
 from AccountingBillingService import AccountingAndBillingClient
+from AuthService import AuthClient
 from GeoService import GeoClient
 from model.ParkingLot import FullException
-from flask import request
+from model.User import NotFoundException
 
 auth_client = AuthClient()
 accounting_client = AccountingAndBillingClient()
@@ -13,7 +14,10 @@ geo_client = GeoClient()
 
 
 def user_signup(api: Api):
-    sign_up_result = accounting_client.sign_up(api.payload)
+    try:
+        sign_up_result = accounting_client.sign_up(api.payload)
+    except NotFoundException as ex:
+        api.abort(500, "Created user not found")
     if "token" in sign_up_result:
         return {"token": sign_up_result["token"]}, 200
     else:
