@@ -36,10 +36,11 @@ class Client(threading.Thread):
 
         corr_id = str(uuid.uuid4())
         self.corr_ids.append(corr_id)
-        self.channel.basic_publish(exchange='',
+        self.channel.basic_publish(exchange='',  # delayed-x
                                    routing_key=self.name,
                                    properties=pika.BasicProperties(reply_to=self.callback_queue,
-                                                                   correlation_id=corr_id, ),
+                                                                   correlation_id=corr_id,
+                                                                   headers={"x-delay": 10000}, ),
                                    body=request)
         while corr_id not in self.responses:
             self.connection.process_data_events()

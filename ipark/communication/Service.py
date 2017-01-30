@@ -26,10 +26,23 @@ class Service(threading.Thread):
     def on_channel_open(self, channel):
         # print("Channel")
         self.channel = channel
+
+        self.channel.exchange_declare(self.on_exchange_declared, exchange="delayed-x", type="x-delayed-message",
+                                      arguments={"x-delayed-type": "direct"}, )
+
         self.channel.queue_declare(self.on_queue_declared, queue=self.name)
+        self.channel.queue_bind(self.on_queue_bind, queue=self.name, exchange="delayed-x", routing_key=self.name)
         self.channel.basic_consume(self.on_request, queue=self.name)
 
     def on_queue_declared(self, frame):
+        pass
+
+    def on_exchange_declared(self, *args, **kwargs):
+        print('args', args, 'kw', kwargs.keys())
+        pass
+
+    def on_queue_bind(self, *args, **kwargs):
+        print('args', args, 'kw', kwargs.keys())
         pass
 
     def run(self):
