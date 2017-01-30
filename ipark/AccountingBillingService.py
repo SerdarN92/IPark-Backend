@@ -94,10 +94,10 @@ class AccountingAndBillingService(Service):
     def reserve_parking_spot(self, token: str, lot_id: int, spottype: int) -> bool:
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
-            return False
+            return None
         user = User(response['email'], readonly=True)
         if any(r.parking_end is None for r in user.reservations):
-            return False
+            return None
 
         lot = ParkingLot(lot_id)
         spot_id = lot.reserve_free_parkingspot(spottype)
@@ -110,7 +110,14 @@ class AccountingAndBillingService(Service):
         res.reservation_start = datetime.now().strftime(DATEFORMAT)
         user.reservations.append(res)
         user.flush()
-        return True
+
+        r = {"id": res.res_id, "lot_id": lot.lot_id, "spot_id": spot_id, "number": spot.number,
+             "reservation_start": any_to_string(res.reservation_start)}
+        if res.parking_start is not None:
+            r["parking_start"] = any_to_string(res.parking_start)
+        if res.parking_end is not None:
+            r["parking_end"] = any_to_string(res.parking_end)
+        return r
 
     def fetch_reservation_data(self, token):
         response = self.authservice.get_email_from_token(token)

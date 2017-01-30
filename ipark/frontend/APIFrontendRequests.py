@@ -86,9 +86,12 @@ def reserve_parking_spot(api: Api):
         api.abort(401, "Invalid Token")
         return
     try:
-        if accounting_client.reserve_parking_spot(request.headers["X-Token"],
-                                                  api.payload['lot_id'], api.payload['type']):
-            return {}, 201
+        res = accounting_client.reserve_parking_spot(request.headers["X-Token"], api.payload['lot_id'],
+                                                     api.payload['type'])
+        if res is not None:
+            if res["number"] is None or res["number"] == b'None':
+                res["number"] = -1
+            return res, 201
         else:
             api.abort(409, 'Denied')
     except HTTPException as ex:

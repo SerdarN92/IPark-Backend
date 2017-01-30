@@ -225,8 +225,9 @@ class ReserveParkingSpot(Resource):
     @ns.doc('Reserve Parking Spot by lot_id')
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.expect(api.model('Parking lot', {'lot_id': fields.Integer('ID of parking lot'),
-                                         'type': fields.Integer('type parking spot')}), validate=True)
-    @ns.marshal_with(api.model('Reservation Successful', {}), code=201, description='Reservation Successful')
+                                         'type': fields.Integer('Type of parking spot')}), validate=True)
+    @ns.marshal_with(api.model('Reservation Successful', reservation),
+                     code=201, description='Reservation Successful')
     def post(self):
         """ Reserve Parking Spots """
         return reserve_parking_spot(api)
