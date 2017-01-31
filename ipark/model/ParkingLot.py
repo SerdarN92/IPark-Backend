@@ -25,6 +25,8 @@ class ParkingLot:
         self.reservation_tax = None
         self.information = None
         self.flags = None
+        self.api_path = None
+        self.api_password = None
 
         self._free_spots = None
 
@@ -102,7 +104,7 @@ class ParkingLot:
 
                     r.sadd('lot:' + str(row['lot_id']) + ':freespots:' + str(row['flags']), row['spot_id'])
                     r.hmset('spot:' + str(row['spot_id']), {k: v for k, v in row.items() if k
-                                                            in ['lot_id', 'number', 'flags']})
+                                                            in ['lot_id', 'number', 'flags', 'coap_ip']})
 
                 for l, t in lot_types.items():
                     r.sadd('lot:' + str(l) + ':spottypes', *t)
@@ -118,8 +120,8 @@ class ParkingSpot:
         self.spot_id = spot_id
 
         # ID, Nummer des Parkplatzes
-        self.lot_id, self.number, self.flags \
-            = DatabaseObject.r.hmget('spot:' + str(self.spot_id), ('lot_id', 'number', 'flags'))
+        self.lot_id, self.number, self.flags, self.coap_ip \
+            = DatabaseObject.r.hmget('spot:' + str(self.spot_id), ('lot_id', 'number', 'flags', 'coap_ip'))
         assert self.lot_id is not None
         assert self.flags is not None
 
