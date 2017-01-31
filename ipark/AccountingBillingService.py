@@ -108,6 +108,8 @@ class AccountingAndBillingService(Service):
         res.spot_id = spot_id
         res.user_id = user.user_id
         res.reservation_start = datetime.now().strftime(DATEFORMAT)
+        res.map_to_email(user.email)
+
         user.reservations.append(res)
         user.flush()
 

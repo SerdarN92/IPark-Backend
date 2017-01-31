@@ -43,6 +43,13 @@ class Reservation(DomainClassBase):
     def __str__(self):
         return str(self.__dict__)
 
+    def map_to_email(self, email: str) -> bool:
+        return DatabaseObject.r.set('res_user:' + str(self.res_id), email)
+
+    @staticmethod
+    def get_email_from_resid(res_id: int) -> str:
+        return DatabaseObject.r.get('res_user:' + str(res_id))
+
 
 class Invoice(DomainClassBase):
     database_fields = []  # Todo
