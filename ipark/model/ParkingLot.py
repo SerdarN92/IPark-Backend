@@ -1,7 +1,8 @@
-from model.DatabaseObject import DatabaseObject
 import pickle
 
 import MySQLdb.cursors
+
+from model.DatabaseObject import DatabaseObject
 
 
 class FullException(BaseException):

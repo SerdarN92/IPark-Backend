@@ -4,7 +4,6 @@ import MySQLdb
 
 from model.DatabaseObject import DatabaseObject, LockedException
 from model.DomainClasses import Reservation, PaymentMethod
-
 from model.User import User, NotFoundException
 
 r = DatabaseObject.r

@@ -1,8 +1,8 @@
-from communication.Service import Service
-from communication.Client import Client
-from model.DatabaseObject import DatabaseObject
 import pickle
 
+from communication.Client import Client
+from communication.Service import Service
+from model.DatabaseObject import DatabaseObject
 from model.ParkingLot import ParkingLot
 
 
