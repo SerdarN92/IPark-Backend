@@ -16,6 +16,8 @@ class PollingService(Service):
 
     def poll_lot(self, lot_id):
         lot = ParkingLot(lot_id)
+        if lot.api_path is None:
+            return
         response = requests.get(lot.api_path + "/events")  # todo certificate
         if response.status_code != 200:
             return  # todo Exception?

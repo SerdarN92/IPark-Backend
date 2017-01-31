@@ -51,7 +51,7 @@ class Reservation(DomainClassBase):
 
     @staticmethod
     def get_email_from_resid(res_id: int) -> str:
-        return DatabaseObject.r.get('res_user:' + str(res_id))
+        return DatabaseObject.r.get('res_user:' + str(res_id)).decode()
 
 
 class Invoice(DomainClassBase):
