@@ -31,16 +31,22 @@ class Client(threading.Thread):
             self.responses[props.correlation_id] = pickle.loads(body)
             self.corr_ids.remove(props.correlation_id)
 
+    def delayed_call(self, function, *args, **kwargs):
+        request = pickle.dumps({'function': function, 'args': args, 'kwargs': kwargs}, pickle.HIGHEST_PROTOCOL)
+        self.channel.basic_publish(exchange='delayed-x',
+                                   routing_key=self.name,
+                                   properties=pika.BasicProperties(headers={"x-delay": 10000}),
+                                   body=request)
+
     def call(self, function, *args, **kwargs):
         request = pickle.dumps({'function': function, 'args': args, 'kwargs': kwargs}, pickle.HIGHEST_PROTOCOL)
 
         corr_id = str(uuid.uuid4())
         self.corr_ids.append(corr_id)
-        self.channel.basic_publish(exchange='',  # delayed-x
+        self.channel.basic_publish(exchange='',
                                    routing_key=self.name,
                                    properties=pika.BasicProperties(reply_to=self.callback_queue,
-                                                                   correlation_id=corr_id,
-                                                                   headers={"x-delay": 10000}, ),
+                                                                   correlation_id=corr_id),
                                    body=request)
         while corr_id not in self.responses:
             self.connection.process_data_events()
