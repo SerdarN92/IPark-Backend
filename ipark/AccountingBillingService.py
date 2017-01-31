@@ -3,10 +3,10 @@ from decimal import Decimal
 from communication.Service import Service
 from communication.Client import Client
 import AuthService
-from datetime import datetime
+from datetime import datetime, timedelta
 from model.DomainClasses import Reservation
 from model.ParkingLot import ParkingLot, ParkingSpot
-from model.User import User
+from model.User import User, NotFoundException
 from flask import json
 
 DATEFORMAT = "%Y-%m-%d %H:%M:%S"
@@ -181,17 +181,17 @@ class AccountingAndBillingService(Service):
         return tax
 
     # diese Methode wird durch IoT Gateway aufgerufen
-    def end_parking(self, token, reservationid):
-        response = self.authservice.get_email_from_token(token)
-        if not response['status']:
-            return False
-        user = User(response['email'])
+    def end_parking(self, reservationid, duration):
+        try:
+            user = User(Reservation.get_email_from_resid(reservationid))
+        except NotFoundException:
+            return  # todo ?
         reservation = self.get_user_reservation_for_id(user, reservationid)
-        if reservation is None:
-            return False
+        if reservation is None or reservation.parking_end is not None:
+            return
         lot = ParkingLot(reservation.spot_id)
         begin = any_to_datetime(reservation.parking_start)
-        end = datetime.now()
+        end = begin + timedelta(seconds=duration)
         reservation.parking_end = end.strftime(DATEFORMAT)
         duration = (end - begin).total_seconds()
         days = (end - begin).days
@@ -235,7 +235,7 @@ class AccountingAndBillingService(Service):
         return tax
 
     @staticmethod
-    def get_user_reservation_for_id(user, reservationid):
+    def get_user_reservation_for_id(user: User, reservationid: int) -> Reservation:
         try:
             return next(x for x in user.reservations if int(x.res_id) == int(reservationid))
         except StopIteration as ex:
@@ -267,8 +267,8 @@ class AccountingAndBillingClient(Client):
     def begin_parking(self, token, resid):
         return self.call("begin_parking", token, resid)
 
-    def end_parking(self, token, resid):
-        return self.call("end_parking", token, resid)
+    def end_parking(self, resid, duration):
+        return self.call("end_parking", resid, duration)
 
     def fetch_reservation_data_for_id(self, token, res_id):
         return self.call("fetch_reservation_data_for_id", token, res_id)
