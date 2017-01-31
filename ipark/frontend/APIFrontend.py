@@ -177,7 +177,7 @@ class UserBilling(Resource):
     @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
     def post(self):
         """ Request List of Invoices """
-        return None, 500
+        api.abort(501)
 
 
 @ns.route('/user/payment_methods')
@@ -191,7 +191,7 @@ class PaymentMethods(Resource):
     @ns.marshal_list_with(payment_method, code=202, description='List of Payment Methods')
     def get(self):
         """List of Payment Methods"""
-        return None, 500
+        api.abort(501)
 
     @ns.doc('')
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
@@ -199,7 +199,7 @@ class PaymentMethods(Resource):
     # @ns.marshal_with(api.model('Payment Method Added', {}), code=201, description='Payment Method Added')
     def post(self):
         """Edit of Payment Methods"""
-        return None, 500
+        api.abort(501)
 
 
 @ns.route('/parking/nearby_lots')
@@ -277,9 +277,9 @@ class Barrier(Resource):
                      code=200, description='Barrier Status')
     @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
     @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
-    def get(self):
+    def get(self, reservation_id):
         """ Get Barrier State """
-        return None, 500
+        api.abort(501)
 
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
@@ -302,7 +302,7 @@ class BarrierSet(Resource):  # Barrier
     @ns.marshal_with(api.model('Too Many Requests', {}), code=429, description='Too Many Requests')
     def post(self):
         """ Open/Close Barrier """
-        return None, 500
+        api.abort(501)
 
 
 @ns.route('/parking/lotinfo/<int:lot_id>')

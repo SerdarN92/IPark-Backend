@@ -52,7 +52,7 @@ class Client(threading.Thread):
             ex = response['exception']  # type: BaseException
             if 'traceback' in response:
                 if len(ex.args) > 0:
-                    ex.args = (response['traceback'] + ex.args[0],) + ex.args[1:]
+                    ex.args = (response['traceback'] + str(ex.args[0]),) + ex.args[1:]
                 else:
                     ex.args = (response['traceback'],)
             raise response['exception']
