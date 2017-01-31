@@ -46,6 +46,9 @@ class Reservation(DomainClassBase):
     def map_to_email(self, email: str) -> bool:
         return DatabaseObject.r.set('res_user:' + str(self.res_id), email)
 
+    def remove_mapping(self) -> bool:
+        return DatabaseObject.r.delete('res_user:' + str(self.res_id))
+
     @staticmethod
     def get_email_from_resid(res_id: int) -> str:
         return DatabaseObject.r.get('res_user:' + str(res_id))

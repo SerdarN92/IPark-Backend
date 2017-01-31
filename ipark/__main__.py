@@ -5,6 +5,7 @@ import MySQLdb
 
 from frontend.APIFrontend import app
 from model.DatabaseObject import DatabaseObject
+from model.DomainClasses import Reservation
 from model.ParkingLot import ParkingLot
 from services.AccountingBillingService import AccountingAndBillingService
 from services.AuthService import AuthService
@@ -20,7 +21,7 @@ if '--reload' in sys.argv:
 if not DatabaseObject.r.exists('reservationsLastId'):
     with DatabaseObject.my.cursor() as cur:
         try:
-            if cur.execute("SELECT `AUTO_INCREMENT` - 1 as a FROM  INFORMATION_SCHEMA.TABLES "
+            if cur.execute("SELECT `AUTO_INCREMENT` - 1 AS a FROM  INFORMATION_SCHEMA.TABLES "
                            "WHERE TABLE_SCHEMA = %s AND   TABLE_NAME   = %s", ('ipark', 'reservations')) != 1:
                 assert False
             DatabaseObject.r.set('reservationsLastId', cur.fetchall()[0]['a'])
@@ -30,6 +31,19 @@ if not DatabaseObject.r.exists('reservationsLastId'):
 
 if not DatabaseObject.r.exists('parkinglots'):
     ParkingLot.import_parkinglots()
+
+if not False:  # Check for Reservation mapping inefficient
+    with DatabaseObject.my.cursor() as cur:
+        try:
+            if cur.execute("SELECT res_id, email FROM `reservations` NATURAL JOIN users WHERE ISNULL(parking_end)") > 0:
+                rows = cur.fetchall()
+                res = Reservation()
+                for row in rows:
+                    res.res_id = int(row['res_id'])
+                    res.map_to_email(row['email'])
+        except MySQLdb.IntegrityError:
+            assert False
+        DatabaseObject.my.commit()
 
 # START SERVICES
 abservice = AccountingAndBillingService()

@@ -201,6 +201,7 @@ class AccountingAndBillingService(Service):
         if tax > lot.max_tax * Decimal(days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
             tax = lot.max_tax * Decimal(days + 1)
         lot.removeReservation(reservation.spot_id)
+        reservation.remove_mapping()
         user.balance -= Decimal(tax)
         user.save()
         user.flush()
@@ -234,6 +235,7 @@ class AccountingAndBillingService(Service):
         user.flush()
 
         lot.removeReservation(reservation.spot_id)
+        reservation.remove_mapping()
         return tax
 
     @staticmethod
