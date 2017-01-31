@@ -112,7 +112,7 @@ class AccountingAndBillingService(Service):
         user.flush()
 
         r = {"id": res.res_id, "lot_id": lot.lot_id, "spot_id": spot_id, "number": spot.number,
-             "reservation_start": any_to_string(res.reservation_start)}
+             "reservation_start": any_to_string(res.reservation_start), 'lot': lot.get_data_dict()}
         if res.parking_start is not None:
             r["parking_start"] = any_to_string(res.parking_start)
         if res.parking_end is not None:
