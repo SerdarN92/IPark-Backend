@@ -189,7 +189,8 @@ class AccountingAndBillingService(Service):
         reservation = self.get_user_reservation_for_id(user, reservationid)
         if reservation is None or reservation.parking_end is not None:
             return
-        lot = ParkingLot(reservation.spot_id)
+        spot = ParkingSpot(reservation.spot_id)
+        lot = ParkingLot(spot.lot_id)
         begin = any_to_datetime(reservation.parking_start)
         end = begin + timedelta(seconds=duration)
         reservation.parking_end = end.strftime(DATEFORMAT)
