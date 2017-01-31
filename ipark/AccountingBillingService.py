@@ -164,7 +164,8 @@ class AccountingAndBillingService(Service):
         reservation = self.get_user_reservation_for_id(user, reservationid)
         if reservation is None:
             return False
-        lot = ParkingLot(reservation.spot_id)
+        spot = ParkingSpot(reservation.spot_id)
+        lot = ParkingLot(spot.lot_id)
         begin = any_to_datetime(reservation.reservation_start)
         end = datetime.now()
         reservation.parking_start = end.strftime(DATEFORMAT)
@@ -194,11 +195,11 @@ class AccountingAndBillingService(Service):
         reservation.parking_end = end.strftime(DATEFORMAT)
         duration = (end - begin).total_seconds()
         days = (end - begin).days()
-        tax = (lot.tax * duration) / 3600
-        if tax > lot.max_tax * (days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
-            tax = lot.max_tax * (days + 1)
+        tax = (lot.tax * Decimal(duration)) / 3600
+        if tax > lot.max_tax * Decimal(days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
+            tax = lot.max_tax * Decimal(days + 1)
         lot.removeReservation(reservation.spot_id)
-        user.balance -= tax
+        user.balance -= Decimal(tax)
         user.save()
         user.flush()
         return tax
