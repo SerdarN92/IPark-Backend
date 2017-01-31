@@ -1,13 +1,14 @@
+from datetime import datetime, timedelta
 from decimal import Decimal
 
-from communication.Service import Service
+from flask import json
+
 from communication.Client import Client
-import AuthService
-from datetime import datetime, timedelta
+from communication.Service import Service
 from model.DomainClasses import Reservation
 from model.ParkingLot import ParkingLot, ParkingSpot
 from model.User import User, NotFoundException
-from flask import json
+from services import AuthService
 
 DATEFORMAT = "%Y-%m-%d %H:%M:%S"
 

@@ -1,12 +1,12 @@
+from AccountingBillingService import AccountingAndBillingClient
+from AuthService import AuthClient
 from flask import request
 from flask_restplus import Api
 from werkzeug.exceptions import HTTPException
 
-from AccountingBillingService import AccountingAndBillingClient
-from AuthService import AuthClient
-from GeoService import GeoClient
 from model.ParkingLot import FullException
 from model.User import NotFoundException
+from services.GeoService import GeoClient
 
 auth_client = AuthClient()
 accounting_client = AccountingAndBillingClient()

@@ -1,7 +1,7 @@
-from AccountingBillingService import AccountingAndBillingService, AccountingAndBillingClient
-from AuthService import AuthService, AuthClient
-from GeoService import GeoService, GeoClient
-from model.DatabaseObject import DatabaseObject
+from services.AccountingBillingService import AccountingAndBillingService, AccountingAndBillingClient
+from services.AuthService import AuthService, AuthClient
+
+from services.GeoService import GeoService
 
 
 class PrintColors:

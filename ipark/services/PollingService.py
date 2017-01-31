@@ -1,10 +1,11 @@
-from communication.Service import Service
-from communication.Client import Client
-from model.ParkingLot import ParkingLot
-from model.DomainClasses import Reservation
-from AccountingBillingService import AccountingAndBillingService, AccountingAndBillingClient
 import requests
+
+from communication.Client import Client
+from communication.Service import Service
+from model.DomainClasses import Reservation
+from model.ParkingLot import ParkingLot
 from model.User import User
+from services.AccountingBillingService import AccountingAndBillingService, AccountingAndBillingClient
 
 
 class PollingService(Service):

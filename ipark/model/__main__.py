@@ -1,9 +1,7 @@
-from GeoService import GeoService
 from model.DomainClasses import PaymentMethod
-from model.User import User, NotFoundException
 from model.ParkingLot import ParkingLot, ParkingSpot
-
-from model.DatabaseObject import DatabaseObject
+from model.User import User, NotFoundException
+from services.GeoService import GeoService
 
 # DatabaseObject.r.flushall()
 
