@@ -172,7 +172,7 @@ class AccountingAndBillingService(Service):
         # tax wird auf die Sekunde genau berechnet!
         duration = (end - begin).total_seconds()
         tax = (lot.reservation_tax * Decimal(duration)) / Decimal(3600)
-        days = (end - begin).days()
+        days = (end - begin).days
         if tax > lot.max_tax * Decimal(days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
             tax = lot.max_tax * Decimal(days + 1)
         user.balance -= Decimal(tax)
@@ -194,7 +194,7 @@ class AccountingAndBillingService(Service):
         end = datetime.now()
         reservation.parking_end = end.strftime(DATEFORMAT)
         duration = (end - begin).total_seconds()
-        days = (end - begin).days()
+        days = (end - begin).days
         tax = (lot.tax * Decimal(duration)) / Decimal(3600)
         if tax > lot.max_tax * Decimal(days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
             tax = lot.max_tax * Decimal(days + 1)
