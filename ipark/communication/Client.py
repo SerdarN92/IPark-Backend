@@ -35,7 +35,8 @@ class Client(threading.Thread):
         request = pickle.dumps({'function': function, 'args': args, 'kwargs': kwargs}, pickle.HIGHEST_PROTOCOL)
         self.channel.basic_publish(exchange='delayed-x',
                                    routing_key=self.name,
-                                   properties=pika.BasicProperties(headers={"x-delay": delay_time}),
+                                   properties=pika.BasicProperties(headers={"x-delay": delay_time},
+                                                                   reply_to=self.callback_queue),
                                    body=request)
 
     def call(self, function, *args, **kwargs):
