@@ -18,7 +18,7 @@ class PollingService(Service):
         lot = ParkingLot(lot_id)
         if lot.api_path is None:
             return
-        response = requests.get(lot.api_path + "/events")  # todo certificate
+        response = requests.get(lot.api_path + "/events", cert='alice2.pem', verify=False)  # todo certificate
         if response.status_code != 200:
             return  # todo Exception?
         try:
@@ -26,7 +26,6 @@ class PollingService(Service):
         except ValueError:
             return {"status": False, "message": "IoT Error"}  # todo discuss: müssen wir hier antworten? ne oder?
         ids = []
-        # [{"index":2,"startTime":77774128,"stopTime":77774375,"ID":57,"spotid":16843009}]
         for event in events:
             res_id = event["ID"]
             if res_id in ids:
