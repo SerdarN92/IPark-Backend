@@ -18,7 +18,7 @@ class PollingService(Service):
         lot = ParkingLot(lot_id)
         if lot.api_path is None:
             return
-        response = requests.get(lot.api_path + "/events", cert='alice2.pem', verify=False)  # todo certificate
+        response = requests.get(lot.api_path + "/events", cert='assets/alice2.pem', verify=False)  # todo certificate
         if response.status_code != 200:
             return  # todo Exception?
         try:
