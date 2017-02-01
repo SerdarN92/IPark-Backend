@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 
 from flask import json
-
+import requests
 from communication.Client import Client
 from communication.Service import Service
 from model.DomainClasses import Reservation
@@ -167,6 +167,10 @@ class AccountingAndBillingService(Service):
             return False
         spot = ParkingSpot(reservation.spot_id)
         lot = ParkingLot(spot.lot_id)
+        response = requests.post(lot.api_path + "/unlock?" + str(reservation.spot_id), cert='alice2.pem',
+                                 data=json.dumps(reservation.res_id))
+        if response.status_code < 200 or response.status_code >= 300:
+            return False
         begin = any_to_datetime(reservation.reservation_start)
         end = datetime.now()
         reservation.parking_start = end.strftime(DATEFORMAT)
