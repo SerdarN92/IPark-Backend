@@ -1,3 +1,5 @@
+from random import randint
+
 from flask import request
 from flask_restplus import Api
 from werkzeug.exceptions import HTTPException
@@ -124,6 +126,12 @@ def begin_parking(api: Api, reservation_id):
         api.abort(401, "Invalid Token")
         return
     result = accounting_client.begin_parking(request.headers["X-Token"], reservation_id)
+
+    # FOR DEMO
+    if result:
+        duration = randint(200, 400)
+        accounting_client.delayed_call('end_parking', reservation_id, duration, delay_time=duration)
+
     if not result:
         api.abort(422, "Invalid Arguments")
         return
