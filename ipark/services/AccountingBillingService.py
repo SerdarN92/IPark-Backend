@@ -168,7 +168,7 @@ class AccountingAndBillingService(Service):
         spot = ParkingSpot(reservation.spot_id)
         lot = ParkingLot(spot.lot_id)
         response = requests.post(lot.api_path + "/unlock?" + str(reservation.spot_id), cert='alice2.pem',
-                                 data=json.dumps(reservation.res_id))
+                                 data=json.dumps(reservation.res_id), verify=False)
         if response.status_code < 200 or response.status_code >= 300:
             return False
         begin = any_to_datetime(reservation.reservation_start)
