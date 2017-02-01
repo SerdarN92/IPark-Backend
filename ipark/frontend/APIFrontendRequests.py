@@ -124,24 +124,21 @@ def get_reservation_data(api: Api):
 def begin_parking(api: Api, reservation_id):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
-        return
     result = accounting_client.begin_parking(request.headers["X-Token"], reservation_id)
 
     # FOR DEMO
-    if result:
-        duration = randint(200, 400)
-        accounting_client.delayed_call('end_parking', reservation_id, duration, delay_time=duration)
+    #if result:
+    #    duration = randint(200, 400)
+    #    accounting_client.delayed_call('end_parking', reservation_id, duration, delay_time=duration * 1000)
 
     if not result:
         api.abort(422, "Invalid Arguments")
-        return
-    return {"status": True}
+    return {"status": True}, 200
 
 
 def fetch_reservation(api: Api, reservation_id):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
-        return
     result = accounting_client.fetch_reservation_data_for_id(request.headers["X-Token"], reservation_id)
     if not result:
         api.abort(422, "Invalid Arguments")
