@@ -3,6 +3,7 @@ import pickle
 import MySQLdb.cursors
 
 from model.DatabaseObject import DatabaseObject
+from services.PollingService import PollingClient
 
 
 class FullException(BaseException):
@@ -74,6 +75,8 @@ class ParkingLot:
         r.delete('parkinglots')
 
         with DatabaseObject.my.cursor() as cur:  # type: MySQLdb.cursors.DictCursor
+            pollclient = PollingClient()
+
             cur.execute('SELECT * FROM parking_lots UNION SELECT * FROM parking_lots_dummy')
             rows = cur.fetchall()
 
@@ -83,6 +86,9 @@ class ParkingLot:
             for row in rows:  # type: dict
                 geoadd_command.extend([str(row['longitude']), str(row['latitude']), pickle.dumps(row)])
                 hmset_command.extend([row['lot_id'], pickle.dumps(row)])
+
+                if row['total_spots'] > 0:  # and row['api_path'] is not None:
+                    pollclient.delayed_poll_lot(row['lot_id'])
 
             r.execute_command(*geoadd_command)
             r.execute_command(*hmset_command)

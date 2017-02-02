@@ -11,6 +11,7 @@ from services.AccountingBillingService import AccountingAndBillingService
 from services.AuthService import AuthService
 from services.GeoService import GeoService
 from services.PersistencyService import flush_redis_to_mysql
+from services.PollingService import PollingService
 
 if '--reload' in sys.argv:
     # CLEAN UP FOR COLD START
@@ -49,6 +50,7 @@ if not False:  # Check for Reservation mapping inefficient
 abservice = AccountingAndBillingService()
 authservice = AuthService()
 geoservice = GeoService()
+pollingservice = PollingService()
 
 # HTTP
 # app.run(host="0.0.0.0", port=80, debug=False, threaded=True)

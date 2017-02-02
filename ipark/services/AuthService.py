@@ -2,6 +2,7 @@ import uuid
 
 from communication.Client import Client
 from communication.Service import Service
+from model.ParkingLot import ParkingLot
 from model.User import User, NotFoundException
 
 
@@ -53,6 +54,10 @@ class AuthService(Service):
             return {"status": False, "message": "Invalid Token"}
         return {"email": self.r.get("token:" + token).decode(), "status": True}
 
+    def validate_lot_pw(self, lot_id: int, password: str) -> bool:
+        lot = ParkingLot(lot_id)
+        return lot.api_password == password
+
 
 class AuthClient(Client):
     def __init__(self):
@@ -69,6 +74,9 @@ class AuthClient(Client):
 
     def get_email_from_token(self, token):
         return self.call("get_email_from_token", token)
+
+    def validate_lot_pw(self, lot_id, password):
+        return self.call('validate_lot_pw', lot_id, password)
 
 
 if __name__ == "__main__":

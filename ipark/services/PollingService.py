@@ -50,5 +50,5 @@ class PollingClient(Client):
     def poll_lot(self, lot_id):
         self.call("poll_lot", lot_id)
 
-    def delayed_poll_lot(self, lot_id):
-        self.delayed_call("poll_lot", lot_id)
+    def delayed_poll_lot(self, lot_id, delay=120000):
+        self.delayed_call("poll_lot", delay, lot_id)

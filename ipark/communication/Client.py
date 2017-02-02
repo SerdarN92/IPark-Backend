@@ -1,6 +1,5 @@
 import pickle
 import threading
-import time
 import uuid
 
 import pika
@@ -31,7 +30,7 @@ class Client(threading.Thread):
             self.responses[props.correlation_id] = pickle.loads(body)
             self.corr_ids.remove(props.correlation_id)
 
-    def delayed_call(self, function, *args, delay_time=10000, **kwargs):
+    def delayed_call(self, function, delay_time, *args, **kwargs):
         request = pickle.dumps({'function': function, 'args': args, 'kwargs': kwargs}, pickle.HIGHEST_PROTOCOL)
         self.channel.basic_publish(exchange='delayed-x',
                                    routing_key=self.name,
