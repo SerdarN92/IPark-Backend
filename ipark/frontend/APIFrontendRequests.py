@@ -129,7 +129,7 @@ def begin_parking(api: Api, reservation_id):
     # FOR DEMO
     if result:
         duration = randint(200, 400)
-        accounting_client.delayed_call('end_parking', reservation_id, duration, delay_time=duration * 1000)
+        accounting_client.delayed_call('end_parking', duration * 1000, reservation_id, duration)
 
     if not result:
         api.abort(422, "Invalid Arguments")

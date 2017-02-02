@@ -169,9 +169,12 @@ class AccountingAndBillingService(Service):
         spot = ParkingSpot(reservation.spot_id)
         lot = ParkingLot(spot.lot_id)
         if lot.api_path is not None:
-            response = requests.post(lot.api_path + "/unlock?" + str(spot.coap_ip), cert='assets/alice2.pem',
+            response = requests.post(lot.api_path + "/unlock?" + spot.coap_ip.decode(), cert='assets/alice2.pem',
                                      data=str(reservation.res_id), verify=False)
             if response.status_code < 200 or response.status_code >= 300:
+                from sys import stderr
+                print(lot.api_path + "/unlock?" + str(spot.coap_ip),
+                      response.status_code, response.content, response.headers, file=stderr)
                 return False
         begin = any_to_datetime(reservation.reservation_start)
         end = datetime.now()

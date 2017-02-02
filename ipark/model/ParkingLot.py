@@ -94,7 +94,7 @@ class ParkingLot:
             r.execute_command(*hmset_command)
             print("Geodata added")
 
-            cur.execute('SELECT spot_id, lot_id, `number`, flags FROM parking_spots ORDER BY lot_id ASC')
+            cur.execute('SELECT spot_id, lot_id, `number`, flags, coap_ip FROM parking_spots ORDER BY lot_id ASC')
             while True:
                 rows = cur.fetchmany(1000)
                 if len(rows) < 1:
