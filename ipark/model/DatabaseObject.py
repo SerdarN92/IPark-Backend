@@ -52,9 +52,7 @@ class DomainClassBase:
 
 
 class DatabaseObject:
-    r = redis.StrictRedis(host='132.252.152.57')
-
-    r.execute_command("AUTH GS~FsB3~&c7T")
+    r = redis.StrictRedis(host='132.252.152.57', password="GS~FsB3~&c7T")
     READONLY = -1
     NONE = 0
     NEW = 1
