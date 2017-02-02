@@ -1,9 +1,9 @@
 import pickle
+import sys
 import threading
 import traceback
 
 import pika
-import sys
 
 
 class Service(threading.Thread):

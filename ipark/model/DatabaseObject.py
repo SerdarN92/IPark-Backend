@@ -1,5 +1,4 @@
 import pickle
-import decimal
 
 import MySQLdb as mydb
 import MySQLdb.cursors

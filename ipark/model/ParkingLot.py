@@ -3,7 +3,6 @@ import pickle
 import MySQLdb.cursors
 
 from model.DatabaseObject import DatabaseObject
-from services.PollingService import PollingClient
 
 
 class FullException(BaseException):
@@ -75,6 +74,7 @@ class ParkingLot:
         r.delete('parkinglots')
 
         with DatabaseObject.my.cursor() as cur:  # type: MySQLdb.cursors.DictCursor
+            from services.PollingService import PollingClient
             pollclient = PollingClient()
 
             cur.execute('SELECT * FROM parking_lots UNION SELECT * FROM parking_lots_dummy')

@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 from decimal import Decimal
 
-from flask import json
 import requests
+from flask import json
+
 from communication.Client import Client
 from communication.Service import Service
 from model.DomainClasses import Reservation

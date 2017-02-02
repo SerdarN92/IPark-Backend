@@ -22,8 +22,8 @@ if '--reload' in sys.argv:
 if not DatabaseObject.r.exists('reservationsLastId'):
     with DatabaseObject.my.cursor() as cur:
         try:
-            if cur.execute("SELECT `AUTO_INCREMENT` - 1 AS a FROM  INFORMATION_SCHEMA.TABLES "
-                           "WHERE TABLE_SCHEMA = %s AND   TABLE_NAME   = %s", ('ipark', 'reservations')) != 1:
+            if cur.execute("SELECT `AUTO_INCREMENT` - 1 AS a FROM INFORMATION_SCHEMA.TABLES "
+                           "WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s", ('ipark', 'reservations')) != 1:
                 assert False
             DatabaseObject.r.set('reservationsLastId', cur.fetchall()[0]['a'])
         except MySQLdb.IntegrityError:
