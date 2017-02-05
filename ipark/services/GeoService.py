@@ -13,18 +13,18 @@ class GeoService(Service):
     def __init__(self):
         super().__init__("GeoService")
 
-    def find_near_parking_lots(self, lon: float, lat: float, radius: int, max_results: int, lot_type: int):
+    @staticmethod
+    def lot_filter(lot: ParkingLot, lot_type: int) -> bool:
         if lot_type is None:
-            lot_filter = lambda lot: True
-        else:
-            lot_filter = lambda lot: \
-                lot_type < len(lot.get_free_parking_spots()) or lot.get_free_parking_spots()[lot_type]
+            return True
+        return lot.get_free_parking_spots().get(lot_type, 0) > 0
 
+    def find_near_parking_lots(self, lon: float, lat: float, radius: int, max_results: int, lot_type: int):
         radius = min(max(radius, 0), GeoService.MAX_RADIUS)
         lots = DatabaseObject.r.execute_command('GEORADIUS', 'parkinglots', str(lon), str(lat), str(radius), 'km',
                                                 'COUNT', GeoService.MAX_RESULTS_REDIS)  # type: list[ParkingLot]
         lots = (DatabaseObject.assign_dict(ParkingLot(), pickle.loads(l)) for l in lots)
-        lots = (l for l in lots if lot_filter(l))
+        lots = (l for l in lots if self.lot_filter(l, lot_type))
 
         lots = sorted(lots, key=lambda x: sum(x.get_free_parking_spots().values()),
                       reverse=True)[0:max_results]  # type: ParkingLot

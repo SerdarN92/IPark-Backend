@@ -35,7 +35,7 @@ class ParkingLot:
             lot_data = DatabaseObject.r.hget('parkinglotsbyid', self.lot_id)
             DatabaseObject.assign_dict(self, pickle.loads(lot_data))
 
-    def get_free_parking_spots(self) -> list:
+    def get_free_parking_spots(self) -> dict:
         assert self.lot_id is not None
         if self._free_spots is None:
             types = (int(t) for t in DatabaseObject.r.smembers('lot:' + str(self.lot_id) + ':spottypes'))
