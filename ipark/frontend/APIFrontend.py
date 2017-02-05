@@ -44,7 +44,8 @@ reservation = api.model('Reservation', {
     'spot_id': fields.Integer(description="Globally unique identifier of the parking spot"),
     'reservation_start': fields.String(required=True, description="Time of Reservation (e.g. 2017-01-14 18:43:56)"),
     'parking_start': fields.String(required=True,
-                                   description="Beginning time of parking. Implies end of Reservation. (e.g. 2017-01-14 18:43:56)"),
+                                   description="Beginning time of parking. Implies end of Reservation. "
+                                               "(e.g. 2017-01-14 18:43:56)"),
     'parking_end': fields.String(required=True, description="End time of parking. (e.g. 2017-01-14 18:43:56)"),
     'lot': fields.Nested(lot),
 })
@@ -56,7 +57,8 @@ nearby_lots = api.model('Nearby Lots', {
 })
 nearby_lots_request = api.model('Nearby Lots Request', {
     'radius': fields.Integer(description='Radius of Parking Lots in km'),
-    'location': fields.Nested(location)
+    'location': fields.Nested(location, required=True),
+    'type': fields.Integer(min=0)
 })
 info = api.model('User Info', {
     'first_name': fields.String(description="First Name"),
