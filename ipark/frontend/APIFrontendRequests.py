@@ -76,13 +76,9 @@ def get_nearby_parkinglots(api: Api):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
-    lot_filter = lambda lot: True
-    if 'type' in api.payload:
-        lot_filter = lambda lot, lot_type=api.payload['type']: \
-            lot_type < len(lot.get_free_parking_spots()) or lot.get_free_parking_spots()[lot_type]
     lots = geo_client.find_near_parking_lots(api.payload['location']['lon'], api.payload['location']['lat'],
-                                             api.payload['radius'], lot_filter=lot_filter)  # type: list[ParkingLot]
-
+                                             api.payload['radius'],
+                                             lot_type=api.payload.get('type', None))  # type: list[ParkingLot]
     lots = [x.get_data_dict() for x in lots]
     return {'found_lots': len(lots), 'lots': lots}, 200
 

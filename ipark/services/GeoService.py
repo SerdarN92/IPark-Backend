@@ -13,7 +13,13 @@ class GeoService(Service):
     def __init__(self):
         super().__init__("GeoService")
 
-    def find_near_parking_lots(self, lon: float, lat: float, radius: int, max_results: int, lot_filter):
+    def find_near_parking_lots(self, lon: float, lat: float, radius: int, max_results: int, lot_type: int):
+        if lot_type is None:
+            lot_filter = lambda lot: True
+        else:
+            lot_filter = lambda lot: \
+                lot_type < len(lot.get_free_parking_spots()) or lot.get_free_parking_spots()[lot_type]
+
         radius = min(max(radius, 0), GeoService.MAX_RADIUS)
         lots = DatabaseObject.r.execute_command('GEORADIUS', 'parkinglots', str(lon), str(lat), str(radius), 'km',
                                                 'COUNT', GeoService.MAX_RESULTS_REDIS)  # type: list[ParkingLot]
@@ -21,7 +27,7 @@ class GeoService(Service):
         lots = (l for l in lots if lot_filter(l))
 
         lots = sorted(lots, key=lambda x: sum(x.get_free_parking_spots().values()),
-                          reverse=True)[0:max_results]  # type: ParkingLot
+                      reverse=True)[0:max_results]  # type: ParkingLot
 
         return lots
 
@@ -38,10 +44,10 @@ class GeoClient(Client):
     def __init__(self):
         super().__init__("GeoService")
 
-    def find_near_parking_lots(self, lon, lat, radius, max_results: int = None, lot_filter=lambda lot: True):
+    def find_near_parking_lots(self, lon, lat, radius, max_results: int = None, lot_type=None):
         if max_results is None or max_results < 0:
             max_results = GeoClient.MAX_RESULTS
-        return self.call("find_near_parking_lots", lon, lat, radius, max_results, lot_filter)
+        return self.call("find_near_parking_lots", lon, lat, radius, max_results, lot_type)
 
     def get_lot(self, lot_id):
         return self.call("get_lot", lot_id)
