@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restplus import Resource, fields
+from flask_restplus import Resource, fields, Mask
 
 from frontend.APIFrontendRequests import *
 
@@ -47,19 +47,19 @@ reservation = api.model('Reservation', {
                                    description="Beginning time of parking. Implies end of Reservation. "
                                                "(e.g. 2017-01-14 18:43:56)"),
     'parking_end': fields.String(required=True, description="End time of parking. (e.g. 2017-01-14 18:43:56)"),
-    'lot': fields.Nested(lot),
+    'lot': fields.Nested(lot, allow_null=True),
     'reservation_fee': fields.Arbitrary(),
     'parking_fee': fields.Arbitrary(),
 })
-invoice = api.model('Invoice', {'reservation': fields.Nested(reservation, description="Reservation")})
+invoice = api.model('Invoice', {'reservation': fields.Nested(reservation, description="Reservation", allow_null=True)})
 payment_method = api.model('Payment Methods', {})
 nearby_lots = api.model('Nearby Lots', {
     'found_lots': fields.Integer(required=True, description='Number of found Parking Lots'),
-    'lots': fields.List(fields.Nested(lot), required=True, description='Array of ParkingLots')
+    'lots': fields.List(fields.Nested(lot, allow_null=True), required=True, description='Array of ParkingLots')
 })
 nearby_lots_request = api.model('Nearby Lots Request', {
     'radius': fields.Integer(description='Radius of Parking Lots in km'),
-    'location': fields.Nested(location, required=True),
+    'location': fields.Nested(location, required=True, allow_null=True),
     'type': fields.Integer(min=0)
 })
 info = api.model('User Info', {
@@ -75,9 +75,9 @@ info = api.model('User Info', {
     'client_settings': fields.String(description="Arbitrary field for user settings")
 })
 userstatus = api.model('Status', {
-    'info': fields.Nested(info, description="General User Information"),
-    # 'used_spots': fields.List(fields.Nested(spot), description="Currently used parking spots"),
-    # 'reservations': fields.List(fields.Nested(reservation), description="Active reservations")
+    'info': fields.Nested(info, description="General User Information", allow_null=True),
+    # 'used_spots': fields.List(fields.Nested(spot), description="Currently used parking spots",allow_null=True),
+    # 'reservations': fields.List(fields.Nested(reservation), description="Active reservations",allow_null=True)
 })
 
 userupdate = api.model("User Update Info", {
@@ -163,7 +163,7 @@ class UserInfo(Resource):
 class UserStatus(Resource):
     """ Request User Status """
 
-    @ns.marshal_with(userstatus, code=200, description='Successful')
+    @ns.marshal_with(userstatus, code=200, description='Successful', mask=Mask(skip=True))
     @ns.doc('Request User Status')
     def get(self, ufilter):
         """ Request User Status """
@@ -241,7 +241,8 @@ class ReserveParkingSpot(Resource):
     @ns.marshal_with(api.model('Reservation List',
                                {"reservations": fields.List(fields.Nested(reservation),
                                                             description="List of reservations",
-                                                            required=False)}))
+                                                            required=False,
+                                                            allow_null=True)}))
     def get(self):
         return get_reservation_data(api)
 
