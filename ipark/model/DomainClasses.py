@@ -80,7 +80,7 @@ class Reservation(DomainClassBase):
         tax = (lot.reservation_tax * Decimal((end - begin).total_seconds())) / Decimal(3600)
         tax = min(tax, lot.max_tax * Decimal((end - begin).days + 1))
 
-        return Decimal(tax)
+        return round(Decimal(tax), 2)
 
     @property
     def parking_fee(self) -> Decimal:
@@ -95,7 +95,7 @@ class Reservation(DomainClassBase):
         tax = (lot.tax * Decimal((end - begin).total_seconds())) / Decimal(3600)
         tax = min(tax, lot.max_tax * Decimal((end - begin).days + 1))
 
-        return Decimal(tax)
+        return round(Decimal(tax), 2)
 
     @reservation_fee.setter
     def reservation_fee(self, *args):

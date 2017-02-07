@@ -111,7 +111,7 @@ class AccountingAndBillingService(Service):
             return False
         user = User(response['email'], readonly=True)
         r = next((x for x in user.reservations if x.res_id == res_id), None)
-        if r in None:
+        if r is None:
             return False
         return r.get_data_dict()
 
