@@ -97,7 +97,8 @@ class DatabaseObject:
                 data = factory(data)
                 DatabaseObject.my.commit()
 
-            DatabaseObject.r.set(key, pickle.dumps(data))
+                if cur.rowcount > 0:
+                    DatabaseObject.r.set(key, pickle.dumps(data))
         else:
             data = pickle.loads(data)
 
