@@ -88,11 +88,9 @@ def reserve_parking_spot(api: Api):
         api.abort(401, "Invalid Token")
         return
     try:
-        res = accounting_client.reserve_parking_spot(request.headers["X-Token"], api.payload['lot_id'],
-                                                     api.payload['type'])
+        res = accounting_client.reserve_parking_spot(request.headers["X-Token"],
+                                                     api.payload['lot_id'], api.payload['type'])
         if res is not None:
-            if res["number"] is None or res["number"] == b'None':
-                res["number"] = -1
             return res, 201
         else:
             api.abort(409, 'Denied')
@@ -101,23 +99,14 @@ def reserve_parking_spot(api: Api):
     except FullException as ex:
         api.abort(422, "Lot is full")
     except BaseException as ex:
-        api.abort(400, ex.__class__.__name__)
+        api.abort(500, ex.__class__.__name__)
 
 
 def get_reservation_data(api: Api):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
-    reservation_result = accounting_client.fetch_reservation_data(request.headers["X-Token"])
-    # return {"reservations": reservation_result}
-    # todo das hier kann weg, sobald die ID und Number richtig gesetzt werden
-    res = []
-    for p in reservation_result:
-        if p["id"] is None:
-            p["id"] = -1
-        if p["number"] is None or p["number"] == b'None':
-            p["number"] = -1
-        res.append(p)
+    res = accounting_client.fetch_reservation_data(request.headers["X-Token"])
     return {"reservations": res}, 200
 
 
@@ -126,39 +115,33 @@ def begin_parking(api: Api, reservation_id):
         api.abort(401, "Invalid Token")
     result = accounting_client.begin_parking(request.headers["X-Token"], reservation_id)
 
-    # FOR DEMO
     if result:
+        # FOR DEMO
         duration = randint(200, 400)
         accounting_client.delayed_call('end_parking', duration * 1000, reservation_id, duration)
 
-    if not result:
+        return {"status": True}, 200
+    else:
         api.abort(422, "Invalid Arguments")
-    return {"status": True}, 200
 
 
 def fetch_reservation(api: Api, reservation_id):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
     result = accounting_client.fetch_reservation_data_for_id(request.headers["X-Token"], reservation_id)
-    if not result:
+    if result:
+        return result, 200
+    else:
         api.abort(422, "Invalid Arguments")
-    print(result)
-    if result["id"] is None:
-        result["id"] = -1
-    if result["number"] is None or result["number"] == b'None':
-        result["number"] = -1
-    return result, 200
 
 
 def cancel_reservation(api: Api, reservation_id):
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
-        return
-    result = accounting_client.cancel_reservation(request.headers["X-Token"], reservation_id)
-    if not result:
+    if accounting_client.cancel_reservation(request.headers["X-Token"], reservation_id):
+        return {"status": True}, 200
+    else:
         api.abort(422, "Invalid Arguments")
-        return
-    return {"status": True}, 200
 
 
 def check_auth(headers):

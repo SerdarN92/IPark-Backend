@@ -6,12 +6,10 @@ from flask import json
 
 from communication.Client import Client
 from communication.Service import Service
-from model.DomainClasses import Reservation
+from model.DomainClasses import Reservation, any_to_datetime
 from model.ParkingLot import ParkingLot, ParkingSpot
 from model.User import User, NotFoundException
 from services import AuthService
-
-DATEFORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 def merge(j, j2) -> bool:
@@ -30,22 +28,6 @@ def merge(j, j2) -> bool:
                     return False
         return True
     return False
-
-
-def any_to_datetime(o):
-    if isinstance(o, str):
-        return datetime.strptime(o, DATEFORMAT)
-    if isinstance(o, datetime):
-        return o
-    assert False
-
-
-def any_to_string(o):
-    if isinstance(o, str):
-        return o
-    if isinstance(o, datetime):
-        return o.strftime(DATEFORMAT)
-    assert False
 
 
 class AccountingAndBillingService(Service):
@@ -103,60 +85,35 @@ class AccountingAndBillingService(Service):
 
         lot = ParkingLot(lot_id)
         spot_id = lot.reserve_free_parkingspot(spottype)
-        spot = ParkingSpot(spot_id)
 
         res = Reservation()
         res.res_id = Reservation.get_next_id()
         res.spot_id = spot_id
         res.user_id = user.user_id
-        res.reservation_start = datetime.now().strftime(DATEFORMAT)
+        res.reservation_start = datetime.now()
         res.map_to_email(user.email)
 
         user.reservations.append(res)
         user.flush()
 
-        r = {"id": res.res_id, "lot_id": lot.lot_id, "spot_id": spot_id, "number": spot.number,
-             "reservation_start": any_to_string(res.reservation_start), 'lot': lot.get_data_dict()}
-        if res.parking_start is not None:
-            r["parking_start"] = any_to_string(res.parking_start)
-        if res.parking_end is not None:
-            r["parking_end"] = any_to_string(res.parking_end)
-        return r
+        return res.get_data_dict()
 
     def fetch_reservation_data(self, token):
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
             return False
         user = User(response['email'], readonly=True)
-        reservations = []
-        for r in user.reservations:
-            p = ParkingSpot(r.spot_id)
-            res = {"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
-                   "reservation_start": any_to_string(r.reservation_start)}
-            if r.parking_start is not None:
-                res["parking_start"] = any_to_string(r.parking_start)
-            if r.parking_end is not None:
-                res["parking_end"] = any_to_string(r.parking_end)
-            reservations.append(res)
-        return reservations
+        return [r.get_data_dict() for r in user.reservations]
 
     def fetch_reservation_data_for_id(self, token, res_id):
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
             return False
         user = User(response['email'], readonly=True)
-        try:
-            r = next(x for x in user.reservations if x.res_id == res_id)
-        except StopIteration:
+        r = next((x for x in user.reservations if x.res_id == res_id), None)
+        if r in None:
             return False
-        p = ParkingSpot(r.spot_id)
-        res = {"id": r.res_id, "lot_id": p.lot_id, "spot_id": p.spot_id, "number": p.number,
-               "reservation_start": any_to_string(r.reservation_start)}
-        if r.parking_start is not None:
-            res["parking_start"] = any_to_string(r.parking_start)
-        if r.parking_end is not None:
-            res["parking_end"] = any_to_string(r.parking_end)
-        return res
+        return r.get_data_dict()
 
     def begin_parking(self, token, reservationid):
         response = self.authservice.get_email_from_token(token)
@@ -166,6 +123,7 @@ class AccountingAndBillingService(Service):
         reservation = self.get_user_reservation_for_id(user, reservationid)
         if reservation is None:
             return False
+
         spot = ParkingSpot(reservation.spot_id)
         lot = ParkingLot(spot.lot_id)
         if lot.api_path is not None:
@@ -176,49 +134,40 @@ class AccountingAndBillingService(Service):
                 print(lot.api_path + "/unlock?" + str(spot.coap_ip),
                       response.status_code, response.content, response.headers, file=stderr)
                 return False
-        begin = any_to_datetime(reservation.reservation_start)
-        end = datetime.now()
-        reservation.parking_start = end.strftime(DATEFORMAT)
-        # tax wird auf die Sekunde genau berechnet!
-        duration = (end - begin).total_seconds()
-        tax = (lot.reservation_tax * Decimal(duration)) / Decimal(3600)
-        days = (end - begin).days
-        if tax > lot.max_tax * Decimal(days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
-            tax = lot.max_tax * Decimal(days + 1)
-        user.balance -= Decimal(tax)
+
+        reservation.parking_start = datetime.now()
+        user.balance -= Decimal(reservation.reservation_fee)
         user.save()
         user.flush()
-        return tax
+
+        return True
 
     # diese Methode wird durch IoT Gateway aufgerufen
     def end_parking(self, reservationid, duration):
         try:
             user = User(Reservation.get_email_from_resid(reservationid))
         except NotFoundException:
-            return  # todo ?
+            return False
         reservation = self.get_user_reservation_for_id(user, reservationid)
         if reservation is None or reservation.parking_end is not None:
-            return
+            return False
+
         spot = ParkingSpot(reservation.spot_id)
         lot = ParkingLot(spot.lot_id)
+
         begin = any_to_datetime(reservation.parking_start)
         end = begin + timedelta(seconds=duration)
-        reservation.parking_end = end.strftime(DATEFORMAT)
-        duration = (end - begin).total_seconds()
-        days = (end - begin).days
-        tax = (lot.tax * Decimal(duration)) / Decimal(3600)
-        if tax > lot.max_tax * Decimal(days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
-            tax = lot.max_tax * Decimal(days + 1)
-        lot.removeReservation(reservation.spot_id)
-        reservation.remove_mapping()
-        user.balance -= Decimal(tax)
+        reservation.parking_end = end
+
+        user.balance -= Decimal(reservation.parking_fee)
         user.save()
         user.flush()
-        return tax
+
+        lot.removeReservation(reservation.spot_id)
+        reservation.remove_mapping()
+        return True
 
     def cancel_reservation(self, token, reservationid):
-        # TODO check if reservation is active
-
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
             return False
@@ -226,26 +175,22 @@ class AccountingAndBillingService(Service):
         if user.balance is None:
             user.balance = Decimal(0)
         reservation = self.get_user_reservation_for_id(user, reservationid)
-        if reservation is None:
+        if reservation is None or reservation.reservation_start is None:
+            return False
+        if reservation.parking_start is not None:
             return False
 
         spot = ParkingSpot(reservation.spot_id)
         lot = ParkingLot(spot.lot_id)
-        begin, end = any_to_datetime(reservation.reservation_start), datetime.now()
-        reservation.parking_start = reservation.parking_end = end.strftime(DATEFORMAT)
+        reservation.parking_start = reservation.parking_end = datetime.now()
 
-        duration = (end - begin).total_seconds()
-        days = (end - begin).days
-        tax = (lot.reservation_tax * Decimal(duration)) / Decimal(3600)
-        if tax > lot.max_tax * Decimal(days + 1):  # todo müssen wir mehrtägiges Parken berücksichtigen?
-            tax = lot.max_tax * Decimal(days + 1)
-        user.balance -= Decimal(tax)
+        user.balance -= reservation.reservation_fee
         user.save()
         user.flush()
 
         lot.removeReservation(reservation.spot_id)
         reservation.remove_mapping()
-        return tax
+        return True
 
     @staticmethod
     def get_user_reservation_for_id(user: User, reservationid: int) -> Reservation:

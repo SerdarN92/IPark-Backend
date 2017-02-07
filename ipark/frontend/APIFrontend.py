@@ -48,6 +48,8 @@ reservation = api.model('Reservation', {
                                                "(e.g. 2017-01-14 18:43:56)"),
     'parking_end': fields.String(required=True, description="End time of parking. (e.g. 2017-01-14 18:43:56)"),
     'lot': fields.Nested(lot),
+    'reservation_fee': fields.Arbitrary(),
+    'parking_fee': fields.Arbitrary(),
 })
 invoice = api.model('Invoice', {'reservation': fields.Nested(reservation, description="Reservation")})
 payment_method = api.model('Payment Methods', {})
@@ -74,8 +76,8 @@ info = api.model('User Info', {
 })
 userstatus = api.model('Status', {
     'info': fields.Nested(info, description="General User Information"),
-    'used_spots': fields.List(fields.Nested(spot), description="Currently used parking spots"),
-    'reservations': fields.List(fields.Nested(reservation), description="Active reservations")
+    # 'used_spots': fields.List(fields.Nested(spot), description="Currently used parking spots"),
+    # 'reservations': fields.List(fields.Nested(reservation), description="Active reservations")
 })
 
 userupdate = api.model("User Update Info", {
@@ -154,7 +156,7 @@ class UserInfo(Resource):
 
 
 @ns.route("/user/info/<string:ufilter>")
-@ns.param("ufilter")
+@ns.param("ufilter", description="Key in info Object")
 @ns.header('X-Token', 'Authentication Token', required=True, type=str)
 @ns.response(401, 'Authentication Error', model=authentication_error)
 @ns.response(422, 'Invalid Arguments', model=argument_error)
