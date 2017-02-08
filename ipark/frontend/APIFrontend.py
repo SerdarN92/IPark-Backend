@@ -86,6 +86,7 @@ lot_push = api.model('Lot Push Information', {
     'stopTime': fields.Integer(description = "End time of the parking transaction as measured by the IoT device")
 })
 lot_push = api.model('Lot Push Information', dict(ID=fields.Integer(description="Reservation ID", required=True),
+lot_push = api.model('Lot Push Information',
 
 userupdate = api.model("User Update Info", {
     'last_name': fields.String(description="new last name"),
