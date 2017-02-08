@@ -80,13 +80,12 @@ userstatus = api.model('Status', {
     # 'reservations': fields.List(fields.Nested(reservation), description="Active reservations",allow_null=True)
 })
 
-lot_push = api.model('Lot Push Information', {
-    'ID': fields.Integer(description = "Reservation ID"),
-    'startTime': fields.Integer(description = "Start time of the parking transaction as measured by the IoT device"),
-    'stopTime': fields.Integer(description = "End time of the parking transaction as measured by the IoT device")
-})
-lot_push = api.model('Lot Push Information', dict(ID=fields.Integer(description="Reservation ID", required=True),
 lot_push = api.model('Lot Push Information',
+                     {'ID': fields.Integer(description="Reservation ID", required=True), 'startTime': fields.Integer(
+                         description="Start time of the parking transaction as measured by the IoT device",
+                         required=True), 'stopTime': fields.Integer(
+                         description="End time of the parking transaction as measured by the IoT device",
+                         required=True)})
 
 userupdate = api.model("User Update Info", {
     'last_name': fields.String(description="new last name"),
