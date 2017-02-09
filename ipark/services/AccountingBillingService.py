@@ -143,7 +143,9 @@ class AccountingAndBillingService(Service):
         return True
 
     # diese Methode wird durch IoT Gateway aufgerufen
-    def end_parking(self, reservationid, duration):
+    def end_parking(self, event):
+        reservationid = event["ID"]
+        duration = event["stopTime"] - event["startTime"]
         try:
             user = User(Reservation.get_email_from_resid(reservationid))
         except NotFoundException:
@@ -225,8 +227,8 @@ class AccountingAndBillingClient(Client):
     def begin_parking(self, token, resid):
         return self.call("begin_parking", token, resid)
 
-    def end_parking(self, resid, duration):
-        return self.call("end_parking", resid, duration)
+    def end_parking(self, event):
+        return self.call("end_parking", event)
 
     def fetch_reservation_data_for_id(self, token, res_id):
         return self.call("fetch_reservation_data_for_id", token, res_id)

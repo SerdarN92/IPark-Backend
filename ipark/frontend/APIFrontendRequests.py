@@ -160,6 +160,10 @@ def get_lot_info(api: Api, lot_id: int):
 
 def iot_push(api: Api, lot_id: int):
     if 'X-Auth' in request.headers and auth_client.validate_lot_pw(lot_id, request.headers['X-Auth']):
+        if accounting_client.end_parking(api.payload):
+            return {}, 200
+        else:
+            return {}, 500
         return {}, 200
     else:
         return {}, 401

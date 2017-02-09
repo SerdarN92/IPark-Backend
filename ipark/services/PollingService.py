@@ -33,6 +33,7 @@ class PollingService(Service):
                 res_id = event["ID"]
                 if res_id in ids:
                     continue  # Duplikat
+                self.accounting.end_parking(event)
                 ids.append(res_id)
                 email = Reservation.get_email_from_resid(res_id)
                 if not email:

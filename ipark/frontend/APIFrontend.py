@@ -330,7 +330,7 @@ class LotInfo(Resource):
 @ns.param('lot_id', required=True, description='ID of Lot')
 @ns.header('X-Auth', 'Lot Authentication Key', required=True, type=str)
 class IoTPush(Resource):
-    @ns.marshal_with(lot_push)
+    @ns.expect(lot_push)
     def post(self, lot_id):
         return iot_push(api, lot_id)
 
