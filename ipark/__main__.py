@@ -47,10 +47,13 @@ if not False:  # Check for Reservation mapping inefficient
         DatabaseObject.my.commit()
 
 # START SERVICES
-abservice = AccountingAndBillingService()
-authservice = AuthService()
-geoservice = GeoService()
-pollingservice = PollingService()
+services = []
+for i in range(5):
+    services +=[AccountingAndBillingService(),
+                AuthService(),
+                GeoService(),
+		PollingService(),
+    ]
 
 # HTTP
 # app.run(host="0.0.0.0", port=80, debug=False, threaded=True)
@@ -59,6 +62,6 @@ pollingservice = PollingService()
 # app.run(host="0.0.0.0", port=443, debug=False, threaded=True, ssl_context='adhoc')
 
 # HTTPS
-context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-context.load_cert_chain('assets/fullchain1.pem', 'assets/privkey1.pem')
-app.run(host="0.0.0.0", port=443, debug=False, threaded=True, ssl_context=context)
+#context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+#context.load_cert_chain('assets/fullchain1.pem', 'assets/privkey1.pem')
+#app.run(host="0.0.0.0", port=443, debug=False, threaded=True, ssl_context=context)
