@@ -54,8 +54,8 @@ class ParkingLot:
 
     def removeReservation(self, spot_id: int) -> bool:
         spot = ParkingSpot(spot_id)
-        return bool(DatabaseObject.r.smove('lot:' + str(self.lot_id) + ':occupiedspots:' + str(spot.flags),
-                                           'lot:' + str(self.lot_id) + ':freespots:' + str(spot.flags),
+        return bool(DatabaseObject.r.smove(b'lot:' + str(self.lot_id).encode() + b':occupiedspots:' + str(spot.flags).encode(),
+                                           b'lot:' + str(self.lot_id).encode() + b':freespots:' + str(spot.flags).encode(),
                                            str(spot_id)))
 
     def get_data_dict(self):
