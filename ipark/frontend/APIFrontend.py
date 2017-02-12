@@ -177,7 +177,7 @@ class UserStatus(Resource):
         return user_status_get(api, ufilter)
 
 
-@ns.route("/billing")
+@ns.route("/billing", doc=False)
 class UserBilling(Resource):
     """ List of Invoices """
 
@@ -191,7 +191,7 @@ class UserBilling(Resource):
         api.abort(501)
 
 
-@ns.route('/user/payment_methods')
+@ns.route('/user/payment_methods', doc=False)
 @ns.response(401, 'Authentication Error', model=authentication_error)
 @ns.response(422, 'Invalid Arguments', model=argument_error)
 class PaymentMethods(Resource):
@@ -251,6 +251,7 @@ class ReserveParkingSpot(Resource):
                                                             required=False,
                                                             allow_null=True)}))
     def get(self):
+        """Get the users reservations"""
         return get_reservation_data(api)
 
 
@@ -263,6 +264,7 @@ class ReservationData(Resource):
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_with(reservation, code=200, description="Reservation data")
     def get(self, reservation_id):
+        """Info for Reservation"""
         return fetch_reservation(api, reservation_id)
 
 
@@ -278,20 +280,23 @@ class CancelReservation(Resource):
         'status': fields.Boolean(description="Whether the request could be fulfilled or not")}),
                      code=200, description='Status of the reservation')
     def post(self, reservation_id):
+        """Cancel reservation"""
         return cancel_reservation(api, reservation_id)
 
 
 @ns.route('/barrier/<int:reservation_id>')
 @ns.param('reservation_id', description='ID of Reservation')
+@ns.doc(get=False)
 class Barrier(Resource):
-    @ns.header('X-Token', 'Authentication Token', required=True, type=str)
-    @ns.marshal_with(api.model('Barrier Status', {'status': fields.Integer('Status Open (1)/Closed (2)')}),
-                     code=200, description='Barrier Status')
-    @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
-    @ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
-    def get(self, reservation_id):
-        """ Get Barrier State """
-        api.abort(501)
+    #@ns.header('X-Token', 'Authentication Token', required=True, type=str)
+    #@ns.marshal_with(api.model('Barrier Status', {'status': fields.Integer('Status Open (1)/Closed (2)')}),
+    #                 code=200, description='Barrier Status')
+    #@ns.marshal_with(authentication_error, code=401, description='Authentication Error')
+    #@ns.marshal_with(argument_error, code=422, description='Invalid Arguments')
+    #@ns.hide()
+    #def get(self, reservation_id):
+    #    """ Get Barrier State """
+    #    api.abort(501)
 
     @ns.header('X-Token', 'Authentication Token', required=True, type=str)
     @ns.marshal_with(authentication_error, code=401, description='Authentication Error')
@@ -300,10 +305,11 @@ class Barrier(Resource):
         'status': fields.Boolean(description="Whether the request could be fulfilled or not")}),
                      code=200, description='Status of the reservation')
     def put(self, reservation_id):
+        """Start parking with opening the barrier"""
         return begin_parking(api, reservation_id)
 
 
-@ns.route('/barrier/<int:id>/<int:status>')
+@ns.route('/barrier/<int:id>/<int:status>', doc=False)
 @ns.param('status', required=False, description='Requested Status [Open (1)/Closed (2)]')
 class BarrierSet(Resource):  # Barrier
 
@@ -323,6 +329,7 @@ class BarrierSet(Resource):  # Barrier
 class LotInfo(Resource):
     @ns.marshal_with(lot, code=200)
     def get(self, lot_id):
+        """Get Info for Lot"""
         return get_lot_info(api, lot_id)
 
 
@@ -332,6 +339,7 @@ class LotInfo(Resource):
 class IoTPush(Resource):
     @ns.expect(lot_push)
     def post(self, lot_id):
+        """Reveice Events from IoT Gateway"""
         return iot_push(api, lot_id)
 
 

@@ -127,6 +127,7 @@ class Reservation(DomainClassBase):
         data['id'] = data['res_id'] = self.res_id if self.res_id is not None else -1
 
         spot = ParkingSpot(self.spot_id)
+        data['lot_id'] = spot.lot_id
         try:
             data['number'] = int(spot.number)
         except ValueError as ex:

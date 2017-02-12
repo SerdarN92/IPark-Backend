@@ -38,11 +38,11 @@ class Service(threading.Thread):
         pass
 
     def on_exchange_declared(self, *args, **kwargs):
-        print('args', args, 'kw', kwargs.keys())
+        # print('args', args, 'kw', kwargs.keys())
         pass
 
     def on_queue_bind(self, *args, **kwargs):
-        print('args', args, 'kw', kwargs.keys())
+        # print('args', args, 'kw', kwargs.keys())
         pass
 
     def run(self):
