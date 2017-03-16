@@ -2,7 +2,7 @@ import pickle
 
 import MySQLdb.cursors
 
-from model.DatabaseObject import DatabaseObject
+from ipark.model.DatabaseObject import DatabaseObject
 
 
 class FullException(BaseException):

@@ -1,9 +1,9 @@
 import uuid
 
-from communication.Client import Client
-from communication.Service import Service
-from model.ParkingLot import ParkingLot
-from model.User import User, NotFoundException
+from ipark.communication.Client import Client
+from ipark.communication.Service import Service
+from ipark.model.ParkingLot import ParkingLot
+from ipark.model.User import User, NotFoundException
 
 
 class AuthService(Service):

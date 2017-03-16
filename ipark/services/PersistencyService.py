@@ -2,9 +2,9 @@ import re
 
 import MySQLdb
 
-from model.DatabaseObject import DatabaseObject, LockedException
-from model.DomainClasses import Reservation, PaymentMethod
-from model.User import User, NotFoundException
+from ipark.model.DatabaseObject import DatabaseObject, LockedException
+from ipark.model.DomainClasses import Reservation, PaymentMethod
+from ipark.model.User import User, NotFoundException
 
 r = DatabaseObject.r
 my = DatabaseObject.my

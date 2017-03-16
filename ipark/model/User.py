@@ -3,8 +3,8 @@ from decimal import Decimal
 import MySQLdb
 import bcrypt
 
-from model.DatabaseObject import DatabaseObject, DomainClassBase
-from model.DomainClasses import PaymentMethod, Reservation, Invoice
+from ipark.model.DatabaseObject import DatabaseObject, DomainClassBase
+from ipark.model.DomainClasses import PaymentMethod, Reservation, Invoice
 
 
 def check_hash(pwhash: str, password: str) -> bool:

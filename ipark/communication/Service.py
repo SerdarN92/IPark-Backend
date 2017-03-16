@@ -1,3 +1,4 @@
+"""Service Unit File"""
 import pickle
 import sys
 import threading
@@ -7,6 +8,7 @@ import pika
 
 
 class Service(threading.Thread):
+    """Unit Service"""
     def __init__(self, name=None):
         threading.Thread.__init__(self)
 
@@ -46,6 +48,7 @@ class Service(threading.Thread):
         pass
 
     def run(self):
+        """Start Service"""
         print(u"[{0:s}] Service running...".format(self.name))
         self.connection.ioloop.start()
 

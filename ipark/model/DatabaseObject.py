@@ -51,7 +51,7 @@ class DomainClassBase:
 
 
 class DatabaseObject:
-    r = redis.StrictRedis(host='132.252.152.57', password="GS~FsB3~&c7T")
+    r = None  #redis.StrictRedis(host='132.252.152.57', password="GS~FsB3~&c7T")
     READONLY = -1
     NONE = 0
     NEW = 1
@@ -60,8 +60,8 @@ class DatabaseObject:
 
     MODIFIED = 2
 
-    my = mydb.connect('132.252.152.57', 'root', 'GS~FsB3~&c7T', 'ipark',
-                      cursorclass=mydb.cursors.DictCursor)
+    my = None  # mydb.connect('132.252.152.57', 'root', 'GS~FsB3~&c7T', 'ipark',
+    #                  cursorclass=mydb.cursors.DictCursor)
 
     database_fields = None
 

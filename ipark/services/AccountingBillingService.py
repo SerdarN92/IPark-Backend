@@ -4,12 +4,12 @@ from decimal import Decimal
 import requests
 from flask import json
 
-from communication.Client import Client
-from communication.Service import Service
-from model.DomainClasses import Reservation, any_to_datetime
-from model.ParkingLot import ParkingLot, ParkingSpot
-from model.User import User, NotFoundException
-from services import AuthService
+from ipark.communication.Client import Client
+from ipark.communication.Service import Service
+from ipark.model.DomainClasses import Reservation, any_to_datetime
+from ipark.model.ParkingLot import ParkingLot, ParkingSpot
+from ipark.model.User import User, NotFoundException
+from ipark.services import AuthService
 
 
 def merge(j, j2) -> bool:

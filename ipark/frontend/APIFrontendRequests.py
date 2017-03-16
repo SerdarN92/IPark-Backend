@@ -4,15 +4,15 @@ from flask import request
 from flask_restplus import Api
 from werkzeug.exceptions import HTTPException
 
-from model.ParkingLot import FullException
-from model.User import NotFoundException
-from services.AccountingBillingService import AccountingAndBillingClient
-from services.AuthService import AuthClient
-from services.GeoService import GeoClient
+from ipark.model.ParkingLot import FullException
+from ipark.model.User import NotFoundException
+from ipark.services.AccountingBillingService import AccountingAndBillingClient
+from ipark.services.AuthService import AuthClient
+from ipark.services.GeoService import GeoClient
 
-auth_client = AuthClient()
-accounting_client = AccountingAndBillingClient()
-geo_client = GeoClient()
+auth_client = None  # AuthClient()
+accounting_client = None  # AccountingAndBillingClient()
+geo_client = None  # GeoClient()
 
 
 def user_signup(api: Api):

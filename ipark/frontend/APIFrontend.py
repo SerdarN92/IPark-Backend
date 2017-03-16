@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restplus import Resource, fields, Mask
 
-from frontend.APIFrontendRequests import *
+from ipark.frontend.APIFrontendRequests import *
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='iPark', description='iPark Frontend')

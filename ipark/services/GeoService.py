@@ -1,9 +1,9 @@
 import pickle
 
-from communication.Client import Client
-from communication.Service import Service
-from model.DatabaseObject import DatabaseObject
-from model.ParkingLot import ParkingLot
+from ipark.communication.Client import Client
+from ipark.communication.Service import Service
+from ipark.model.DatabaseObject import DatabaseObject
+from ipark.model.ParkingLot import ParkingLot
 
 
 class GeoService(Service):

@@ -2,9 +2,9 @@ from builtins import property
 from datetime import datetime
 from decimal import Decimal
 
-from model.DatabaseObject import DomainClassBase, DatabaseObject
-from model.ParkingLot import ParkingLot
-from model.ParkingLot import ParkingSpot
+from ipark.model.DatabaseObject import DomainClassBase, DatabaseObject
+from ipark.model.ParkingLot import ParkingLot
+from ipark.model.ParkingLot import ParkingSpot
 
 
 class PaymentMethod(DomainClassBase):
