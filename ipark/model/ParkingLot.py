@@ -4,8 +4,10 @@ import MySQLdb.cursors
 
 from model.DatabaseObject import DatabaseObject
 
+"""Object Representation of a Parking Lot"""
 
 class FullException(BaseException):
+    """Exception if full Parking Lot is requested for reservation"""
     def __init__(self):
         super(FullException, self).__init__()
 
@@ -36,6 +38,7 @@ class ParkingLot:
             DatabaseObject.assign_dict(self, pickle.loads(lot_data))
 
     def get_free_parking_spots(self) -> dict:
+        """get free parking spots grouped by type"""
         assert self.lot_id is not None
         if self._free_spots is None:
             types = (int(t) for t in DatabaseObject.r.smembers('lot:' + str(self.lot_id) + ':spottypes'))
@@ -44,6 +47,7 @@ class ParkingLot:
         return self._free_spots
 
     def reserve_free_parkingspot(self, spottype: int = 0) -> int:
+        """reserve random free parking spot of a specific Parking Lot"""
         assert self.lot_id is not None
 
         spot_id = DatabaseObject.r.spop('lot:' + str(self.lot_id) + ':freespots:' + str(spottype))
@@ -53,12 +57,14 @@ class ParkingLot:
         return int(spot_id)
 
     def removeReservation(self, spot_id: int) -> bool:
+        """cancel Reservation"""
         spot = ParkingSpot(spot_id)
         return bool(DatabaseObject.r.smove(b'lot:' + str(self.lot_id).encode() + b':occupiedspots:' + spot.flags,
                                            b'lot:' + str(self.lot_id).encode() + b':freespots:' + spot.flags,
                                            str(spot_id)))
 
     def get_data_dict(self):
+        """get raw representation of object"""
         data = {k: getattr(self, k) for k in
                 ['lot_id', 'name', 'total_spots', 'longitude', 'latitude',
                  'tax', 'max_tax', 'reservation_tax',
@@ -70,6 +76,7 @@ class ParkingLot:
 
     @staticmethod
     def import_parkinglots():
+        """initialize static parking lot data in redis"""
         r = DatabaseObject.r
         r.delete('parkinglots')
 
@@ -133,4 +140,5 @@ class ParkingSpot:
         assert self.flags is not None
 
     def is_busy(self):
+        """get busy state of parking spot"""
         return not bool(DatabaseObject.r.sismember('lot:' + str(self.lot_id) + ':freespots:' + str(self.flags)))

@@ -13,6 +13,7 @@ from services import AuthService
 
 
 def merge(j, j2) -> bool:
+    """Merge Data structures strings"""
     if type(j) is not type(j2):
         return False
 
@@ -31,11 +32,14 @@ def merge(j, j2) -> bool:
 
 
 class AccountingAndBillingService(Service):
+    """Service for handling Reservation Requests and other User Modifications"""
+
     def __init__(self):
         self.authservice = AuthService.AuthClient()
         super().__init__("Accounting")
 
     def sign_up(self, info):
+        """create new account"""
         if 'email' not in info or 'password' not in info or len(info['email']) * len(info['password']) == 0:
             return {"status": False, "message": "Invalid Arguments"}
 
@@ -47,6 +51,7 @@ class AccountingAndBillingService(Service):
         return {"status": True, "token": result["token"]}
 
     def fetch_user_data(self, token):
+        """Return User information"""
         user = self.authservice.get_email_from_token(token)
         if "status" not in user or not user["status"]:
             return {"status": False, "message": "Invalid Token."}
@@ -54,6 +59,7 @@ class AccountingAndBillingService(Service):
         return {"status": True, "user": ruser.get_data_dict()}
 
     def update_user_data(self, token: str, updata: dict, join: bool) -> dict:
+        """Update User information"""
         user = self.authservice.get_email_from_token(token)
         if "status" not in user or not user["status"]:
             return {"status": False, "message": "Invalid Token."}
@@ -76,6 +82,7 @@ class AccountingAndBillingService(Service):
         return {"status": True}
 
     def reserve_parking_spot(self, token: str, lot_id: int, spottype: int) -> bool:
+        """reserve random free parking spot of a specific Parking Lot"""
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
             return None
@@ -99,6 +106,7 @@ class AccountingAndBillingService(Service):
         return res.get_data_dict()
 
     def fetch_reservation_data(self, token):
+        """Get Details of Reservation History"""
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
             return False
@@ -106,6 +114,7 @@ class AccountingAndBillingService(Service):
         return [r.get_data_dict() for r in user.reservations]
 
     def fetch_reservation_data_for_id(self, token, res_id):
+        """Get Details of specific Reservation"""
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
             return False
@@ -116,6 +125,7 @@ class AccountingAndBillingService(Service):
         return r.get_data_dict()
 
     def begin_parking(self, token, reservationid):
+        """State the presence at the parking spot and request barrier opening"""
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
             return False
@@ -144,6 +154,7 @@ class AccountingAndBillingService(Service):
 
     # diese Methode wird durch IoT Gateway aufgerufen
     def end_parking(self, event):
+        """IoT Gateway announces the leaving of a Car"""
         reservationid = event["ID"]
         duration = event["stopTime"] - event["startTime"]
         try:
@@ -170,6 +181,7 @@ class AccountingAndBillingService(Service):
         return True
 
     def cancel_reservation(self, token, reservationid):
+        """Cancel Reservation"""
         response = self.authservice.get_email_from_token(token)
         if not response['status']:
             return False
@@ -196,6 +208,7 @@ class AccountingAndBillingService(Service):
 
     @staticmethod
     def get_user_reservation_for_id(user: User, reservationid: int) -> Reservation:
+        """Get reservation form USer by ID"""
         try:
             return next(x for x in user.reservations if int(x.res_id) == int(reservationid))
         except StopIteration as ex:
@@ -203,6 +216,7 @@ class AccountingAndBillingService(Service):
 
 
 class AccountingAndBillingClient(Client):
+    """Client for Accounting and Billing Service"""
     def __init__(self):
         super().__init__("Accounting")
 

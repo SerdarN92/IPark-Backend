@@ -7,6 +7,7 @@ from model.ParkingLot import ParkingLot
 from model.User import User
 from services.AccountingBillingService import AccountingAndBillingService, AccountingAndBillingClient
 
+"""Service for polling data from IoT Gateway (deprecated)"""
 
 class PollingService(Service):
     def __init__(self):

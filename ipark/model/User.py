@@ -6,8 +6,10 @@ import bcrypt
 from model.DatabaseObject import DatabaseObject, DomainClassBase
 from model.DomainClasses import PaymentMethod, Reservation, Invoice
 
+"""Representation Object of the User (Data)"""
 
 def check_hash(pwhash: str, password: str) -> bool:
+    """Validate hased password"""
     try:
         return bcrypt.checkpw(password.encode(), pwhash.encode())
     except ValueError as ex:
@@ -15,10 +17,12 @@ def check_hash(pwhash: str, password: str) -> bool:
 
 
 def hash_password(password: str) -> str:
+    """Generate password hash"""
     return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 
 class NotFoundException(BaseException):
+    """Exception if the User is not found or the password is invalid"""
     pass
 
 
@@ -71,14 +75,17 @@ class User(DomainClassBase):
             setattr(self, e, data[e])
 
     def save(self):
+        """Mark User Object for saving, write external properties"""
         super(User, self).save()
         self.save_properties()
 
     def save_properties(self):
+        """save external properties"""
         for p in ['reservations', 'payment_methods', 'invoices']:
             self._save_list_property(p)
 
     def flush(self):
+        """write properties and data marked for saving, Object becomes readonly"""
         self.save_properties()
         super(User, self).flush()
 
@@ -92,6 +99,7 @@ class User(DomainClassBase):
 
     @staticmethod
     def create(email, password, **additional_data):
+        """Create new user in Database (sign up)"""
         with DatabaseObject.my.cursor() as cur:
             try:
                 data = [email, hash_password(password)]
@@ -111,7 +119,7 @@ class User(DomainClassBase):
     @property
     def payment_methods(self):
         """
-
+            Load and get Payment Methods of User
         :rtype: list[PaymentMethod]
         """
         if self._payment_methods is None:
@@ -124,7 +132,7 @@ class User(DomainClassBase):
     @property
     def reservations(self):
         """
-
+            Load and get Reservations of User
         :rtype: list[Reservation]
         """
         if self._reservations is None:
@@ -137,7 +145,7 @@ class User(DomainClassBase):
     @property
     def invoices(self):
         """
-
+            Load and get Invoices of User
         :rtype: list[Invoice]
         """
         pass  # Todo

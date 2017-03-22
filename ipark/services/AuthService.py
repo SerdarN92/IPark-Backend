@@ -7,6 +7,7 @@ from model.User import User, NotFoundException
 
 
 class AuthService(Service):
+    """Micro Service for User Authorization"""
     def __init__(self):
         super().__init__("AuthService")
         from model.DatabaseObject import DatabaseObject
@@ -18,6 +19,7 @@ class AuthService(Service):
                                                 "return a")
 
     def login(self, email, password):
+        """check for valid user credentials and issue login token"""
         if not self.validate_user(email, password)["status"]:
             return {"status": False, "message": "Invalid password or user."}
 
@@ -28,6 +30,7 @@ class AuthService(Service):
         return {"status": True, "token": self.issue_token(email)}
 
     def validate_user(self, email, password):
+        """check for valid user credentials"""
         try:
             User(email, password, readonly=True)
         except NotFoundException:
@@ -35,11 +38,13 @@ class AuthService(Service):
         return {"status": True}
 
     def validate_token(self, token):
+        """check for valid login token"""
         if not self.r.exists("token:" + token):
             return {"status": False, "message": "Invalid Token."}
         return {"status": True}  # Todo müssen wir hier nicht noch irgendwie email / user-ID zurückgeben?
 
     def issue_token(self, email):
+        """Generate Token"""
         token = str(uuid.uuid4())  # das hier reicht mMn für den Proof of Concept erstmal
         # while self.r.exists("token:" + token):
         #    token = str(uuid.uuid4())
@@ -49,17 +54,20 @@ class AuthService(Service):
         return token
 
     def get_email_from_token(self, token):
+        """Get email address from token (to load user object)"""
         if not self.r.exists("token:" + token):
             print("Auth")
             return {"status": False, "message": "Invalid Token"}
         return {"email": self.r.get("token:" + token).decode(), "status": True}
 
     def validate_lot_pw(self, lot_id: int, password: str) -> bool:
+        """Check Password from IoT Gateway"""
         lot = ParkingLot(lot_id)
         return lot.api_password == password
 
 
 class AuthClient(Client):
+    """Client for Authorization Service"""
     def __init__(self):
         super().__init__("AuthService")
 

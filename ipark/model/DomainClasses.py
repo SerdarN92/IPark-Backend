@@ -30,6 +30,7 @@ DATEFORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 def any_to_datetime(o):
+    """Convert various date representations to datetime object"""
     if o is None:
         return None
     if isinstance(o, str):
@@ -40,6 +41,7 @@ def any_to_datetime(o):
 
 
 def any_to_string(o):
+    """Convert various date representations to string"""
     if o is None:
         return None
     if isinstance(o, datetime):
@@ -54,6 +56,7 @@ class Reservation(DomainClassBase):
 
     @staticmethod
     def get_next_id() -> int:
+        """Get and increment next database id for a new Reservation"""
         return DatabaseObject.r.incr('reservationsLastId')
 
     def __init__(self):
@@ -69,6 +72,7 @@ class Reservation(DomainClassBase):
 
     @property
     def reservation_fee(self) -> Decimal:
+        """Get current reservation fee"""
         if self.reservation_start is None:
             return Decimal(0)
         begin = any_to_datetime(self.reservation_start)
@@ -84,6 +88,7 @@ class Reservation(DomainClassBase):
 
     @property
     def parking_fee(self) -> Decimal:
+        """Get current parking fee"""
         if self.parking_start is None:
             return Decimal(0)
         begin = any_to_datetime(self.parking_start)
@@ -99,26 +104,32 @@ class Reservation(DomainClassBase):
 
     @reservation_fee.setter
     def reservation_fee(self, *args):
+        """Reservation fees cannot be set -> ignore"""
         pass
 
     @parking_fee.setter
     def parking_fee(self, *args):
+        """Parking fees cannot be set -> ignore"""
         pass
 
     def __str__(self):
         return str(self.__dict__)
 
     def map_to_email(self, email: str) -> bool:
+        """Create mapping to retrieve user email"""
         return DatabaseObject.r.set('res_user:' + str(self.res_id), email)
 
     def remove_mapping(self) -> bool:
+        """Remove extra mapping between reservation and user email"""
         return DatabaseObject.r.delete('res_user:' + str(self.res_id))
 
     @staticmethod
     def get_email_from_resid(res_id: int) -> str:
+        """Get mapped user email address to get user from reservation id"""
         return DatabaseObject.r.get('res_user:' + str(res_id)).decode()
 
     def get_data_dict(self):
+        """get raw representation of object"""
         data = super(Reservation, self).get_data_dict()
         for e in ['reservation_start', 'parking_start', 'parking_end']:
             data[e] = any_to_datetime(getattr(self, e, None))
@@ -138,6 +149,7 @@ class Reservation(DomainClassBase):
 
 
 class Invoice(DomainClassBase):
+    """Object Representation of an Invoice"""
     database_fields = []  # Todo
 
     def __init__(self):

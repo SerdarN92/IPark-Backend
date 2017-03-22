@@ -4,8 +4,12 @@ import uuid
 
 import pika
 
+"""Client Base for Micro Service via RabbitMQ"""
+
 
 class Client(threading.Thread):
+    """Client Base for Micro Service via RabbitMQ"""
+
     def __init__(self, name=None):
         super(Client, self).__init__()
 
@@ -26,11 +30,13 @@ class Client(threading.Thread):
         self.start()
 
     def on_response(self, ch, method, props, body):
+        """Handle respose and pass back to caller (internal use)"""
         if props.correlation_id in self.corr_ids:
             self.responses[props.correlation_id] = pickle.loads(body)
             self.corr_ids.remove(props.correlation_id)
 
     def delayed_call(self, function, delay_time, *args, **kwargs):
+        """Schedule delayed Service Routine Call"""
         request = pickle.dumps({'function': function, 'args': args, 'kwargs': kwargs}, pickle.HIGHEST_PROTOCOL)
         self.channel.basic_publish(exchange='delayed-x',
                                    routing_key=self.name,
@@ -39,6 +45,7 @@ class Client(threading.Thread):
                                    body=request)
 
     def call(self, function, *args, **kwargs):
+        """Call Service Routine"""
         request = pickle.dumps({'function': function, 'args': args, 'kwargs': kwargs}, pickle.HIGHEST_PROTOCOL)
 
         corr_id = str(uuid.uuid4())
@@ -66,6 +73,7 @@ class Client(threading.Thread):
         return response['result']
 
     def run(self):
+        """Open connection to Service"""
         while True:
             self.connection.process_data_events()
             self.connection.sleep(10)
