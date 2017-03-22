@@ -10,7 +10,10 @@ r = DatabaseObject.r
 my = DatabaseObject.my
 
 
+"""Flush redis state to MySQL (onetime)"""
+
 def redis_scan_generator(rds, match="*", regex: re._pattern_type = None):
+    """python generator to scan redis incrementally"""
     count = 10
     cursor = 0
     while True:
@@ -31,6 +34,7 @@ def redis_scan_generator(rds, match="*", regex: re._pattern_type = None):
 
 
 def get_insert_update_statement(table: str, columns: list, data: dict) -> str:
+    """convert raw data to insert or update statement"""
     data = [data[k] for k in columns]
     return "INSERT INTO " + table + "(`" + ("`, `".join(columns)) + "`) " \
            + "VALUES (" + (", ".join(["%s"] * len(columns))) + ") " \
@@ -38,12 +42,15 @@ def get_insert_update_statement(table: str, columns: list, data: dict) -> str:
 
 
 def get_update_statement(table: str, columns: list, data: dict, id_field: str, id_value) -> tuple:
+    """convert raw data to update statement"""
     data = [data[k] for k in columns]
     return "UPDATE " + table + " SET " + (", ".join(["`" + c + "` = %s" for c in columns])) \
            + " WHERE `" + id_field + "` = %s", tuple(data) + (id_value,)
 
 
 def flush_redis_to_mysql():
+    """main method"""
+
     # USER
     user_gen = redis_scan_generator(r, 'user:*', re.compile("^user:[^:]*$", re.IGNORECASE))
 

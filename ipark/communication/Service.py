@@ -1,4 +1,3 @@
-"""Service Unit File"""
 import pickle
 import sys
 import threading
@@ -6,9 +5,12 @@ import traceback
 
 import pika
 
+"""Service Base for Micro Service via RabbitMQ"""
+
 
 class Service(threading.Thread):
-    """Unit Service"""
+    """Service Base for Micro Service via RabbitMQ"""
+
     def __init__(self, name=None):
         threading.Thread.__init__(self)
 
@@ -22,11 +24,11 @@ class Service(threading.Thread):
         self.start()
 
     def on_connected(self, connection):
-        # print("Connected")
+        """RabbitMQ Connected"""
         connection.channel(self.on_channel_open)
 
     def on_channel_open(self, channel):
-        # print("Channel")
+        """RabbitMQ Channel opened"""
         self.channel = channel
 
         self.channel.exchange_declare(self.on_exchange_declared, exchange="delayed-x", type="x-delayed-message",
@@ -40,19 +42,18 @@ class Service(threading.Thread):
         pass
 
     def on_exchange_declared(self, *args, **kwargs):
-        # print('args', args, 'kw', kwargs.keys())
         pass
 
     def on_queue_bind(self, *args, **kwargs):
-        # print('args', args, 'kw', kwargs.keys())
         pass
 
     def run(self):
-        """Start Service"""
+        """Start Serving Client Requests"""
         print(u"[{0:s}] Service running...".format(self.name))
         self.connection.ioloop.start()
 
     def on_request(self, ch, method, props, body):
+        """Handle incoming Service Request"""
         request = pickle.loads(body)
 
         try:
@@ -70,6 +71,7 @@ class Service(threading.Thread):
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
     def stop(self):
+        """Terminate Serving"""
         self.connection.close()
         self.join()
         self.run()

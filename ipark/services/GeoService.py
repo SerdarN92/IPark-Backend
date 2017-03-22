@@ -5,8 +5,10 @@ from ipark.communication.Service import Service
 from ipark.model.DatabaseObject import DatabaseObject
 from ipark.model.ParkingLot import ParkingLot
 
+"""Service for Geo Data"""
 
 class GeoService(Service):
+    """Service for Geo Data"""
     MAX_RESULTS_REDIS = 300
     MAX_RADIUS = 50
 
@@ -15,11 +17,13 @@ class GeoService(Service):
 
     @staticmethod
     def lot_filter(lot: ParkingLot, lot_type: int) -> bool:
+        """check if Lot has free spots of type"""
         if lot_type is None:
             return True
         return lot.get_free_parking_spots().get(lot_type, 0) > 0
 
     def find_near_parking_lots(self, lon: float, lat: float, radius: int, max_results: int, lot_type: int):
+        """find nearby parking lot"""
         radius = min(max(radius, 0), GeoService.MAX_RADIUS)
         lots = DatabaseObject.r.execute_command('GEORADIUS', 'parkinglots', str(lon), str(lat), str(radius), 'km',
                                                 'COUNT', GeoService.MAX_RESULTS_REDIS)  # type: list[ParkingLot]
@@ -32,6 +36,7 @@ class GeoService(Service):
         return lots
 
     def get_lot(self, lot_id):
+        """Get Lot by ID"""
         try:
             return ParkingLot(lot_id)
         except:
@@ -40,6 +45,8 @@ class GeoService(Service):
 
 class GeoClient(Client):
     MAX_RESULTS = 50
+
+    """Client for Geo Data Service"""
 
     def __init__(self):
         super().__init__("GeoService")

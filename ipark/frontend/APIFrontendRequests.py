@@ -10,12 +10,15 @@ from ipark.services.AccountingBillingService import AccountingAndBillingClient
 from ipark.services.AuthService import AuthClient
 from ipark.services.GeoService import GeoClient
 
+"""Module to translate the API calls to the corresponding Service actions"""
+
 auth_client = None  # AuthClient()
 accounting_client = None  # AccountingAndBillingClient()
 geo_client = None  # GeoClient()
 
 
 def user_signup(api: Api):
+    """API Request: User Sign Up"""
     try:
         sign_up_result = accounting_client.sign_up(api.payload)
     except NotFoundException as ex:
@@ -27,6 +30,7 @@ def user_signup(api: Api):
 
 
 def user_login(api: Api):
+    """API Request: User Login"""
     login_result = auth_client.login(api.payload["email"], api.payload["password"])
     if "token" in login_result:
         return {'token': login_result["token"]}, 200
@@ -34,6 +38,7 @@ def user_login(api: Api):
 
 
 def user_info_get(api: Api):
+    """API Request: get User info"""
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
@@ -48,6 +53,7 @@ def user_info_get(api: Api):
 
 
 def user_status_get(api: Api, ufilter):
+    """API Request: User Sign Up"""
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
@@ -62,6 +68,7 @@ def user_status_get(api: Api, ufilter):
 
 
 def user_info_set(api: Api):
+    """API Request: Update User account details"""
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
@@ -73,6 +80,7 @@ def user_info_set(api: Api):
 
 
 def get_nearby_parkinglots(api: Api):
+    """API Request: Find available parking lot in a nearby radius"""
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
@@ -84,6 +92,7 @@ def get_nearby_parkinglots(api: Api):
 
 
 def reserve_parking_spot(api: Api):
+    """API Request: Reserve a (free) parking spot"""
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
@@ -103,6 +112,7 @@ def reserve_parking_spot(api: Api):
 
 
 def get_reservation_data(api: Api):
+    """API Request: Get Details of Reservation History"""
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
         return
@@ -111,6 +121,7 @@ def get_reservation_data(api: Api):
 
 
 def begin_parking(api: Api, reservation_id):
+    """API Request: State the presence at the parking spot and request barrier opening"""
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
     result = accounting_client.begin_parking(request.headers["X-Token"], reservation_id)
@@ -126,6 +137,7 @@ def begin_parking(api: Api, reservation_id):
 
 
 def fetch_reservation(api: Api, reservation_id):
+    """API Request: Get Details for a specific Reservation"""
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
     result = accounting_client.fetch_reservation_data_for_id(request.headers["X-Token"], reservation_id)
@@ -136,6 +148,7 @@ def fetch_reservation(api: Api, reservation_id):
 
 
 def cancel_reservation(api: Api, reservation_id):
+    """API Request: Cancel Reservation"""
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
     if accounting_client.cancel_reservation(request.headers["X-Token"], reservation_id):
@@ -145,10 +158,12 @@ def cancel_reservation(api: Api, reservation_id):
 
 
 def check_auth(headers):
+    """Helper for API Request: Check if User is authorized"""
     return 'X-Token' in headers and auth_client.validate_token(headers["X-Token"])["status"]
 
 
 def get_lot_info(api: Api, lot_id: int):
+    """API Request: Get Details of an specific Parking Lot"""
     if not check_auth(request.headers):
         api.abort(401, "Invalid Token")
     lot = geo_client.get_lot(lot_id)  # type: ParkingLot
@@ -159,6 +174,7 @@ def get_lot_info(api: Api, lot_id: int):
 
 
 def iot_push(api: Api, lot_id: int):
+    """Process status update from IoT Gateway"""
     if 'X-Auth' in request.headers and auth_client.validate_lot_pw(lot_id, request.headers['X-Auth']):
         if accounting_client.end_parking(api.payload):
             return {}, 200

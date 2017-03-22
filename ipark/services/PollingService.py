@@ -7,6 +7,7 @@ from ipark.model.ParkingLot import ParkingLot
 from ipark.model.User import User
 from ipark.services.AccountingBillingService import AccountingAndBillingService, AccountingAndBillingClient
 
+"""Service for polling data from IoT Gateway (deprecated)"""
 
 class PollingService(Service):
     def __init__(self):
