@@ -1,0 +1,615 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ipark.frontend package &#8212; ipark_backend 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ipark.model package" href="ipark.model.html" />
+    <link rel="prev" title="ipark.communication package" href="ipark.communication.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ipark-frontend-package">
+<h1>ipark.frontend package<a class="headerlink" href="#ipark-frontend-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-ipark.frontend.APIFrontend">
+<span id="ipark-frontend-apifrontend-module"></span><h2>ipark.frontend.APIFrontend module<a class="headerlink" href="#module-ipark.frontend.APIFrontend" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.Barrier">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">Barrier</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.Barrier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.Barrier.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_barrier'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.Barrier.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.Barrier.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.Barrier.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.Barrier.methods">
+<code class="descname">methods</code><em class="property"> = ['PUT']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.Barrier.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.Barrier.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>reservation_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.Barrier.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start parking with opening the barrier</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.BarrierSet">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">BarrierSet</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.BarrierSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.BarrierSet.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_barrier_set'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.BarrierSet.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.BarrierSet.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.BarrierSet.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.BarrierSet.methods">
+<code class="descname">methods</code><em class="property"> = ['POST']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.BarrierSet.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.BarrierSet.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.BarrierSet.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open/Close Barrier</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.CancelReservation">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">CancelReservation</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.CancelReservation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.CancelReservation.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_cancel_reservation'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.CancelReservation.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.CancelReservation.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.CancelReservation.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.CancelReservation.methods">
+<code class="descname">methods</code><em class="property"> = ['POST']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.CancelReservation.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.CancelReservation.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>reservation_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.CancelReservation.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cancel reservation</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.IoTPush">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">IoTPush</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.IoTPush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.IoTPush.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_io_t_push'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.IoTPush.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.IoTPush.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.IoTPush.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.IoTPush.methods">
+<code class="descname">methods</code><em class="property"> = ['POST']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.IoTPush.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.IoTPush.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>lot_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.IoTPush.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reveice Events from IoT Gateway</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.LotInfo">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">LotInfo</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.LotInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.LotInfo.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_lot_info'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.LotInfo.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.LotInfo.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>lot_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.LotInfo.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Info for Lot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.LotInfo.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.LotInfo.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.LotInfo.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.LotInfo.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.ParkingSpots">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">ParkingSpots</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.ParkingSpots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<p>Parking Lots and Spots</p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.ParkingSpots.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_parking_spots'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.ParkingSpots.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.ParkingSpots.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.ParkingSpots.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.ParkingSpots.methods">
+<code class="descname">methods</code><em class="property"> = ['POST']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.ParkingSpots.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.ParkingSpots.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.ParkingSpots.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of nearby Parking Lots</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.PaymentMethods">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">PaymentMethods</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.PaymentMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<p>List of Payment Methods</p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.PaymentMethods.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_payment_methods'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.PaymentMethods.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.PaymentMethods.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.PaymentMethods.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of Payment Methods</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.PaymentMethods.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.PaymentMethods.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.PaymentMethods.methods">
+<code class="descname">methods</code><em class="property"> = ['GET', 'POST']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.PaymentMethods.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.PaymentMethods.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.PaymentMethods.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edit of Payment Methods</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.ReservationData">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">ReservationData</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.ReservationData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.ReservationData.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_reservation_data'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.ReservationData.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.ReservationData.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>reservation_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.ReservationData.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Info for Reservation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.ReservationData.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.ReservationData.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.ReservationData.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.ReservationData.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.ReserveParkingSpot">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">ReserveParkingSpot</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.ReserveParkingSpot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.ReserveParkingSpot.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_reserve_parking_spot'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.ReserveParkingSpot.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.ReserveParkingSpot.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.ReserveParkingSpot.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the users reservations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.ReserveParkingSpot.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.ReserveParkingSpot.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.ReserveParkingSpot.methods">
+<code class="descname">methods</code><em class="property"> = ['GET', 'POST']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.ReserveParkingSpot.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.ReserveParkingSpot.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.ReserveParkingSpot.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reserve Parking Spots</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.UserBilling">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">UserBilling</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserBilling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<p>List of Invoices</p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.UserBilling.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_user_billing'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.UserBilling.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserBilling.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserBilling.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.UserBilling.methods">
+<code class="descname">methods</code><em class="property"> = ['POST']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.UserBilling.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserBilling.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserBilling.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request List of Invoices</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.UserInfo">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">UserInfo</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<p>Request User Info</p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.UserInfo.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_user_info'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.UserInfo.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserInfo.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserInfo.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request User Info</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserInfo.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserInfo.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.UserInfo.methods">
+<code class="descname">methods</code><em class="property"> = ['GET', 'PUT']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.UserInfo.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserInfo.put">
+<code class="descname">put</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserInfo.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set User Status</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.UserLogin">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">UserLogin</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserLogin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<p>Request Authentication Token</p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.UserLogin.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_user_login'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.UserLogin.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserLogin.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserLogin.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.UserLogin.methods">
+<code class="descname">methods</code><em class="property"> = ['POST']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.UserLogin.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserLogin.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserLogin.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request Authentication Token</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.UserSignup">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">UserSignup</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserSignup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<p>User Sign Up</p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.UserSignup.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_user_signup'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.UserSignup.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserSignup.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserSignup.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.UserSignup.methods">
+<code class="descname">methods</code><em class="property"> = ['POST']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.UserSignup.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserSignup.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserSignup.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>User Sign Up</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.frontend.APIFrontend.UserStatus">
+<em class="property">class </em><code class="descclassname">ipark.frontend.APIFrontend.</code><code class="descname">UserStatus</code><span class="sig-paren">(</span><em>api=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restplus.resource.Resource</span></code></p>
+<p>Request User Status</p>
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.UserStatus.endpoint">
+<code class="descname">endpoint</code><em class="property"> = 'ipark/v1_user_status'</em><a class="headerlink" href="#ipark.frontend.APIFrontend.UserStatus.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserStatus.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>ufilter</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserStatus.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request User Status</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.frontend.APIFrontend.UserStatus.mediatypes">
+<code class="descname">mediatypes</code><span class="sig-paren">(</span><em>resource_cls</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontend.UserStatus.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.frontend.APIFrontend.UserStatus.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#ipark.frontend.APIFrontend.UserStatus.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.frontend.APIFrontendRequests">
+<span id="ipark-frontend-apifrontendrequests-module"></span><h2>ipark.frontend.APIFrontendRequests module<a class="headerlink" href="#module-ipark.frontend.APIFrontendRequests" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.begin_parking">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">begin_parking</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em>, <em>reservation_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.begin_parking" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: State the presence at the parking spot and request barrier opening</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.cancel_reservation">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">cancel_reservation</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em>, <em>reservation_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.cancel_reservation" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: Cancel Reservation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.check_auth">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">check_auth</code><span class="sig-paren">(</span><em>headers</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.check_auth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper for API Request: Check if User is authorized</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.fetch_reservation">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">fetch_reservation</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em>, <em>reservation_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.fetch_reservation" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: Get Details for a specific Reservation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.get_lot_info">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">get_lot_info</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em>, <em>lot_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.get_lot_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: Get Details of an specific Parking Lot</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.get_nearby_parkinglots">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">get_nearby_parkinglots</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.get_nearby_parkinglots" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: Find available parking lot in a nearby radius</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.get_reservation_data">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">get_reservation_data</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.get_reservation_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: Get Details of Reservation History</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.iot_push">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">iot_push</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em>, <em>lot_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.iot_push" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process status update from IoT Gateway</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.reserve_parking_spot">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">reserve_parking_spot</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.reserve_parking_spot" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: Reserve a (free) parking spot</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.user_info_get">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">user_info_get</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.user_info_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: get User info</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.user_info_set">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">user_info_set</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.user_info_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: Update User account details</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.user_login">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">user_login</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.user_login" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: User Login</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.user_signup">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">user_signup</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.user_signup" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: User Sign Up</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.frontend.APIFrontendRequests.user_status_get">
+<code class="descclassname">ipark.frontend.APIFrontendRequests.</code><code class="descname">user_status_get</code><span class="sig-paren">(</span><em>api: flask_restplus.api.Api</em>, <em>ufilter</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.frontend.APIFrontendRequests.user_status_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>API Request: User Sign Up</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.frontend">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ipark.frontend" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ipark.frontend package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-ipark.frontend.APIFrontend">ipark.frontend.APIFrontend module</a></li>
+<li><a class="reference internal" href="#module-ipark.frontend.APIFrontendRequests">ipark.frontend.APIFrontendRequests module</a></li>
+<li><a class="reference internal" href="#module-ipark.frontend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">ipark</a><ul>
+  <li><a href="ipark.html">ipark package</a><ul>
+      <li>Previous: <a href="ipark.communication.html" title="previous chapter">ipark.communication package</a></li>
+      <li>Next: <a href="ipark.model.html" title="next chapter">ipark.model package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ipark.frontend.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Tobias Cloosters, Jens-Rene Gießen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/ipark.frontend.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ipark.communication package &#8212; ipark_backend 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ipark.frontend package" href="ipark.frontend.html" />
+    <link rel="prev" title="ipark package" href="ipark.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ipark-communication-package">
+<h1>ipark.communication package<a class="headerlink" href="#ipark-communication-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-ipark.communication.Client">
+<span id="ipark-communication-client-module"></span><h2>ipark.communication.Client module<a class="headerlink" href="#module-ipark.communication.Client" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ipark.communication.Client.Client">
+<em class="property">class </em><code class="descclassname">ipark.communication.Client.</code><code class="descname">Client</code><span class="sig-paren">(</span><em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Client.Client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/threading.html#threading.Thread" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a></p>
+<p>Client Base for Micro Service via RabbitMQ</p>
+<dl class="method">
+<dt id="ipark.communication.Client.Client.call">
+<code class="descname">call</code><span class="sig-paren">(</span><em>function</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Client.Client.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call Service Routine</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.communication.Client.Client.delayed_call">
+<code class="descname">delayed_call</code><span class="sig-paren">(</span><em>function</em>, <em>delay_time</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Client.Client.delayed_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schedule delayed Service Routine Call</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.communication.Client.Client.on_response">
+<code class="descname">on_response</code><span class="sig-paren">(</span><em>ch</em>, <em>method</em>, <em>props</em>, <em>body</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Client.Client.on_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle respose and pass back to caller (internal use)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.communication.Client.Client.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Client.Client.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open connection to Service</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.communication.Service">
+<span id="ipark-communication-service-module"></span><h2>ipark.communication.Service module<a class="headerlink" href="#module-ipark.communication.Service" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ipark.communication.Service.Service">
+<em class="property">class </em><code class="descclassname">ipark.communication.Service.</code><code class="descname">Service</code><span class="sig-paren">(</span><em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Service.Service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/threading.html#threading.Thread" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a></p>
+<p>Service Base for Micro Service via RabbitMQ</p>
+<dl class="method">
+<dt id="ipark.communication.Service.Service.on_channel_open">
+<code class="descname">on_channel_open</code><span class="sig-paren">(</span><em>channel</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Service.Service.on_channel_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>RabbitMQ Channel opened</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.communication.Service.Service.on_connected">
+<code class="descname">on_connected</code><span class="sig-paren">(</span><em>connection</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Service.Service.on_connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>RabbitMQ Connected</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.communication.Service.Service.on_exchange_declared">
+<code class="descname">on_exchange_declared</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Service.Service.on_exchange_declared" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.communication.Service.Service.on_queue_bind">
+<code class="descname">on_queue_bind</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Service.Service.on_queue_bind" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.communication.Service.Service.on_queue_declared">
+<code class="descname">on_queue_declared</code><span class="sig-paren">(</span><em>frame</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Service.Service.on_queue_declared" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.communication.Service.Service.on_request">
+<code class="descname">on_request</code><span class="sig-paren">(</span><em>ch</em>, <em>method</em>, <em>props</em>, <em>body</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Service.Service.on_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle incoming Service Request</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.communication.Service.Service.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Service.Service.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start Serving Client Requests</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.communication.Service.Service.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.communication.Service.Service.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminate Serving</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.communication">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ipark.communication" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ipark.communication package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-ipark.communication.Client">ipark.communication.Client module</a></li>
+<li><a class="reference internal" href="#module-ipark.communication.Service">ipark.communication.Service module</a></li>
+<li><a class="reference internal" href="#module-ipark.communication">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">ipark</a><ul>
+  <li><a href="ipark.html">ipark package</a><ul>
+      <li>Previous: <a href="ipark.html" title="previous chapter">ipark package</a></li>
+      <li>Next: <a href="ipark.frontend.html" title="next chapter">ipark.frontend package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ipark.communication.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Tobias Cloosters, Jens-Rene Gießen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/ipark.communication.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

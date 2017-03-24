@@ -1,0 +1,487 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ipark.model package &#8212; ipark_backend 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ipark.services package" href="ipark.services.html" />
+    <link rel="prev" title="ipark.frontend package" href="ipark.frontend.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ipark-model-package">
+<h1>ipark.model package<a class="headerlink" href="#ipark-model-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-ipark.model.DatabaseObject">
+<span id="ipark-model-databaseobject-module"></span><h2>ipark.model.DatabaseObject module<a class="headerlink" href="#module-ipark.model.DatabaseObject" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ipark.model.DatabaseObject.DatabaseObject">
+<em class="property">class </em><code class="descclassname">ipark.model.DatabaseObject.</code><code class="descname">DatabaseObject</code><a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>static helper methods and connection management for database objects (redis and MySQL)</p>
+<dl class="attribute">
+<dt id="ipark.model.DatabaseObject.DatabaseObject.MODIFIED">
+<code class="descname">MODIFIED</code><em class="property"> = 2</em><a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject.MODIFIED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.DatabaseObject.DatabaseObject.NEW">
+<code class="descname">NEW</code><em class="property"> = 1</em><a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject.NEW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.DatabaseObject.DatabaseObject.NONE">
+<code class="descname">NONE</code><em class="property"> = 0</em><a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject.NONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.DatabaseObject.DatabaseObject.READONLY">
+<code class="descname">READONLY</code><em class="property"> = -1</em><a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject.READONLY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="ipark.model.DatabaseObject.DatabaseObject.assign_dict">
+<em class="property">static </em><code class="descname">assign_dict</code><span class="sig-paren">(</span><em>object: object</em>, <em>data: dict</em><span class="sig-paren">)</span> &#x2192; object<a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject.assign_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize object from raw representation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.DatabaseObject.DatabaseObject.database_fields">
+<code class="descname">database_fields</code><em class="property"> = None</em><a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject.database_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="ipark.model.DatabaseObject.DatabaseObject.load_and_lock_data">
+<em class="property">static </em><code class="descname">load_and_lock_data</code><span class="sig-paren">(</span><em>key: str</em>, <em>query: str</em>, <em>queryargs: tuple</em>, <em>factory: &lt;built-in function callable&gt;</em><span class="sig-paren">)</span> &#x2192; &lt;built-in function any&gt;<a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject.load_and_lock_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load Object from DB in r/w</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="ipark.model.DatabaseObject.DatabaseObject.load_data">
+<em class="property">static </em><code class="descname">load_data</code><span class="sig-paren">(</span><em>key: str</em>, <em>query: str</em>, <em>queryargs: tuple</em>, <em>factory: &lt;built-in function callable&gt;</em><span class="sig-paren">)</span> &#x2192; &lt;built-in function any&gt;<a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject.load_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load Data from DB, it is readonly if not locked from outer call</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.DatabaseObject.DatabaseObject.my">
+<code class="descname">my</code><em class="property"> = None</em><a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject.my" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.DatabaseObject.DatabaseObject.r">
+<code class="descname">r</code><em class="property"> = None</em><a class="headerlink" href="#ipark.model.DatabaseObject.DatabaseObject.r" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.model.DatabaseObject.DomainClassBase">
+<em class="property">class </em><code class="descclassname">ipark.model.DatabaseObject.</code><code class="descname">DomainClassBase</code><a class="headerlink" href="#ipark.model.DatabaseObject.DomainClassBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Base Class for Database Objects</p>
+<dl class="attribute">
+<dt id="ipark.model.DatabaseObject.DomainClassBase.database_fields">
+<code class="descname">database_fields</code><em class="property"> = None</em><a class="headerlink" href="#ipark.model.DatabaseObject.DomainClassBase.database_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.DatabaseObject.DomainClassBase.flush">
+<code class="descname">flush</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.DatabaseObject.DomainClassBase.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save, unlock and make Object readonly</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.DatabaseObject.DomainClassBase.get_data_dict">
+<code class="descname">get_data_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.DatabaseObject.DomainClassBase.get_data_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>get raw representation of object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.DatabaseObject.DomainClassBase.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.DatabaseObject.DomainClassBase.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark Object for saving</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="ipark.model.DatabaseObject.LockedException">
+<em class="property">exception </em><code class="descclassname">ipark.model.DatabaseObject.</code><code class="descname">LockedException</code><a class="headerlink" href="#ipark.model.DatabaseObject.LockedException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">BaseException</span></code></p>
+<p>Exception if Object cannot be opened r/w</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ipark.model.DatabaseObject.ReadonlyException">
+<em class="property">exception </em><code class="descclassname">ipark.model.DatabaseObject.</code><code class="descname">ReadonlyException</code><a class="headerlink" href="#ipark.model.DatabaseObject.ReadonlyException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">BaseException</span></code></p>
+<p>Exception if Object cannot be written back to Database</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.model.DomainClasses">
+<span id="ipark-model-domainclasses-module"></span><h2>ipark.model.DomainClasses module<a class="headerlink" href="#module-ipark.model.DomainClasses" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ipark.model.DomainClasses.Invoice">
+<em class="property">class </em><code class="descclassname">ipark.model.DomainClasses.</code><code class="descname">Invoice</code><a class="headerlink" href="#ipark.model.DomainClasses.Invoice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ipark.model.DatabaseObject.DomainClassBase" title="ipark.model.DatabaseObject.DomainClassBase"><code class="xref py py-class docutils literal"><span class="pre">ipark.model.DatabaseObject.DomainClassBase</span></code></a></p>
+<p>Object Representation of an Invoice</p>
+<dl class="attribute">
+<dt id="ipark.model.DomainClasses.Invoice.database_fields">
+<code class="descname">database_fields</code><em class="property"> = []</em><a class="headerlink" href="#ipark.model.DomainClasses.Invoice.database_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.model.DomainClasses.PaymentMethod">
+<em class="property">class </em><code class="descclassname">ipark.model.DomainClasses.</code><code class="descname">PaymentMethod</code><a class="headerlink" href="#ipark.model.DomainClasses.PaymentMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ipark.model.DatabaseObject.DomainClassBase" title="ipark.model.DatabaseObject.DomainClassBase"><code class="xref py py-class docutils literal"><span class="pre">ipark.model.DatabaseObject.DomainClassBase</span></code></a></p>
+<p>This class is used to represent different payment methods.</p>
+<dl class="attribute">
+<dt id="ipark.model.DomainClasses.PaymentMethod.database_fields">
+<code class="descname">database_fields</code><em class="property"> = ['pm_id', 'user_id', 'payment_provider', 'valid_from', 'valid_until']</em><a class="headerlink" href="#ipark.model.DomainClasses.PaymentMethod.database_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.model.DomainClasses.Reservation">
+<em class="property">class </em><code class="descclassname">ipark.model.DomainClasses.</code><code class="descname">Reservation</code><a class="headerlink" href="#ipark.model.DomainClasses.Reservation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ipark.model.DatabaseObject.DomainClassBase" title="ipark.model.DatabaseObject.DomainClassBase"><code class="xref py py-class docutils literal"><span class="pre">ipark.model.DatabaseObject.DomainClassBase</span></code></a></p>
+<p>This class represents a reservation.</p>
+<dl class="attribute">
+<dt id="ipark.model.DomainClasses.Reservation.database_fields">
+<code class="descname">database_fields</code><em class="property"> = ['res_id', 'user_id', 'spot_id', 'reservation_start', 'parking_start', 'parking_end']</em><a class="headerlink" href="#ipark.model.DomainClasses.Reservation.database_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.DomainClasses.Reservation.get_data_dict">
+<code class="descname">get_data_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.DomainClasses.Reservation.get_data_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>get raw representation of object</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="ipark.model.DomainClasses.Reservation.get_email_from_resid">
+<em class="property">static </em><code class="descname">get_email_from_resid</code><span class="sig-paren">(</span><em>res_id: int</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#ipark.model.DomainClasses.Reservation.get_email_from_resid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get mapped user email address to get user from reservation id</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="ipark.model.DomainClasses.Reservation.get_next_id">
+<em class="property">static </em><code class="descname">get_next_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#ipark.model.DomainClasses.Reservation.get_next_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get and increment next database id for a new Reservation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.DomainClasses.Reservation.map_to_email">
+<code class="descname">map_to_email</code><span class="sig-paren">(</span><em>email: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ipark.model.DomainClasses.Reservation.map_to_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create mapping to retrieve user email</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.DomainClasses.Reservation.parking_fee">
+<code class="descname">parking_fee</code><a class="headerlink" href="#ipark.model.DomainClasses.Reservation.parking_fee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current parking fee</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.DomainClasses.Reservation.remove_mapping">
+<code class="descname">remove_mapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ipark.model.DomainClasses.Reservation.remove_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove extra mapping between reservation and user email</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.DomainClasses.Reservation.reservation_fee">
+<code class="descname">reservation_fee</code><a class="headerlink" href="#ipark.model.DomainClasses.Reservation.reservation_fee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current reservation fee</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.model.DomainClasses.any_to_datetime">
+<code class="descclassname">ipark.model.DomainClasses.</code><code class="descname">any_to_datetime</code><span class="sig-paren">(</span><em>o</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.DomainClasses.any_to_datetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert various date representations to datetime object</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.model.DomainClasses.any_to_string">
+<code class="descclassname">ipark.model.DomainClasses.</code><code class="descname">any_to_string</code><span class="sig-paren">(</span><em>o</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.DomainClasses.any_to_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert various date representations to string</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.model.ParkingLot">
+<span id="ipark-model-parkinglot-module"></span><h2>ipark.model.ParkingLot module<a class="headerlink" href="#module-ipark.model.ParkingLot" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="ipark.model.ParkingLot.FullException">
+<em class="property">exception </em><code class="descclassname">ipark.model.ParkingLot.</code><code class="descname">FullException</code><a class="headerlink" href="#ipark.model.ParkingLot.FullException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">BaseException</span></code></p>
+<p>Exception if full Parking Lot is requested for reservation</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.model.ParkingLot.ParkingLot">
+<em class="property">class </em><code class="descclassname">ipark.model.ParkingLot.</code><code class="descname">ParkingLot</code><span class="sig-paren">(</span><em>lot_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.ParkingLot.ParkingLot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>This class represents a geographical location in which the system manages a set of parking spots.</p>
+<dl class="method">
+<dt id="ipark.model.ParkingLot.ParkingLot.get_data_dict">
+<code class="descname">get_data_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.ParkingLot.ParkingLot.get_data_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>get raw representation of object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.ParkingLot.ParkingLot.get_free_parking_spots">
+<code class="descname">get_free_parking_spots</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#ipark.model.ParkingLot.ParkingLot.get_free_parking_spots" title="Permalink to this definition">¶</a></dt>
+<dd><p>get free parking spots grouped by type</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="ipark.model.ParkingLot.ParkingLot.import_parkinglots">
+<em class="property">static </em><code class="descname">import_parkinglots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.ParkingLot.ParkingLot.import_parkinglots" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize static parking lot data in redis</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.ParkingLot.ParkingLot.removeReservation">
+<code class="descname">removeReservation</code><span class="sig-paren">(</span><em>spot_id: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ipark.model.ParkingLot.ParkingLot.removeReservation" title="Permalink to this definition">¶</a></dt>
+<dd><p>cancel Reservation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.ParkingLot.ParkingLot.reserve_free_parkingspot">
+<code class="descname">reserve_free_parkingspot</code><span class="sig-paren">(</span><em>spottype: int = 0</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#ipark.model.ParkingLot.ParkingLot.reserve_free_parkingspot" title="Permalink to this definition">¶</a></dt>
+<dd><p>reserve random free parking spot of a specific Parking Lot</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.model.ParkingLot.ParkingSpot">
+<em class="property">class </em><code class="descclassname">ipark.model.ParkingLot.</code><code class="descname">ParkingSpot</code><span class="sig-paren">(</span><em>spot_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.ParkingLot.ParkingSpot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>This class represents a single spot to park a car on. This always belongs to exactly one ParkingLot.</p>
+<dl class="method">
+<dt id="ipark.model.ParkingLot.ParkingSpot.is_busy">
+<code class="descname">is_busy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.ParkingLot.ParkingSpot.is_busy" title="Permalink to this definition">¶</a></dt>
+<dd><p>get busy state of parking spot</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.model.User">
+<span id="ipark-model-user-module"></span><h2>ipark.model.User module<a class="headerlink" href="#module-ipark.model.User" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="ipark.model.User.NotFoundException">
+<em class="property">exception </em><code class="descclassname">ipark.model.User.</code><code class="descname">NotFoundException</code><a class="headerlink" href="#ipark.model.User.NotFoundException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">BaseException</span></code></p>
+<p>Exception if the User is not found or the password is invalid</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.model.User.User">
+<em class="property">class </em><code class="descclassname">ipark.model.User.</code><code class="descname">User</code><span class="sig-paren">(</span><em>email: str</em>, <em>password: str = None</em>, <em>readonly: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.User.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ipark.model.DatabaseObject.DomainClassBase" title="ipark.model.DatabaseObject.DomainClassBase"><code class="xref py py-class docutils literal"><span class="pre">ipark.model.DatabaseObject.DomainClassBase</span></code></a></p>
+<p>Objects of this class hold the master data of the customers.</p>
+<dl class="staticmethod">
+<dt id="ipark.model.User.User.create">
+<em class="property">static </em><code class="descname">create</code><span class="sig-paren">(</span><em>email</em>, <em>password</em>, <em>**additional_data</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.User.User.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new user in Database (sign up)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.User.User.database_fields">
+<code class="descname">database_fields</code><em class="property"> = ['user_id', 'first_name', 'last_name', 'email', 'password', 'street', 'number', 'plz', 'city', 'country', 'dataflags', 'balance', 'client_settings']</em><a class="headerlink" href="#ipark.model.User.User.database_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.User.User.flush">
+<code class="descname">flush</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.User.User.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>write properties and data marked for saving, Object becomes readonly</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.User.User.invoices">
+<code class="descname">invoices</code><a class="headerlink" href="#ipark.model.User.User.invoices" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Load and get Invoices of User</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)">list</a>[<a class="reference internal" href="#ipark.model.DomainClasses.Invoice" title="ipark.model.DomainClasses.Invoice">Invoice</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.User.User.payment_methods">
+<code class="descname">payment_methods</code><a class="headerlink" href="#ipark.model.User.User.payment_methods" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Load and get Payment Methods of User</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)">list</a>[<a class="reference internal" href="#ipark.model.DomainClasses.PaymentMethod" title="ipark.model.DomainClasses.PaymentMethod">PaymentMethod</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.model.User.User.reservations">
+<code class="descname">reservations</code><a class="headerlink" href="#ipark.model.User.User.reservations" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Load and get Reservations of User</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)">list</a>[<a class="reference internal" href="#ipark.model.DomainClasses.Reservation" title="ipark.model.DomainClasses.Reservation">Reservation</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.User.User.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.User.User.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark User Object for saving, write external properties</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.model.User.User.save_properties">
+<code class="descname">save_properties</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.model.User.User.save_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>save external properties</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.model.User.check_hash">
+<code class="descclassname">ipark.model.User.</code><code class="descname">check_hash</code><span class="sig-paren">(</span><em>pwhash: str</em>, <em>password: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ipark.model.User.check_hash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate hased password</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.model.User.hash_password">
+<code class="descclassname">ipark.model.User.</code><code class="descname">hash_password</code><span class="sig-paren">(</span><em>password: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#ipark.model.User.hash_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate password hash</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.model">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ipark.model" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ipark.model package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-ipark.model.DatabaseObject">ipark.model.DatabaseObject module</a></li>
+<li><a class="reference internal" href="#module-ipark.model.DomainClasses">ipark.model.DomainClasses module</a></li>
+<li><a class="reference internal" href="#module-ipark.model.ParkingLot">ipark.model.ParkingLot module</a></li>
+<li><a class="reference internal" href="#module-ipark.model.User">ipark.model.User module</a></li>
+<li><a class="reference internal" href="#module-ipark.model">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">ipark</a><ul>
+  <li><a href="ipark.html">ipark package</a><ul>
+      <li>Previous: <a href="ipark.frontend.html" title="previous chapter">ipark.frontend package</a></li>
+      <li>Next: <a href="ipark.services.html" title="next chapter">ipark.services package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ipark.model.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Tobias Cloosters, Jens-Rene Gießen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/ipark.model.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

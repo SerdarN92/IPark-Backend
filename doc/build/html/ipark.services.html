@@ -1,0 +1,452 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ipark.services package &#8212; ipark_backend 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="ipark.model package" href="ipark.model.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ipark-services-package">
+<h1>ipark.services package<a class="headerlink" href="#ipark-services-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-ipark.services.AccountingBillingService">
+<span id="ipark-services-accountingbillingservice-module"></span><h2>ipark.services.AccountingBillingService module<a class="headerlink" href="#module-ipark.services.AccountingBillingService" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingClient">
+<em class="property">class </em><code class="descclassname">ipark.services.AccountingBillingService.</code><code class="descname">AccountingAndBillingClient</code><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ipark.communication.html#ipark.communication.Client.Client" title="ipark.communication.Client.Client"><code class="xref py py-class docutils literal"><span class="pre">ipark.communication.Client.Client</span></code></a></p>
+<p>Client for Accounting and Billing Service</p>
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingClient.begin_parking">
+<code class="descname">begin_parking</code><span class="sig-paren">(</span><em>token</em>, <em>resid</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingClient.begin_parking" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingClient.cancel_reservation">
+<code class="descname">cancel_reservation</code><span class="sig-paren">(</span><em>token</em>, <em>resid</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingClient.cancel_reservation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingClient.end_parking">
+<code class="descname">end_parking</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingClient.end_parking" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingClient.fetch_reservation_data">
+<code class="descname">fetch_reservation_data</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingClient.fetch_reservation_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingClient.fetch_reservation_data_for_id">
+<code class="descname">fetch_reservation_data_for_id</code><span class="sig-paren">(</span><em>token</em>, <em>res_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingClient.fetch_reservation_data_for_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingClient.fetch_user_data">
+<code class="descname">fetch_user_data</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingClient.fetch_user_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingClient.reserve_parking_spot">
+<code class="descname">reserve_parking_spot</code><span class="sig-paren">(</span><em>token: str</em>, <em>lot_id: int</em>, <em>spottype: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingClient.reserve_parking_spot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingClient.sign_up">
+<code class="descname">sign_up</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingClient.sign_up" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingClient.update_user_data">
+<code class="descname">update_user_data</code><span class="sig-paren">(</span><em>token: str</em>, <em>updata: dict</em>, <em>join: bool</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingClient.update_user_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService">
+<em class="property">class </em><code class="descclassname">ipark.services.AccountingBillingService.</code><code class="descname">AccountingAndBillingService</code><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ipark.communication.html#ipark.communication.Service.Service" title="ipark.communication.Service.Service"><code class="xref py py-class docutils literal"><span class="pre">ipark.communication.Service.Service</span></code></a></p>
+<p>Service for handling Reservation Requests and other User Modifications</p>
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService.begin_parking">
+<code class="descname">begin_parking</code><span class="sig-paren">(</span><em>token</em>, <em>reservationid</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService.begin_parking" title="Permalink to this definition">¶</a></dt>
+<dd><p>State the presence at the parking spot and request barrier opening</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService.cancel_reservation">
+<code class="descname">cancel_reservation</code><span class="sig-paren">(</span><em>token</em>, <em>reservationid</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService.cancel_reservation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cancel Reservation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService.end_parking">
+<code class="descname">end_parking</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService.end_parking" title="Permalink to this definition">¶</a></dt>
+<dd><p>IoT Gateway announces the leaving of a Car</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService.fetch_reservation_data">
+<code class="descname">fetch_reservation_data</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService.fetch_reservation_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Details of Reservation History</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService.fetch_reservation_data_for_id">
+<code class="descname">fetch_reservation_data_for_id</code><span class="sig-paren">(</span><em>token</em>, <em>res_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService.fetch_reservation_data_for_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Details of specific Reservation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService.fetch_user_data">
+<code class="descname">fetch_user_data</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService.fetch_user_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return User information</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService.get_user_reservation_for_id">
+<em class="property">static </em><code class="descname">get_user_reservation_for_id</code><span class="sig-paren">(</span><em>user: ipark.model.User.User</em>, <em>reservationid: int</em><span class="sig-paren">)</span> &#x2192; ipark.model.DomainClasses.Reservation<a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService.get_user_reservation_for_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get reservation form USer by ID</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService.reserve_parking_spot">
+<code class="descname">reserve_parking_spot</code><span class="sig-paren">(</span><em>token: str</em>, <em>lot_id: int</em>, <em>spottype: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService.reserve_parking_spot" title="Permalink to this definition">¶</a></dt>
+<dd><p>reserve random free parking spot of a specific Parking Lot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService.sign_up">
+<code class="descname">sign_up</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService.sign_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>create new account</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AccountingBillingService.AccountingAndBillingService.update_user_data">
+<code class="descname">update_user_data</code><span class="sig-paren">(</span><em>token: str</em>, <em>updata: dict</em>, <em>join: bool</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#ipark.services.AccountingBillingService.AccountingAndBillingService.update_user_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update User information</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.services.AccountingBillingService.merge">
+<code class="descclassname">ipark.services.AccountingBillingService.</code><code class="descname">merge</code><span class="sig-paren">(</span><em>j</em>, <em>j2</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ipark.services.AccountingBillingService.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge Data structures strings</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.services.AuthService">
+<span id="ipark-services-authservice-module"></span><h2>ipark.services.AuthService module<a class="headerlink" href="#module-ipark.services.AuthService" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ipark.services.AuthService.AuthClient">
+<em class="property">class </em><code class="descclassname">ipark.services.AuthService.</code><code class="descname">AuthClient</code><a class="headerlink" href="#ipark.services.AuthService.AuthClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ipark.communication.html#ipark.communication.Client.Client" title="ipark.communication.Client.Client"><code class="xref py py-class docutils literal"><span class="pre">ipark.communication.Client.Client</span></code></a></p>
+<p>Client for Authorization Service</p>
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthClient.get_email_from_token">
+<code class="descname">get_email_from_token</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AuthService.AuthClient.get_email_from_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthClient.login">
+<code class="descname">login</code><span class="sig-paren">(</span><em>email</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AuthService.AuthClient.login" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthClient.validate_lot_pw">
+<code class="descname">validate_lot_pw</code><span class="sig-paren">(</span><em>lot_id</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AuthService.AuthClient.validate_lot_pw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthClient.validate_token">
+<code class="descname">validate_token</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AuthService.AuthClient.validate_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthClient.validate_user">
+<code class="descname">validate_user</code><span class="sig-paren">(</span><em>email</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AuthService.AuthClient.validate_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.services.AuthService.AuthService">
+<em class="property">class </em><code class="descclassname">ipark.services.AuthService.</code><code class="descname">AuthService</code><a class="headerlink" href="#ipark.services.AuthService.AuthService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ipark.communication.html#ipark.communication.Service.Service" title="ipark.communication.Service.Service"><code class="xref py py-class docutils literal"><span class="pre">ipark.communication.Service.Service</span></code></a></p>
+<p>Micro Service for User Authorization</p>
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthService.get_email_from_token">
+<code class="descname">get_email_from_token</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AuthService.AuthService.get_email_from_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get email address from token (to load user object)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthService.issue_token">
+<code class="descname">issue_token</code><span class="sig-paren">(</span><em>email</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AuthService.AuthService.issue_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate Token</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthService.login">
+<code class="descname">login</code><span class="sig-paren">(</span><em>email</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AuthService.AuthService.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>check for valid user credentials and issue login token</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthService.validate_lot_pw">
+<code class="descname">validate_lot_pw</code><span class="sig-paren">(</span><em>lot_id: int</em>, <em>password: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ipark.services.AuthService.AuthService.validate_lot_pw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check Password from IoT Gateway</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthService.validate_token">
+<code class="descname">validate_token</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AuthService.AuthService.validate_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>check for valid login token</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.AuthService.AuthService.validate_user">
+<code class="descname">validate_user</code><span class="sig-paren">(</span><em>email</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.AuthService.AuthService.validate_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>check for valid user credentials</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.services.GeoService">
+<span id="ipark-services-geoservice-module"></span><h2>ipark.services.GeoService module<a class="headerlink" href="#module-ipark.services.GeoService" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ipark.services.GeoService.GeoClient">
+<em class="property">class </em><code class="descclassname">ipark.services.GeoService.</code><code class="descname">GeoClient</code><a class="headerlink" href="#ipark.services.GeoService.GeoClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ipark.communication.html#ipark.communication.Client.Client" title="ipark.communication.Client.Client"><code class="xref py py-class docutils literal"><span class="pre">ipark.communication.Client.Client</span></code></a></p>
+<dl class="attribute">
+<dt id="ipark.services.GeoService.GeoClient.MAX_RESULTS">
+<code class="descname">MAX_RESULTS</code><em class="property"> = 50</em><a class="headerlink" href="#ipark.services.GeoService.GeoClient.MAX_RESULTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Client for Geo Data Service</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.GeoService.GeoClient.find_near_parking_lots">
+<code class="descname">find_near_parking_lots</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em>, <em>radius</em>, <em>max_results: int = None</em>, <em>lot_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.GeoService.GeoClient.find_near_parking_lots" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.GeoService.GeoClient.get_lot">
+<code class="descname">get_lot</code><span class="sig-paren">(</span><em>lot_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.GeoService.GeoClient.get_lot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.services.GeoService.GeoService">
+<em class="property">class </em><code class="descclassname">ipark.services.GeoService.</code><code class="descname">GeoService</code><a class="headerlink" href="#ipark.services.GeoService.GeoService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ipark.communication.html#ipark.communication.Service.Service" title="ipark.communication.Service.Service"><code class="xref py py-class docutils literal"><span class="pre">ipark.communication.Service.Service</span></code></a></p>
+<p>Service for Geo Data</p>
+<dl class="attribute">
+<dt id="ipark.services.GeoService.GeoService.MAX_RADIUS">
+<code class="descname">MAX_RADIUS</code><em class="property"> = 50</em><a class="headerlink" href="#ipark.services.GeoService.GeoService.MAX_RADIUS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ipark.services.GeoService.GeoService.MAX_RESULTS_REDIS">
+<code class="descname">MAX_RESULTS_REDIS</code><em class="property"> = 300</em><a class="headerlink" href="#ipark.services.GeoService.GeoService.MAX_RESULTS_REDIS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.GeoService.GeoService.find_near_parking_lots">
+<code class="descname">find_near_parking_lots</code><span class="sig-paren">(</span><em>lon: float</em>, <em>lat: float</em>, <em>radius: int</em>, <em>max_results: int</em>, <em>lot_type: int</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.GeoService.GeoService.find_near_parking_lots" title="Permalink to this definition">¶</a></dt>
+<dd><p>find nearby parking lot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.GeoService.GeoService.get_lot">
+<code class="descname">get_lot</code><span class="sig-paren">(</span><em>lot_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.GeoService.GeoService.get_lot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Lot by ID</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="ipark.services.GeoService.GeoService.lot_filter">
+<em class="property">static </em><code class="descname">lot_filter</code><span class="sig-paren">(</span><em>lot: ipark.model.ParkingLot.ParkingLot</em>, <em>lot_type: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ipark.services.GeoService.GeoService.lot_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if Lot has free spots of type</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.services.PersistencyService">
+<span id="ipark-services-persistencyservice-module"></span><h2>ipark.services.PersistencyService module<a class="headerlink" href="#module-ipark.services.PersistencyService" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ipark.services.PersistencyService.flush_redis_to_mysql">
+<code class="descclassname">ipark.services.PersistencyService.</code><code class="descname">flush_redis_to_mysql</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.PersistencyService.flush_redis_to_mysql" title="Permalink to this definition">¶</a></dt>
+<dd><p>main method</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.services.PersistencyService.get_insert_update_statement">
+<code class="descclassname">ipark.services.PersistencyService.</code><code class="descname">get_insert_update_statement</code><span class="sig-paren">(</span><em>table: str</em>, <em>columns: list</em>, <em>data: dict</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#ipark.services.PersistencyService.get_insert_update_statement" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert raw data to insert or update statement</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.services.PersistencyService.get_update_statement">
+<code class="descclassname">ipark.services.PersistencyService.</code><code class="descname">get_update_statement</code><span class="sig-paren">(</span><em>table: str</em>, <em>columns: list</em>, <em>data: dict</em>, <em>id_field: str</em>, <em>id_value</em><span class="sig-paren">)</span> &#x2192; tuple<a class="headerlink" href="#ipark.services.PersistencyService.get_update_statement" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert raw data to update statement</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ipark.services.PersistencyService.my">
+<code class="descclassname">ipark.services.PersistencyService.</code><code class="descname">my</code><em class="property"> = None</em><a class="headerlink" href="#ipark.services.PersistencyService.my" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flush redis state to MySQL (onetime)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ipark.services.PersistencyService.redis_scan_generator">
+<code class="descclassname">ipark.services.PersistencyService.</code><code class="descname">redis_scan_generator</code><span class="sig-paren">(</span><em>rds</em>, <em>match='*'</em>, <em>regex: _sre.SRE_Pattern = None</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.PersistencyService.redis_scan_generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>python generator to scan redis incrementally</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.services.PollingService">
+<span id="ipark-services-pollingservice-module"></span><h2>ipark.services.PollingService module<a class="headerlink" href="#module-ipark.services.PollingService" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ipark.services.PollingService.PollingClient">
+<em class="property">class </em><code class="descclassname">ipark.services.PollingService.</code><code class="descname">PollingClient</code><a class="headerlink" href="#ipark.services.PollingService.PollingClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ipark.communication.html#ipark.communication.Client.Client" title="ipark.communication.Client.Client"><code class="xref py py-class docutils literal"><span class="pre">ipark.communication.Client.Client</span></code></a></p>
+<dl class="method">
+<dt id="ipark.services.PollingService.PollingClient.delayed_poll_lot">
+<code class="descname">delayed_poll_lot</code><span class="sig-paren">(</span><em>lot_id</em>, <em>delay=120000</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.PollingService.PollingClient.delayed_poll_lot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ipark.services.PollingService.PollingClient.poll_lot">
+<code class="descname">poll_lot</code><span class="sig-paren">(</span><em>lot_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.PollingService.PollingClient.poll_lot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ipark.services.PollingService.PollingService">
+<em class="property">class </em><code class="descclassname">ipark.services.PollingService.</code><code class="descname">PollingService</code><a class="headerlink" href="#ipark.services.PollingService.PollingService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="ipark.communication.html#ipark.communication.Service.Service" title="ipark.communication.Service.Service"><code class="xref py py-class docutils literal"><span class="pre">ipark.communication.Service.Service</span></code></a></p>
+<dl class="method">
+<dt id="ipark.services.PollingService.PollingService.poll_lot">
+<code class="descname">poll_lot</code><span class="sig-paren">(</span><em>lot_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ipark.services.PollingService.PollingService.poll_lot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ipark.services">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ipark.services" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ipark.services package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-ipark.services.AccountingBillingService">ipark.services.AccountingBillingService module</a></li>
+<li><a class="reference internal" href="#module-ipark.services.AuthService">ipark.services.AuthService module</a></li>
+<li><a class="reference internal" href="#module-ipark.services.GeoService">ipark.services.GeoService module</a></li>
+<li><a class="reference internal" href="#module-ipark.services.PersistencyService">ipark.services.PersistencyService module</a></li>
+<li><a class="reference internal" href="#module-ipark.services.PollingService">ipark.services.PollingService module</a></li>
+<li><a class="reference internal" href="#module-ipark.services">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">ipark</a><ul>
+  <li><a href="ipark.html">ipark package</a><ul>
+      <li>Previous: <a href="ipark.model.html" title="previous chapter">ipark.model package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ipark.services.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Tobias Cloosters, Jens-Rene Gießen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/ipark.services.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
