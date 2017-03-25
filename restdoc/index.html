@@ -1,0 +1,1313 @@
+<!doctype html>
+<html>
+  <head>
+    <title>iPark Backend API</title>
+    <style type="text/css">
+      body {
+	font-family: Trebuchet MS, sans-serif;
+	font-size: 15px;
+	color: #444;
+	margin-right: 24px;
+}
+
+h1	{
+	font-size: 25px;
+}
+h2	{
+	font-size: 20px;
+}
+h3	{
+	font-size: 16px;
+	font-weight: bold;
+}
+hr	{
+	height: 1px;
+	border: 0;
+	color: #ddd;
+	background-color: #ddd;
+}
+
+.app-desc {
+  clear: both;
+  margin-left: 20px;
+}
+.param-name {
+  width: 100%;
+}
+.license-info {
+  margin-left: 20px;
+}
+
+.license-url {
+  margin-left: 20px;
+}
+
+.model {
+  margin: 0 0 0px 20px;
+}
+
+.method {
+  margin-left: 20px;
+}
+
+.method-notes	{
+	margin: 10px 0 20px 0;
+	font-size: 90%;
+	color: #555;
+}
+
+pre {
+  padding: 10px;
+  margin-bottom: 2px;
+}
+
+.http-method {
+ text-transform: uppercase;
+}
+
+pre.get {
+  background-color: #0f6ab4;
+}
+
+pre.post {
+  background-color: #10a54a;
+}
+
+pre.put {
+  background-color: #c5862b;
+}
+
+pre.delete {
+  background-color: #a41e22;
+}
+
+.huge	{
+	color: #fff;
+}
+
+pre.example {
+  background-color: #f3f3f3;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+code {
+  white-space: pre;
+}
+
+.nickname {
+  font-weight: bold;
+    display: none;
+}
+
+.method-path {
+  font-size: 1.5em;
+  background-color: #0f6ab4;
+}
+
+.up {
+  float:right;
+}
+
+.parameter {
+  width: 500px;
+}
+
+.param {
+  width: 500px;
+  padding: 10px 0 0 20px;
+  font-weight: bold;
+}
+
+.param-desc {
+  width: 700px;
+  padding: 0 0 0 20px;
+  color: #777;
+}
+
+.param-type {
+  font-style: italic;
+}
+
+.param-enum-header {
+width: 700px;
+padding: 0 0 0 60px;
+color: #777;
+font-weight: bold;
+}
+
+.param-enum {
+width: 700px;
+padding: 0 0 0 80px;
+color: #777;
+font-style: italic;
+}
+
+.field-label {
+  padding: 0;
+  margin: 0;
+  clear: both;
+}
+
+.field-items	{
+	padding: 0 0 15px 0;
+	margin-bottom: 15px;
+}
+
+.return-type {
+  clear: both;
+  padding-bottom: 10px;
+}
+
+.param-header {
+  font-weight: bold;
+}
+
+.method-tags {
+  text-align: right;
+}
+
+.method-tag {
+  background: none repeat scroll 0% 0% #24A600;
+  border-radius: 3px;
+  padding: 2px 10px;
+  margin: 2px;
+  color: #FFF;
+  display: inline-block;
+  text-decoration: none;
+}
+
+    </style>
+  </head>
+  <body>
+  <h1>iPark Backend API</h1>
+    <div class="app-desc">This document describes the REST-API for use in the frontends (Website and App) of the iPark project. This API defines the data types and routes (e.g. actions and queries) required to interface the frontend with the backend. A special route for use in the IoT-Gateway is also described here.</div>
+    <div class="app-desc">Version: 1.0</div>
+  <h2><a name="__Methods">Methods</a></h2>
+  [ Jump to <a href="#__Models">Models</a> ]
+
+  <h3>Table of Contents </h3>
+  <div class="method-summary"></div>
+  <h4><a href="#Iparkv1">iPark V1</a></h4>
+  <ul>
+  <li><a href="#get the reservation corresponding to the ID, if it belongs to the user"><code><span class="http-method">get</span> /ipark/v1/parking/{reservation_id}</code></a></li>
+  <li><a href="#get the users reservations"><code><span class="http-method">get</span> /ipark/v1/parking/reserve</code></a></li>
+  <li><a href="#getLotInfo"><code><span class="http-method">get</span> /ipark/v1/parking/lotinfo/{lot_id}</code></a></li>
+  <li><a href="#iparkV1ParkingNearbyLotsPost"><code><span class="http-method">post</span> /ipark/v1/parking/nearby_lots</code></a></li>
+  <li><a href="#iparkV1UserSignUpPost"><code><span class="http-method">post</span> /ipark/v1/user/sign_up</code></a></li>
+  <li><a href="#postCancelReservation"><code><span class="http-method">post</span> /ipark/v1/parking/{reservation_id}/cancel</code></a></li>
+  <li><a href="#postIoTPush"><code><span class="http-method">post</span> /ipark/v1/iot/push/{lot_id}</code></a></li>
+  <li><a href="#putBarrier"><code><span class="http-method">put</span> /ipark/v1/barrier/{reservation_id}</code></a></li>
+  <li><a href="#request Authentication Token"><code><span class="http-method">post</span> /ipark/v1/user/login</code></a></li>
+  <li><a href="#request User Info"><code><span class="http-method">get</span> /ipark/v1/user/info</code></a></li>
+  <li><a href="#request User Status"><code><span class="http-method">get</span> /ipark/v1/user/info/{ufilter}</code></a></li>
+  <li><a href="#reserve Parking Spot by lotId"><code><span class="http-method">post</span> /ipark/v1/parking/reserve</code></a></li>
+  <li><a href="#update User Details"><code><span class="http-method">put</span> /ipark/v1/user/info</code></a></li>
+  </ul>
+
+  <h1><a name="Iparkv1">iPark V1</a></h1>
+  <div class="method"><a name="get the reservation corresponding to the ID, if it belongs to the user"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /ipark/v1/parking/{reservation_id}</code></pre></div>
+    <div class="method-summary">Gets all information about a certain reservation. <span class="nickname">get the reservation corresponding to the ID, if it belongs to the user</span></div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">reservation_id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID of Reservation </div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Reservation">Reservation</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "lot" : {
+    "free_spots" : [ 123 ],
+    "lot_id" : "aeiou",
+    "total_spots" : "aeiou",
+    "max_tax" : "aeiou",
+    "latitude" : "aeiou",
+    "flags" : "aeiou",
+    "name" : "aeiou",
+    "tax" : "aeiou",
+    "information" : "aeiou",
+    "reservation_tax" : "aeiou",
+    "longitude" : "aeiou"
+  },
+  "parking_end" : "aeiou",
+  "reservation_fee" : 1.3579000000000001069366817318950779736042022705078125,
+  "number" : 123,
+  "parking_start" : "aeiou",
+  "lot_id" : 123,
+  "spot_id" : 123,
+  "reservation_start" : "aeiou",
+  "parking_fee" : 1.3579000000000001069366817318950779736042022705078125,
+  "id" : 123
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Reservation data
+        <a href="#Reservation">Reservation</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+    <h4 class="field-label">422</h4>
+    Invalid Arguments
+        <a href="#Argument Error">Argument Error</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="get the users reservations"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /ipark/v1/parking/reserve</code></pre></div>
+    <div class="method-summary">Requests all reservations of the user. Includes finished reservations. <span class="nickname">get the users reservations</span></div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Reservation List">Reservation List</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "reservations" : [ {
+    "lot" : {
+      "free_spots" : [ 123 ],
+      "lot_id" : "aeiou",
+      "total_spots" : "aeiou",
+      "max_tax" : "aeiou",
+      "latitude" : "aeiou",
+      "flags" : "aeiou",
+      "name" : "aeiou",
+      "tax" : "aeiou",
+      "information" : "aeiou",
+      "reservation_tax" : "aeiou",
+      "longitude" : "aeiou"
+    },
+    "parking_end" : "aeiou",
+    "reservation_fee" : 1.3579000000000001069366817318950779736042022705078125,
+    "number" : 123,
+    "parking_start" : "aeiou",
+    "lot_id" : 123,
+    "spot_id" : 123,
+    "reservation_start" : "aeiou",
+    "parking_fee" : 1.3579000000000001069366817318950779736042022705078125,
+    "id" : 123
+  } ]
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#Reservation List">Reservation List</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+    <h4 class="field-label">409</h4>
+    This user cannot reserve spots (anymore)
+        <a href="#"></a>
+    <h4 class="field-label">422</h4>
+    Invalid Arguments
+        <a href="#Argument Error">Argument Error</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getLotInfo"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /ipark/v1/parking/lotinfo/{lot_id}</code></pre></div>
+    <div class="method-summary">This operation requests information about a specific parking lot. <span class="nickname">getLotInfo</span></div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">lot_id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID of Lot </div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#ParkingLot">ParkingLot</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "free_spots" : [ 123 ],
+  "lot_id" : "aeiou",
+  "total_spots" : "aeiou",
+  "max_tax" : "aeiou",
+  "latitude" : "aeiou",
+  "flags" : "aeiou",
+  "name" : "aeiou",
+  "tax" : "aeiou",
+  "information" : "aeiou",
+  "reservation_tax" : "aeiou",
+  "longitude" : "aeiou"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    This is an object containing all the requested information about a parking lot.
+        <a href="#ParkingLot">ParkingLot</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="iparkV1ParkingNearbyLotsPost"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /ipark/v1/parking/nearby_lots</code></pre></div>
+    <div class="method-summary">Requests a list of parking lots within &#39;radius&#39; around &#39;location&#39;. <span class="nickname">iparkV1ParkingNearbyLotsPost</span></div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">payload <a href="#Nearby Lots Request">Nearby Lots Request</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Nearby Lots">Nearby Lots</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "lots" : [ {
+    "free_spots" : [ 123 ],
+    "lot_id" : "aeiou",
+    "total_spots" : "aeiou",
+    "max_tax" : "aeiou",
+    "latitude" : "aeiou",
+    "flags" : "aeiou",
+    "name" : "aeiou",
+    "tax" : "aeiou",
+    "information" : "aeiou",
+    "reservation_tax" : "aeiou",
+    "longitude" : "aeiou"
+  } ],
+  "found_lots" : 123
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    List of Parking Lots within &#39;radius&#39; around &#39;location&#39;.
+        <a href="#Nearby Lots">Nearby Lots</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+    <h4 class="field-label">422</h4>
+    Invalid Arguments
+        <a href="#Argument Error">Argument Error</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="iparkV1UserSignUpPost"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /ipark/v1/user/sign_up</code></pre></div>
+    <div class="method-summary">Sign up the user for a new account. Creates an Authentication Token. <span class="nickname">iparkV1UserSignUpPost</span></div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">payload <a href="#Sign Up Request">Sign Up Request</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Token">Token</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "token" : "aeiou"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Sign Up successful, contains token.
+        <a href="#Token">Token</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+    <h4 class="field-label">422</h4>
+    Invalid Arguments
+        <a href="#Argument Error">Argument Error</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="postCancelReservation"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /ipark/v1/parking/{reservation_id}/cancel</code></pre></div>
+    <div class="method-summary">Cancels a specific reservation. <span class="nickname">postCancelReservation</span></div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">reservation_id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID of Reservation </div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Result of action">Result of action</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "status" : true
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    If true, the reservation is cancelled.
+        <a href="#Result of action">Result of action</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+    <h4 class="field-label">422</h4>
+    Invalid Arguments
+        <a href="#Argument Error">Argument Error</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="postIoTPush"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /ipark/v1/iot/push/{lot_id}</code></pre></div>
+    <div class="method-summary">Reveice a sequence of events from the IoT gateway to finish reservations after some cars left the parking spot. <span class="nickname">postIoTPush</span></div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">lot_id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID of Lot </div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">payload <a href="#Lot Push Information">Lot Push Information</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; This is a list containing all occurences of events since the last updae. </div>
+
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="putBarrier"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /ipark/v1/barrier/{reservation_id}</code></pre></div>
+    <div class="method-summary">Start parking with opening the barrier <span class="nickname">putBarrier</span></div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">reservation_id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The ID of the reservation. This ID is used to track down the parking spot to open. </div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Result of action">Result of action</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "status" : true
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    If true, the barrier should open and the parking clock begins to tick.
+        <a href="#Result of action">Result of action</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+    <h4 class="field-label">422</h4>
+    Invalid Arguments
+        <a href="#Argument Error">Argument Error</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="request Authentication Token"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /ipark/v1/user/login</code></pre></div>
+    <div class="method-summary">Request Authentication Token for an already existing account. <span class="nickname">request Authentication Token</span></div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">payload <a href="#User Credentials">User Credentials</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Login credentials. </div>
+
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Token">Token</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "token" : "aeiou"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Login successful, contains token.
+        <a href="#Token">Token</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="request User Info"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /ipark/v1/user/info</code></pre></div>
+    <div class="method-summary">Request User Info <span class="nickname">request User Info</span></div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#User Info">User Info</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "number" : "aeiou",
+  "country" : "aeiou",
+  "client_settings" : "aeiou",
+  "balance" : 1.3579000000000001069366817318950779736042022705078125,
+  "city" : "aeiou",
+  "street" : "aeiou",
+  "last_name" : "aeiou",
+  "first_name" : "aeiou",
+  "email" : "aeiou",
+  "plz" : "aeiou"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful
+        <a href="#User Info">User Info</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+    <h4 class="field-label">422</h4>
+    Invalid Arguments
+        <a href="#Argument Error">Argument Error</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="request User Status"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /ipark/v1/user/info/{ufilter}</code></pre></div>
+    <div class="method-summary">Request filtered user info. Although deprecated (use X-Fields instead), it remains functional. <span class="nickname">request User Status</span></div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">ufilter (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Key in info Object </div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Status">Status</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "info" : {
+    "number" : "aeiou",
+    "country" : "aeiou",
+    "client_settings" : "aeiou",
+    "balance" : 1.3579000000000001069366817318950779736042022705078125,
+    "city" : "aeiou",
+    "street" : "aeiou",
+    "last_name" : "aeiou",
+    "first_name" : "aeiou",
+    "email" : "aeiou",
+    "plz" : "aeiou"
+  }
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful
+        <a href="#Status">Status</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+    <h4 class="field-label">422</h4>
+    Invalid Arguments
+        <a href="#Argument Error">Argument Error</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="reserve Parking Spot by lotId"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /ipark/v1/parking/reserve</code></pre></div>
+    <div class="method-summary">Requests a reservation for a certain &#39;type&#39; of spot in the parking lot specified by &#39;lot_id&#39;. <span class="nickname">reserve Parking Spot by lotId</span></div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">payload <a href="#Parking lot">Parking lot</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Specifies the lot and the type of the spot. </div>
+
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Reservation Successful">Reservation Successful</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "lot" : {
+    "free_spots" : [ 123 ],
+    "lot_id" : "aeiou",
+    "total_spots" : "aeiou",
+    "max_tax" : "aeiou",
+    "latitude" : "aeiou",
+    "flags" : "aeiou",
+    "name" : "aeiou",
+    "tax" : "aeiou",
+    "information" : "aeiou",
+    "reservation_tax" : "aeiou",
+    "longitude" : "aeiou"
+  },
+  "parking_end" : "aeiou",
+  "reservation_fee" : 1.3579000000000001069366817318950779736042022705078125,
+  "number" : 123,
+  "parking_start" : "aeiou",
+  "lot_id" : 123,
+  "spot_id" : 123,
+  "reservation_start" : "aeiou",
+  "parking_fee" : 1.3579000000000001069366817318950779736042022705078125,
+  "id" : 123
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Reservation Successful, returns reservation data.
+        <a href="#Reservation Successful">Reservation Successful</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+    <h4 class="field-label">409</h4>
+    This user cannot reserve spots (anymore)
+        <a href="#"></a>
+    <h4 class="field-label">422</h4>
+    Invalid Arguments
+        <a href="#Argument Error">Argument Error</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="update User Details"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /ipark/v1/user/info</code></pre></div>
+    <div class="method-summary">Sets or updates core data for the user. <span class="nickname">update User Details</span></div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">payload <a href="#User Update Info">User Update Info</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Contains user data to set or update </div>
+
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">join (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Joins JSON Objects </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Successful">Successful</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "message" : "aeiou"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful
+        <a href="#Successful">Successful</a>
+    <h4 class="field-label">401</h4>
+    Authentication Error
+        <a href="#User Authentication Error">User Authentication Error</a>
+    <h4 class="field-label">422</h4>
+    Invalid Arguments
+        <a href="#Argument Error">Argument Error</a>
+  </div> <!-- method -->
+  <hr/>
+
+  <div class="up"><a href="#__Models">Up</a></div>
+  <h2><a name="__Models">Models</a></h2>
+  [ Jump to <a href="#__Methods">Methods</a> ]
+
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#Argument Error"><code>Argument Error</code></a></li>
+    <li><a href="#Location"><code>Location</code></a></li>
+    <li><a href="#Lot Push Information"><code>Lot Push Information</code></a></li>
+    <li><a href="#Nearby Lots"><code>Nearby Lots</code></a></li>
+    <li><a href="#Nearby Lots Request"><code>Nearby Lots Request</code></a></li>
+    <li><a href="#Parking lot"><code>Parking lot</code></a></li>
+    <li><a href="#ParkingLot"><code>ParkingLot</code></a></li>
+    <li><a href="#Reservation"><code>Reservation</code></a></li>
+    <li><a href="#Reservation List"><code>Reservation List</code></a></li>
+    <li><a href="#Reservation Successful"><code>Reservation Successful</code></a></li>
+    <li><a href="#Result of action"><code>Result of action</code></a></li>
+    <li><a href="#Sign Up Request"><code>Sign Up Request</code></a></li>
+    <li><a href="#Status"><code>Status</code></a></li>
+    <li><a href="#Successful"><code>Successful</code></a></li>
+    <li><a href="#Token"><code>Token</code></a></li>
+    <li><a href="#User Authentication Error"><code>User Authentication Error</code></a></li>
+    <li><a href="#User Credentials"><code>User Credentials</code></a></li>
+    <li><a href="#User Info"><code>User Info</code></a></li>
+    <li><a href="#User Update Info"><code>User Update Info</code></a></li>
+  </ol>
+
+  <div class="model">
+    <h3 class="field-label"><a name="Argument Error">Argument Error - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">message (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Error Message </div>
+<div class="param">argument (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Invalid Argument </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Location">Location - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">lat </div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span> Latitude </div>
+<div class="param">lon </div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span> Longitude </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Lot Push Information">Lot Push Information - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">ID </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Reservation ID </div>
+<div class="param">stopTime </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> End time of the parking transaction as measured by the IoT device </div>
+<div class="param">startTime </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Start time of the parking transaction as measured by the IoT device </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Nearby Lots">Nearby Lots - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">lots </div><div class="param-desc"><span class="param-type"><a href="#ParkingLot">array[ParkingLot]</a></span> Array of ParkingLots </div>
+<div class="param">found_lots </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Number of found Parking Lots </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Nearby Lots Request">Nearby Lots Request - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">location </div><div class="param-desc"><span class="param-type"><a href="#Location">Location</a></span> Location to find lots. </div>
+<div class="param">type (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Some special types (e.g. electric cars) </div>
+<div class="param">radius (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Radius of Parking Lots in km </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="ParkingLot">ParkingLot - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">longitude </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">tax </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Tax (&euro;/h) </div>
+<div class="param">total_spots </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> The total number of spots for all types. Includes already reserved ones. </div>
+<div class="param">latitude </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">information </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">flags </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Flags include information about whether certain kinds of spots are available </div>
+<div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> The name of the parking lot. </div>
+<div class="param">lot_id </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">reservation_tax </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Reservation tax (&euro;/h) </div>
+<div class="param">free_spots (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span> The spots for certain types. The type is specified via the index. </div>
+<div class="param">max_tax </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Tax limit per day </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Reservation">Reservation - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">lot (optional)</div><div class="param-desc"><span class="param-type"><a href="#ParkingLot">ParkingLot</a></span>  </div>
+<div class="param">spot_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Globally unique identifier of the parking spot </div>
+<div class="param">parking_start </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Beginning time of parking. Implies end of Reservation. (e.g. 2017-01-14 18:43:56) </div>
+<div class="param">parking_end </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> End time of parking. (e.g. 2017-01-14 18:43:56) </div>
+<div class="param">number (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Parking spot number inside the parking lot (not globally unique) </div>
+<div class="param">parking_fee (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span>  </div>
+<div class="param">lot_id </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Parking Lot id </div>
+<div class="param">id </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Unique identifier </div>
+<div class="param">reservation_fee (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span>  </div>
+<div class="param">reservation_start </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Time of Reservation (e.g. 2017-01-14 18:43:56) </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Reservation List">Reservation List - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">reservations (optional)</div><div class="param-desc"><span class="param-type"><a href="#Reservation">array[Reservation]</a></span> List of reservations </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Reservation Successful">Reservation Successful - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">lot (optional)</div><div class="param-desc"><span class="param-type"><a href="#ParkingLot">ParkingLot</a></span>  </div>
+<div class="param">spot_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Globally unique identifier of the parking spot </div>
+<div class="param">parking_start </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Beginning time of parking. Implies end of Reservation. (e.g. 2017-01-14 18:43:56) </div>
+<div class="param">parking_end </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> End time of parking. (e.g. 2017-01-14 18:43:56) </div>
+<div class="param">number (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Parking spot number inside the parking lot (not globally unique) </div>
+<div class="param">parking_fee (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span>  </div>
+<div class="param">lot_id </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Parking Lot id </div>
+<div class="param">id </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span> Unique identifier </div>
+<div class="param">reservation_fee (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span>  </div>
+<div class="param">reservation_start </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Time of Reservation (e.g. 2017-01-14 18:43:56) </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Result of action">Result of action - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">status (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span> Whether the request could be fulfilled or not </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Sign Up Request">Sign Up Request - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">city (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new city </div>
+<div class="param">last_name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new last name </div>
+<div class="param">number (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new number </div>
+<div class="param">client_settings (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Arbitrary field for user settings </div>
+<div class="param">country (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new country </div>
+<div class="param">plz (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new plz </div>
+<div class="param">first_name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new first name </div>
+<div class="param">street (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new street </div>
+<div class="param">password </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Password </div>
+<div class="param">email </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> E-Mail Address </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Status">Status - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">info (optional)</div><div class="param-desc"><span class="param-type"><a href="#User Info">User Info</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Successful">Successful - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">message (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Token">Token - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">token </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="User Authentication Error">User Authentication Error - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">message (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Error Message </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="User Credentials">User Credentials - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">password </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Password </div>
+<div class="param">email </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> E-Mail Address </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="User Info">User Info - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">city (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new city </div>
+<div class="param">last_name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Last Name </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> E-Mail address </div>
+<div class="param">number (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new number </div>
+<div class="param">client_settings (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Arbitrary field for user settings </div>
+<div class="param">country (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new country </div>
+<div class="param">balance (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span> Account balance </div>
+<div class="param">plz (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new plz </div>
+<div class="param">first_name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> First Name </div>
+<div class="param">street (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new street </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="User Update Info">User Update Info - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">city (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new city </div>
+<div class="param">last_name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new last name </div>
+<div class="param">number (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new number </div>
+<div class="param">client_settings (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Arbitrary field for user settings </div>
+<div class="param">country (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new country </div>
+<div class="param">plz (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new plz </div>
+<div class="param">first_name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new first name </div>
+<div class="param">street (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> new street </div>
+    </div>  <!-- field-items -->
+  </div>
+  </body>
+</html>

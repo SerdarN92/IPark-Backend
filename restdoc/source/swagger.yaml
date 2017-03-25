@@ -1,0 +1,750 @@
+definitions:
+  Argument Error:
+    allOf:
+      - $ref: '#/definitions/User Authentication Error'
+      - properties:
+          argument:
+            description: Invalid Argument
+            type: string
+        type: object
+  Nearby Lots:
+    properties:
+      lots:
+        description: Array of ParkingLots
+        type: array
+        items:
+          $ref: '#/definitions/ParkingLot'
+      found_lots:
+        description: Number of found Parking Lots
+        type: integer
+    type: object
+    required:
+      - found_lots
+      - lots
+  ParkingLot:
+    properties:
+      longitude:
+        description: ''
+        type: string
+      tax:
+        description: Tax (€/h)
+        type: string
+      total_spots:
+        description: ''
+        type: string
+      latitude:
+        description: ''
+        type: string
+      information:
+        description: ''
+        type: string
+      flags:
+        description: ''
+        type: string
+      name:
+        description: ''
+        type: string
+      lot_id:
+        description: ''
+        type: string
+      reservation_tax:
+        description: Reservation tax (€/h)
+        type: string
+      free_spots:
+        type: array
+        items:
+          type: integer
+      max_tax:
+        description: Tax limit per day
+        type: string
+    type: object
+    required:
+      - flags
+      - information
+      - latitude
+      - longitude
+      - lot_id
+      - max_tax
+      - name
+      - reservation_tax
+      - tax
+      - total_spots
+  Sign Up Request:
+    allOf:
+      - $ref: '#/definitions/User Update Info'
+      - properties:
+          password:
+            description: Password
+            type: string
+          email:
+            description: E-Mail Address
+            type: string
+        type: object
+        required:
+          - email
+          - password
+  Reservation:
+    properties:
+      lot:
+        $ref: '#/definitions/ParkingLot'
+      spot_id:
+        description: Globally unique identifier of the parking spot
+        type: integer
+      parking_start:
+        description: >-
+          Beginning time of parking. Implies end of Reservation. (e.g.
+          2017-01-14 18:43:56)
+        type: string
+      parking_end:
+        description: 'End time of parking. (e.g. 2017-01-14 18:43:56)'
+        type: string
+      number:
+        description: Parking spot number inside the parking lot (not globally unique)
+        type: integer
+      parking_fee:
+        type: number
+      lot_id:
+        description: Parking Lot id
+        type: integer
+      id:
+        description: Unique identifier
+        type: integer
+      reservation_fee:
+        type: number
+      reservation_start:
+        description: 'Time of Reservation (e.g. 2017-01-14 18:43:56)'
+        type: string
+    type: object
+    required:
+      - id
+      - lot_id
+      - parking_end
+      - parking_start
+      - reservation_start
+  Token:
+    properties:
+      token:
+        type: string
+    type: object
+    required:
+      - token
+  Reservation List:
+    properties:
+      reservations:
+        description: List of reservations
+        type: array
+        items:
+          $ref: '#/definitions/Reservation'
+    type: object
+  Result of action:
+    properties:
+      status:
+        description: Whether the request could be fulfilled or not
+        type: boolean
+    type: object
+  Reservation Successful:
+    properties:
+      lot:
+        $ref: '#/definitions/ParkingLot'
+      spot_id:
+        description: Globally unique identifier of the parking spot
+        type: integer
+      parking_start:
+        description: >-
+          Beginning time of parking. Implies end of Reservation. (e.g.
+          2017-01-14 18:43:56)
+        type: string
+      parking_end:
+        description: 'End time of parking. (e.g. 2017-01-14 18:43:56)'
+        type: string
+      number:
+        description: Parking spot number inside the parking lot (not globally unique)
+        type: integer
+      parking_fee:
+        type: number
+      lot_id:
+        description: Parking Lot id
+        type: integer
+      id:
+        description: Unique identifier
+        type: integer
+      reservation_fee:
+        type: number
+      reservation_start:
+        description: 'Time of Reservation (e.g. 2017-01-14 18:43:56)'
+        type: string
+    type: object
+    required:
+      - id
+      - lot_id
+      - parking_end
+      - parking_start
+      - reservation_start
+  Successful:
+    properties:
+      message:
+        type: string
+    type: object
+  Nearby Lots Request:
+    properties:
+      location:
+        $ref: '#/definitions/Location'
+      type:
+        minimum: 0
+        type: integer
+      radius:
+        description: Radius of Parking Lots in km
+        type: integer
+    type: object
+    required:
+      - location
+  Location:
+    properties:
+      lat:
+        description: Latitude
+        type: number
+      lon:
+        description: Longitude
+        type: number
+    type: object
+    required:
+      - lat
+      - lon
+  Status:
+    properties:
+      info:
+        $ref: '#/definitions/User Info'
+    type: object
+  Lot Push Information:
+    properties:
+      ID:
+        description: Reservation ID
+        type: integer
+      stopTime:
+        description: End time of the parking transaction as measured by the IoT device
+        type: integer
+      startTime:
+        description: Start time of the parking transaction as measured by the IoT device
+        type: integer
+    type: object
+    required:
+      - ID
+      - startTime
+      - stopTime
+  User Info:
+    properties:
+      city:
+        description: new city
+        type: string
+      last_name:
+        description: Last Name
+        type: string
+      email:
+        description: E-Mail address
+        type: string
+      number:
+        description: new number
+        type: string
+      client_settings:
+        description: Arbitrary field for user settings
+        type: string
+      country:
+        description: new country
+        type: string
+      balance:
+        description: Account balance
+        type: number
+      plz:
+        description: new plz
+        type: string
+      first_name:
+        description: First Name
+        type: string
+      street:
+        description: new street
+        type: string
+    type: object
+  Parking lot:
+    properties:
+      lot_id:
+        type: integer
+      type:
+        type: integer
+    type: object
+  User Authentication Error:
+    properties:
+      message:
+        description: Error Message
+        type: string
+    type: object
+  User Update Info:
+    properties:
+      city:
+        description: new city
+        type: string
+      last_name:
+        description: new last name
+        type: string
+      number:
+        description: new number
+        type: string
+      client_settings:
+        description: Arbitrary field for user settings
+        type: string
+      country:
+        description: new country
+        type: string
+      plz:
+        description: new plz
+        type: string
+      first_name:
+        description: new first name
+        type: string
+      street:
+        description: new street
+        type: string
+    type: object
+  User Credentials:
+    properties:
+      password:
+        description: Password
+        type: string
+      email:
+        description: E-Mail Address
+        type: string
+    type: object
+    required:
+      - email
+      - password
+info:
+  description: This document describes the REST-API for use in the frontends (Website and App) of the iPark project. This API defines the data types and routes (e.g. actions and queries) required to interface the frontend with the backend. A special route for use in the IoT-Gateway is also described here.  
+  version: '1.0'
+  title: iPark Backend API
+basePath: /
+tags:
+  - name: ipark/v1
+    description: iPark API as implemented by the end of the project
+consumes:
+  - application/json
+swagger: '2.0'
+produces:
+  - application/json
+paths:
+  '/ipark/v1/barrier/{reservation_id}':
+    put:
+      tags:
+        - ipark/v1
+      parameters:
+        - in: header
+          name: X-Token
+          description: An authentication token which can be obtained via /user/login or /user/signup respectively.
+          type: string
+          required: true
+        - name: X-Fields
+          in: header
+          description: An optional fields mask. This mask is used to filter properties of the response.
+          type: string
+          format: mask
+      summary: Start parking with opening the barrier
+      responses:
+        '200':
+          description: If true, the barrier should open and the parking clock begins to tick.
+          schema:
+            $ref: '#/definitions/Result of action'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+        '422':
+          description: Invalid Arguments
+          schema:
+            $ref: '#/definitions/Argument Error'
+      operationId: put_barrier
+    parameters:
+      - in: path
+        name: reservation_id
+        description: The ID of the reservation. This ID is used to track down the parking spot to open.
+        type: integer
+        required: true
+  '/ipark/v1/iot/push/{lot_id}':
+    parameters:
+      - in: path
+        name: lot_id
+        description: ID of Lot
+        type: integer
+        required: true
+      - in: header
+        name: X-Auth
+        description: Lot Authentication Key
+        type: string
+        required: true
+    post:
+      tags:
+        - ipark/v1
+      parameters:
+        - name: payload
+          in: body
+          description: This is a list containing all occurences of events since the last updae.
+          schema:
+            $ref: '#/definitions/Lot Push Information'
+          required: true
+      summary: Reveice a sequence of events from the IoT gateway to finish reservations after some cars left the parking spot.
+      responses:
+        '200':
+          description: Success
+      operationId: post_io_t_push
+  '/ipark/v1/parking/lotinfo/{lot_id}':
+    parameters:
+      - in: path
+        name: lot_id
+        description: ID of Lot
+        type: integer
+        required: true
+      - in: header
+        name: X-Token
+        description: Authentication Token
+        type: string
+        required: true
+    get:
+      tags:
+        - ipark/v1
+      parameters:
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          type: string
+          format: mask
+      summary: This operation requests information about a specific parking lot.
+      responses:
+        '200':
+          description: This is an object containing all the requested information about a parking lot.
+          schema:
+            $ref: '#/definitions/ParkingLot'
+      operationId: get_lot_info
+  /ipark/v1/parking/nearby_lots:
+    post:
+      tags:
+        - ipark/v1
+      parameters:
+        - in: header
+          name: X-Token
+          description: Authentication Token
+          type: string
+          required: true
+        - name: payload
+          in: body
+          schema:
+            $ref: '#/definitions/Nearby Lots Request'
+          required: true
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          type: string
+          format: mask
+      summary: Requests a list of parking lots within 'radius' around 'location'.
+      responses:
+        '200':
+          description: List of Parking Lots within 'radius' around 'location'.
+          schema:
+            $ref: '#/definitions/Nearby Lots'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+        '422':
+          description: Invalid Arguments
+          schema:
+            $ref: '#/definitions/Argument Error'
+      operationId: ''
+  /ipark/v1/parking/reserve:
+    get:
+      tags:
+        - ipark/v1
+      parameters:
+        - in: header
+          name: X-Token
+          description: Authentication Token
+          type: string
+          required: true
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          type: string
+          format: mask
+      summary: Requests all reservations of the user. Includes finished reservations.
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Reservation List'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+        '409':
+          description: This user cannot reserve spots (anymore)
+        '422':
+          description: Invalid Arguments
+          schema:
+            $ref: '#/definitions/Argument Error'
+      operationId: Get the users reservations
+    post:
+      tags:
+        - ipark/v1
+      parameters:
+        - in: header
+          name: X-Token
+          description: Authentication Token
+          type: string
+          required: true
+        - name: payload
+          in: body
+          description: Specifies the lot and the type of the spot.
+          schema:
+            $ref: '#/definitions/Parking lot'
+          required: true
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          type: string
+          format: mask
+      summary: Requests a reservation for a certain 'type' of spot in the parking lot specified by 'lot_id'.
+      responses:
+        '201':
+          description: Reservation Successful, returns reservation data.
+          schema:
+            $ref: '#/definitions/Reservation Successful'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+        '409':
+          description: This user cannot reserve spots (anymore)
+        '422':
+          description: Invalid Arguments
+          schema:
+            $ref: '#/definitions/Argument Error'
+      operationId: Reserve Parking Spot by lot_id
+  '/ipark/v1/parking/{reservation_id}':
+    parameters:
+      - in: path
+        name: reservation_id
+        description: ID of Reservation
+        type: integer
+        required: true
+    get:
+      tags:
+        - ipark/v1
+      parameters:
+        - in: header
+          name: X-Token
+          description: Authentication Token
+          type: string
+          required: true
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          type: string
+          format: mask
+      summary: Gets all information about a certain reservation.
+      responses:
+        '200':
+          description: Reservation data
+          schema:
+            $ref: '#/definitions/Reservation'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+        '422':
+          description: Invalid Arguments
+          schema:
+            $ref: '#/definitions/Argument Error'
+      operationId: 'Get the reservation corresponding to the ID, if it belongs to the user'
+  '/ipark/v1/parking/{reservation_id}/cancel':
+    parameters:
+      - in: path
+        name: reservation_id
+        description: ID of Reservation
+        type: integer
+        required: true
+    post:
+      tags:
+        - ipark/v1
+      parameters:
+        - in: header
+          name: X-Token
+          description: Authentication Token
+          type: string
+          required: true
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          type: string
+          format: mask
+      summary: Cancels a specific reservation.
+      responses:
+        '200':
+          description: If true, the reservation is cancelled.
+          schema:
+            $ref: '#/definitions/Result of action'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+        '422':
+          description: Invalid Arguments
+          schema:
+            $ref: '#/definitions/Argument Error'
+      operationId: post_cancel_reservation
+  /ipark/v1/user/info:
+    put:
+      tags:
+        - ipark/v1
+      parameters:
+        - name: payload
+          in: body
+          description: Contains user data to set or update
+          schema:
+            $ref: '#/definitions/User Update Info'
+          required: true
+        - in: query
+          name: join
+          description: Joins JSON Objects
+          type: string
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          type: string
+          format: mask
+      summary: Sets or updates core data for the user.
+      responses:
+        '200':
+          description: Successful
+          schema:
+            $ref: '#/definitions/Successful'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+        '422':
+          description: Invalid Arguments
+          schema:
+            $ref: '#/definitions/Argument Error'
+      operationId: Update User Details
+    parameters:
+      - in: header
+        name: X-Token
+        description: Authentication Token
+        type: string
+        required: true
+    get:
+      tags:
+        - ipark/v1
+      parameters:
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          type: string
+          format: mask
+      summary: Request User Info
+      responses:
+        '200':
+          description: Successful
+          schema:
+            $ref: '#/definitions/User Info'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+        '422':
+          description: Invalid Arguments
+          schema:
+            $ref: '#/definitions/Argument Error'
+      operationId: Request User Info
+  '/ipark/v1/user/info/{ufilter}':
+    parameters:
+      - in: header
+        name: X-Token
+        description: Authentication Token
+        type: string
+        required: true
+      - in: path
+        name: ufilter
+        description: Key in info Object
+        type: string
+        required: true
+    get:
+      tags:
+        - ipark/v1
+      summary: Request filtered user info. Although deprecated (use X-Fields instead), it remains functional.
+      responses:
+        '200':
+          description: Successful
+          schema:
+            $ref: '#/definitions/Status'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+        '422':
+          description: Invalid Arguments
+          schema:
+            $ref: '#/definitions/Argument Error'
+      operationId: Request User Status
+  /ipark/v1/user/login:
+    post:
+      tags:
+        - ipark/v1
+      parameters:
+        - name: payload
+          in: body
+          description: Login credentials.
+          schema:
+            $ref: '#/definitions/User Credentials'
+          required: true
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          type: string
+          format: mask
+      summary: Request Authentication Token for an already existing account.
+      responses:
+        '200':
+          description: Login successful, contains token.
+          schema:
+            $ref: '#/definitions/Token'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+      operationId: Request Authentication Token
+  /ipark/v1/user/sign_up:
+    post:
+      tags:
+        - ipark/v1
+      parameters:
+        - name: payload
+          in: body
+          schema:
+            $ref: '#/definitions/Sign Up Request'
+          required: true
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          type: string
+          format: mask
+      summary: Sign up the user for a new account. Creates an Authentication Token.
+      responses:
+        '200':
+          description: Sign Up successful, contains token.
+          schema:
+            $ref: '#/definitions/Token'
+        '401':
+          description: Authentication Error
+          schema:
+            $ref: '#/definitions/User Authentication Error'
+        '422':
+          description: Invalid Arguments
+          schema:
+            $ref: '#/definitions/Argument Error'
