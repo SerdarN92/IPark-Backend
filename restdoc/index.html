@@ -246,26 +246,26 @@ font-style: italic;
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
   "lot" : {
-    "free_spots" : [ 123 ],
-    "lot_id" : "aeiou",
-    "total_spots" : "aeiou",
-    "max_tax" : "aeiou",
-    "latitude" : "aeiou",
-    "flags" : "aeiou",
-    "name" : "aeiou",
-    "tax" : "aeiou",
-    "information" : "aeiou",
-    "reservation_tax" : "aeiou",
-    "longitude" : "aeiou"
+    "free_spots" : [ 123, 0 ],
+    "lot_id" : 0,
+    "total_spots" : 758,
+    "max_tax" : 15.3,
+    "latitude" : 51.461614
+    "flags" : 8,
+    "name" : "Universität Duisburg Essen",
+    "tax" : 1.00,
+    "information" : "anything",
+    "reservation_tax" : 0.30,
+    "longitude" : 7.0181410
   },
-  "parking_end" : "aeiou",
-  "reservation_fee" : 1.3579000000000001069366817318950779736042022705078125,
+  "parking_end" : "2017-03-23 11:15:00",
+  "reservation_fee" : 1.35,
   "number" : 123,
-  "parking_start" : "aeiou",
+  "parking_start" : "2017-03-23 10:15:00",
   "lot_id" : 123,
   "spot_id" : 123,
-  "reservation_start" : "aeiou",
-  "parking_fee" : 1.3579000000000001069366817318950779736042022705078125,
+  "reservation_start" : "2017-03-23 08:15:00",
+  "parking_fee" : 1.35,
   "id" : 123
 }</code></pre>
 
@@ -322,28 +322,28 @@ font-style: italic;
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
   "reservations" : [ {
-    "lot" : {
-      "free_spots" : [ 123 ],
-      "lot_id" : "aeiou",
-      "total_spots" : "aeiou",
-      "max_tax" : "aeiou",
-      "latitude" : "aeiou",
-      "flags" : "aeiou",
-      "name" : "aeiou",
-      "tax" : "aeiou",
-      "information" : "aeiou",
-      "reservation_tax" : "aeiou",
-      "longitude" : "aeiou"
-    },
-    "parking_end" : "aeiou",
-    "reservation_fee" : 1.3579000000000001069366817318950779736042022705078125,
-    "number" : 123,
-    "parking_start" : "aeiou",
-    "lot_id" : 123,
-    "spot_id" : 123,
-    "reservation_start" : "aeiou",
-    "parking_fee" : 1.3579000000000001069366817318950779736042022705078125,
-    "id" : 123
+        "lot" : {
+            "free_spots" : [ 123, 0 ],
+            "lot_id" : 0,
+            "total_spots" : 758,
+            "max_tax" : 15.3,
+            "latitude" : 51.461614
+            "flags" : 8,
+            "name" : "Universität Duisburg Essen",
+            "tax" : 1.00,
+            "information" : "anything",
+            "reservation_tax" : 0.30,
+            "longitude" : 7.0181410
+        },
+        "parking_end" : "2017-03-23 11:15:00",
+        "reservation_fee" : 1.35,
+        "number" : 123,
+        "parking_start" : "2017-03-23 10:15:00",
+        "lot_id" : 123,
+        "spot_id" : 123,
+        "reservation_start" : "2017-03-23 08:15:00",
+        "parking_fee" : 1.35,
+        "id" : 123
   } ]
 }</code></pre>
 
@@ -408,17 +408,17 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "free_spots" : [ 123 ],
-  "lot_id" : "aeiou",
-  "total_spots" : "aeiou",
-  "max_tax" : "aeiou",
-  "latitude" : "aeiou",
-  "flags" : "aeiou",
-  "name" : "aeiou",
-  "tax" : "aeiou",
-  "information" : "aeiou",
-  "reservation_tax" : "aeiou",
-  "longitude" : "aeiou"
+    "free_spots" : [ 123, 0 ],
+    "lot_id" : 0,
+    "total_spots" : 758,
+    "max_tax" : 15.3,
+    "latitude" : 51.461614
+    "flags" : 8,
+    "name" : "Universität Duisburg Essen",
+    "tax" : 1.00,
+    "information" : "anything",
+    "reservation_tax" : 0.30,
+    "longitude" : 7.0181410
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -475,19 +475,19 @@ font-style: italic;
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
   "lots" : [ {
-    "free_spots" : [ 123 ],
-    "lot_id" : "aeiou",
-    "total_spots" : "aeiou",
-    "max_tax" : "aeiou",
-    "latitude" : "aeiou",
-    "flags" : "aeiou",
-    "name" : "aeiou",
-    "tax" : "aeiou",
-    "information" : "aeiou",
-    "reservation_tax" : "aeiou",
-    "longitude" : "aeiou"
+    "free_spots" : [ 123, 0 ],
+    "lot_id" : 0,
+    "total_spots" : 758,
+    "max_tax" : 15.3,
+    "latitude" : 51.461614
+    "flags" : 8,
+    "name" : "Universität Duisburg Essen",
+    "tax" : 1.00,
+    "information" : "anything",
+    "reservation_tax" : 0.30,
+    "longitude" : 7.0181410
   } ],
-  "found_lots" : 123
+  "found_lots" : 1
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -549,7 +549,7 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "token" : "aeiou"
+  "token" : "some uuid"
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -785,7 +785,7 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "token" : "aeiou"
+  "token" : "some uuid"
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -837,16 +837,16 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "number" : "aeiou",
-  "country" : "aeiou",
-  "client_settings" : "aeiou",
-  "balance" : 1.3579000000000001069366817318950779736042022705078125,
-  "city" : "aeiou",
-  "street" : "aeiou",
-  "last_name" : "aeiou",
-  "first_name" : "aeiou",
-  "email" : "aeiou",
-  "plz" : "aeiou"
+  "number" : 8,
+  "country" : "Germany",
+  "client_settings" : "some json string",
+  "balance" : 10.00,
+  "city" : "Essen",
+  "street" : "Gerlingstraße",
+  "last_name" : "Mustermann",
+  "first_name" : "Max",
+  "email" : "max.mustermann@muster.de",
+  "plz" : 12345
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -908,16 +908,16 @@ font-style: italic;
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
   "info" : {
-    "number" : "aeiou",
-    "country" : "aeiou",
-    "client_settings" : "aeiou",
-    "balance" : 1.3579000000000001069366817318950779736042022705078125,
-    "city" : "aeiou",
-    "street" : "aeiou",
-    "last_name" : "aeiou",
-    "first_name" : "aeiou",
-    "email" : "aeiou",
-    "plz" : "aeiou"
+    "number" : 8,
+    "country" : "Germany",
+    "client_settings" : "some json string",
+    "balance" : 10.00,
+    "city" : "Essen",
+    "street" : "Gerlingstraße",
+    "last_name" : "Mustermann",
+    "first_name" : "Max",
+    "email" : "max.mustermann@muster.de",
+    "plz" : 12345
   }
 }</code></pre>
 
@@ -980,28 +980,28 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "lot" : {
-    "free_spots" : [ 123 ],
-    "lot_id" : "aeiou",
-    "total_spots" : "aeiou",
-    "max_tax" : "aeiou",
-    "latitude" : "aeiou",
-    "flags" : "aeiou",
-    "name" : "aeiou",
-    "tax" : "aeiou",
-    "information" : "aeiou",
-    "reservation_tax" : "aeiou",
-    "longitude" : "aeiou"
-  },
-  "parking_end" : "aeiou",
-  "reservation_fee" : 1.3579000000000001069366817318950779736042022705078125,
-  "number" : 123,
-  "parking_start" : "aeiou",
-  "lot_id" : 123,
-  "spot_id" : 123,
-  "reservation_start" : "aeiou",
-  "parking_fee" : 1.3579000000000001069366817318950779736042022705078125,
-  "id" : 123
+    "lot" : {
+        "free_spots" : [ 123, 0 ],
+        "lot_id" : 0,
+        "total_spots" : 758,
+        "max_tax" : 15.3,
+        "latitude" : 51.461614
+        "flags" : 8,
+        "name" : "Universität Duisburg Essen",
+        "tax" : 1.00,
+        "information" : "anything",
+        "reservation_tax" : 0.30,
+        "longitude" : 7.0181410
+    },
+    "parking_end" : "2017-03-23 11:15:00",
+    "reservation_fee" : 1.35,
+    "number" : 123,
+    "parking_start" : "2017-03-23 10:15:00",
+    "lot_id" : 123,
+    "spot_id" : 123,
+    "reservation_start" : "2017-03-23 08:15:00",
+    "parking_fee" : 1.35,
+    "id" : 123
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -1072,7 +1072,7 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "message" : "aeiou"
+  "message" : "some message"
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
